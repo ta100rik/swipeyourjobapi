@@ -84,4 +84,19 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
         }
     }
 
+    public int newCard(String cardtitel, String city, String companyname) {
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cards (cardtitel,city,companyname) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,cardtitel);
+            preparedStatement.setString(2,city);
+            preparedStatement.setString(3,companyname);
+            return super.executeQueryReturningId(preparedStatement,connection);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
 }

@@ -1,6 +1,6 @@
 package com.CartService.cartService.domain;
 
-public class LikeRequest {
+public class MatchRequest {
     private int userid;
     private int cardid;
 
