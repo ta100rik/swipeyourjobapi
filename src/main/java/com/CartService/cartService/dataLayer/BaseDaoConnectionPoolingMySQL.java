@@ -14,7 +14,7 @@ public class BaseDaoConnectionPoolingMySQL {
 //    private String dbpassword = "$wipeYourJob@69";
 
     private String dbpassword = "pMeJFFhC3";
-    private String url = "jdbc:mysql://web0119.zxcs.nl:3306/u7281p15572_swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private String url = "jdbc:mysql://web0119.zxcs.nl:3306/u7281p15572_swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
     private String driverName = "com.mysql.cj.jdbc.Driver";
     private  Connection conn = null;
 
