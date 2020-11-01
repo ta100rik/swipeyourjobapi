@@ -4,8 +4,8 @@ import com.CartService.cartService.dataLayer.DataAccessObjectsMySQL.BaseDaoMySQL
 import com.CartService.cartService.dataLayer.InterfacesDao.likeDao;
 import com.CartService.cartService.domain.Card;
 import com.CartService.cartService.domain.CardImage;
-import com.CartService.cartService.domain.CardImageList;
-import com.CartService.cartService.domain.Cardlist;
+import com.CartService.cartService.domain.ListClasses.CardImageList;
+import com.CartService.cartService.domain.ListClasses.Cardlist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,11 +41,11 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             Cardlist cardlist = new Cardlist();
             while(result.next()){
                 int cardid              = result.getInt("cardid");
-                String cardtitel        = result.getString("cardtitel");
+                String cardtitle        = result.getString("cardtitle");
                 String city             = result.getString("city");
                 String companyname      = result.getString("companyname");
                 CardImageList imagelist = getCardimagesByCardid(cardid,connection);
-                Card newCard            = new Card(cardid,cardtitel,city,companyname,imagelist);
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,"The beautiful description");
                 cardlist.addCard(newCard);
             }
             return cardlist;
@@ -84,11 +84,11 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
         }
     }
 
-    public int newCard(String cardtitel, String city, String companyname) {
+    public int newCard(String cardtitle, String city, String companyname) {
         try{
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cards (cardtitel,city,companyname) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,cardtitel);
+            preparedStatement.setString(1,cardtitle);
             preparedStatement.setString(2,city);
             preparedStatement.setString(3,companyname);
             return super.executeQueryReturningId(preparedStatement,connection);

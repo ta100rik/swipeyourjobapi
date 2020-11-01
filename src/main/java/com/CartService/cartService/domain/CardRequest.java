@@ -1,12 +1,12 @@
 package com.CartService.cartService.domain;
 
 public class CardRequest {
-    private String cardtitel;
+    private String cardtitle;
     private String city;
     private String companyname;
 
     public void setCardtitel(String cardtitel) {
-        this.cardtitel = cardtitel;
+        this.cardtitle = cardtitel;
     }
 
     public void setCity(String city) {
@@ -17,8 +17,8 @@ public class CardRequest {
         this.companyname = companyname;
     }
 
-    public String getCardtitel() {
-        return cardtitel;
+    public String getcardtitle() {
+        return cardtitle;
     }
 
     public String getCity() {

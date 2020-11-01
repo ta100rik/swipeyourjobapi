@@ -1,4 +1,6 @@
-package com.CartService.cartService.domain;
+package com.CartService.cartService.domain.ListClasses;
+
+import com.CartService.cartService.domain.Card;
 
 import java.util.ArrayList;
 import java.util.List;

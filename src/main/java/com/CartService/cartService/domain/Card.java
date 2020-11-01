@@ -1,26 +1,31 @@
 package com.CartService.cartService.domain;
 
+import com.CartService.cartService.domain.ListClasses.CardImageList;
+
 public class Card {
     private int cardid;
-    private String cardTitel;
+    private String cardtitle;
     private String city;
     private String companyname;
+    private String description;
     private CardImageList imagelist;
 
-    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist) {
+    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description) {
         this.cardid = cardid;
-        this.cardTitel = cardTitel;
+        this.cardtitle = cardTitel;
         this.city = city;
         this.companyname = companyname;
         this.imagelist = imagelist;
+        this.description = description;
+
     }
 
     public void setCardid(int cardid) {
         this.cardid = cardid;
     }
 
-    public void setCardTitel(String cardTitel) {
-        this.cardTitel = cardTitel;
+    public void setCardtitle(String cardtitle) {
+        this.cardtitle = cardtitle;
     }
 
     public void setCity(String city) {
@@ -35,12 +40,16 @@ public class Card {
         this.imagelist = imagelist;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getCardid() {
         return cardid;
     }
 
     public String getCardTitel() {
-        return cardTitel;
+        return cardtitle;
     }
 
     public String getCity() {
@@ -53,5 +62,13 @@ public class Card {
 
     public CardImageList getImagelist() {
         return imagelist;
+    }
+
+    public String getCardtitle() {
+        return cardtitle;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

@@ -12,7 +12,7 @@ public class WebController {
 
     @PostMapping("/newCard")
     public ResponseEntity<?> Card(@RequestBody CardRequest cardrequest) throws JSONException {
-        int result = ServiceProvider.getCardService().newCard(cardrequest.getCardtitel(),cardrequest.getCity(),cardrequest.getCompanyname());
+        int result = ServiceProvider.getCardService().newCard(cardrequest.getcardtitle(),cardrequest.getCity(),cardrequest.getCompanyname());
         if(result != 0){
             return ResponseEntity.ok(cardrequest);
         }else{
