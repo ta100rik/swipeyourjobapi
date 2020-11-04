@@ -1,4 +1,4 @@
-package com.CartService.cartService.domain;
+package com.CartService.cartService.domain.request;
 
 public class MatchRequest {
     private int userid;

@@ -44,8 +44,39 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
                 String cardtitle        = result.getString("cardtitle");
                 String city             = result.getString("city");
                 String companyname      = result.getString("companyname");
+                String description      = result.getString("description");
                 CardImageList imagelist = getCardimagesByCardid(cardid,connection);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,"The beautiful description");
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description);
+                cardlist.addCard(newCard);
+            }
+            return cardlist;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Cardlist getCardsByUserid(String userid){
+        try{
+            // get connection
+            Connection connection  = super.getConnection();
+            // getting all the cards
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM  cards right outer join showedcards on showedcards.cardid != cards.cardid and showedcards.userid = \""+userid+"\" where cardtitle is not null " +
+                    "limit 10");
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+
+            // initiliaze domain item
+            Cardlist cardlist = new Cardlist();
+            while(result.next()){
+                int cardid              = result.getInt("cardid");
+                String cardtitle        = result.getString("cardtitle");
+                String city             = result.getString("city");
+                String companyname      = result.getString("companyname");
+                String description      = result.getString("description");
+                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description);
                 cardlist.addCard(newCard);
             }
             return cardlist;
@@ -84,6 +115,21 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
         }
     }
 
+    public int newShowed( String userid, int cardid) {
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO showedcards (userid,cardid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,userid);
+            preparedStatement.setInt(2,cardid);
+
+            return super.executeQueryReturningId(preparedStatement,connection);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
     public int newCard(String cardtitle, String city, String companyname) {
         try{
             Connection connection  = super.getConnection();

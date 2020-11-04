@@ -1,7 +1,7 @@
 package com.CartService.cartService.Controllers;
 
 import com.CartService.cartService.Services.ServiceProvider;
-import com.CartService.cartService.domain.CardRequest;
+import com.CartService.cartService.domain.request.CardRequest;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

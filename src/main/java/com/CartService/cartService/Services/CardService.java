@@ -12,8 +12,12 @@ import java.util.List;
 
 public class CardService {
     private final LikeDaoimpl LikeImpl = new LikeDaoimpl();
+//    app
     public int newLike(int userid, int cardid){
         return LikeImpl.newLike(userid,cardid);
+    }
+    public int newShowed(String userid, int cardid){
+        return LikeImpl.newShowed(userid,cardid);
     }
     public List<AppCard> getAppCards(){
         Cardlist result  = LikeImpl.getCards();
@@ -30,9 +34,26 @@ public class CardService {
         }
         return cardlist;
     }
+    public List<AppCard> getAppcardByUserid(String userid){
+        Cardlist result  = LikeImpl.getCardsByUserid(userid);
+        List<String> images = new ArrayList<>();
+        List<AppCard> cardlist = new ArrayList<>();
+
+        for (Card currentcard : result.getCardList())
+        {
+            AppCard newcard = new AppCard(currentcard.getCardid(),currentcard.getCardTitel(),currentcard.getDescription(), currentcard.getCity(),currentcard.getCompanyname());
+            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
+                newcard.addImage(cardimage.getImageurl());
+            }
+            cardlist.add(newcard);
+        }
+        return cardlist;
+    }
+
     public Cardlist getCards(){
         return LikeImpl.getCards();
     }
 
+    //    web
     public int newCard(String cardtitle, String city, String companyname) {return LikeImpl.newCard(cardtitle,city,companyname); }
 }
