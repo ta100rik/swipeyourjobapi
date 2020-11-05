@@ -37,13 +37,13 @@ public class Appcontroller {
     }
 
     @GetMapping("/cards")
-    public ResponseEntity<?> getCards(@RequestParam(required = false) String userid){
+    public ResponseEntity<?> getCards(@RequestParam(required = false) String userid,@RequestParam(required = false) String start, @RequestParam(required = false) String amount){
         try{
             if(userid == null){
                 List<AppCard> result = ServiceProvider.getCardService().getAppCards();
                 return ResponseEntity.ok(new Gson().toJson(result));
             }else{
-                List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid);
+                List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount);
                 return ResponseEntity.ok(new Gson().toJson(result));
             }
         }catch (Exception e){

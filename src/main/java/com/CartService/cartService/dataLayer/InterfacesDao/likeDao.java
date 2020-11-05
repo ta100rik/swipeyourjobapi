@@ -5,5 +5,5 @@ import com.CartService.cartService.domain.ListClasses.Cardlist;
 public interface likeDao {
     int newLike(int userid, int cardid);
     Cardlist getCards();
-    Cardlist getCardsByUserid(String userid);
+    Cardlist getCardsByUserid(String userid,String start, String amount);
 }

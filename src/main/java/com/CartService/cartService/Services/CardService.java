@@ -34,8 +34,8 @@ public class CardService {
         }
         return cardlist;
     }
-    public List<AppCard> getAppcardByUserid(String userid){
-        Cardlist result  = LikeImpl.getCardsByUserid(userid);
+    public List<AppCard> getAppcardByUserid(String userid,String start, String amount){
+        Cardlist result  = LikeImpl.getCardsByUserid(userid,start,amount);
         List<String> images = new ArrayList<>();
         List<AppCard> cardlist = new ArrayList<>();
 
@@ -55,5 +55,5 @@ public class CardService {
     }
 
     //    web
-    public int newCard(String cardtitle, String city, String companyname) {return LikeImpl.newCard(cardtitle,city,companyname); }
+    public int newCard(String cardtitle, String city, String companyname, String description,List<String> images ) {return LikeImpl.newCard(cardtitle,city,companyname,description,images); }
 }
