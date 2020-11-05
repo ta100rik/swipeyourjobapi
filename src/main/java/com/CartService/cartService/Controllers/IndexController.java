@@ -17,7 +17,7 @@ public class IndexController {
                 "       <li>addLike - POST({\"userid\" :  ,\"cardid\":})</li>   " +
                 "       <li>addShowed - POST({\\\"userid\\\" :  ,\\\"cardid\\\":})</li>  " +
 
-                "       <li><a href='/app/cards?userid=bart'>cards?userid=bart - GET</a></li> " +
+                "       <li><a href='/app/cards?userid=bart&start=15&amount=2'>cards?userid=bart&start=15&amount=2 - GET</a></li> " +
                 "       <li><a href='/app/cards'>cards - GET</a></li>   " +
                 "   </ul>" +
                 "   <li><a href='/web'>Web</a></li>" +
