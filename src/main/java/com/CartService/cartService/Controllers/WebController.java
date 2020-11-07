@@ -1,10 +1,15 @@
 package com.CartService.cartService.Controllers;
 
 import com.CartService.cartService.Services.ServiceProvider;
+import com.CartService.cartService.domain.AppViews.AppCard;
 import com.CartService.cartService.domain.request.CardRequest;
+import com.google.gson.Gson;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/web")
@@ -26,6 +31,15 @@ public class WebController {
             return ResponseEntity.ok(result);
         }else{
             return ResponseEntity.status(500).body("Something went wrong");
+        }
+    }
+    @GetMapping("/companycards")
+    public ResponseEntity<?> getCards(@RequestParam(required = false) String companyname){
+        try{
+            List<AppCard> result = ServiceProvider.getCardService().getAppCards();
+            return ResponseEntity.ok(new Gson().toJson(result));
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
         }
     }
 
