@@ -69,16 +69,15 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             int ConvertedStart = Integer.parseInt(start);
             int ConvertedAmount = Integer.parseInt(amount);
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * " +
-                    "FROM cards t1 " +
-                    "WHERE t1.cardid NOT IN (SELECT t2.cardid from showedcards t2 where t2.userid = ?) " +
-                    "and cardid > ? " +
-                    "order by t1.cardid " +
-                    "limit ? ");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1" +
+                    "                    WHERE t1.cardid NOT IN (SELECT t2.cardid from showedjobs t2 where t2.userid = ?)" +
+                    "                    and cardid > ?" +
+                    "                    order by t1.cardid" +
+                    " limit ?");
+
             preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,ConvertedStart);
             preparedStatement.setInt(3,ConvertedAmount);
-
             ResultSet result = super.executeQuery(preparedStatement,connection);
 
             // initiliaze domain item
@@ -96,7 +95,7 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             return cardlist;
         }
         catch (Exception e){
-            e.printStackTrace();
+            e.printStackTrace();1
             return null;
         }
     }
@@ -104,7 +103,7 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
     public CardImageList getCardimagesByCardid(int cardid,Connection connection){
         try{
             //getting the current image list
-            String imagesql = "SELECT * FROM cardsimages where cardid = ?";
+            String imagesql = "SELECT * FROM jobsimages where jobid = ?";
             PreparedStatement imageStatement = connection.prepareStatement(imagesql);
             imageStatement.setInt(1, cardid);
             ResultSet result = super.executeQuery(imageStatement,connection);
