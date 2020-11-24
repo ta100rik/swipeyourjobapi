@@ -1,0 +1,47 @@
+package com.CartService.cartService.domain.AppViews;
+
+public class AppLocation {
+    private String city;
+    private String streetname;
+    private int housenumber;
+    private String zipcode;
+
+    public AppLocation(String city, String streetname, int housenumber, String zipcode) {
+        this.city = city;
+        this.streetname = streetname;
+        this.housenumber = housenumber;
+        this.zipcode = zipcode;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setStreetname(String streetname) {
+        this.streetname = streetname;
+    }
+
+    public void setHousenumber(int housenumber) {
+        this.housenumber = housenumber;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStreetname() {
+        return streetname;
+    }
+
+    public int getHousenumber() {
+        return housenumber;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+}

@@ -4,6 +4,7 @@ import com.CartService.cartService.dataLayer.DataAccessObjectsMySQL.BaseDaoMySQL
 import com.CartService.cartService.dataLayer.InterfacesDao.likeDao;
 import com.CartService.cartService.domain.Card;
 import com.CartService.cartService.domain.CardImage;
+import com.CartService.cartService.domain.CardLocation;
 import com.CartService.cartService.domain.ListClasses.CardImageList;
 import com.CartService.cartService.domain.ListClasses.Cardlist;
 
@@ -18,7 +19,7 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
     public int newLike(int userid, int cardid){
         try{
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO liketable (userid,cardid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO likedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1,userid);
             preparedStatement.setInt(2,cardid);
             return super.executeQueryReturningId(preparedStatement,connection);
@@ -31,31 +32,42 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
     }
     @Override
     public Cardlist getCards(){
-        try{
-            // get connection
-            Connection connection  = super.getConnection();
-            // getting all the cards
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM cards;");
-            ResultSet result = super.executeQuery(preparedStatement,connection);
+        /*
+        *   this function is turned off because it is decrypted
+        * */
+//        try{
+//            // get connection
+//            Connection connection  = super.getConnection();
+//            // getting all the cards
+//            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs;");
+//            ResultSet result = super.executeQuery(preparedStatement,connection);
+//
+//            // initiliaze domain item
+//            Cardlist cardlist = new Cardlist();
+//            while(result.next()){
+//                int cardid              = result.getInt("cardid");
+//                String cardtitle        = result.getString("cardtitle");
+//                String city             = result.getString("city");
+//                String companyname      = result.getString("companyname");
+//                String companydesc      = result.getString("companydesc");
+//                String companyurl       = result.getString("weburl");
+//                String description      = result.getString("description");
+//                float salary            = result.getFloat("salary");
+//                float minHours          = result.getFloat("minhours");
+//                float maxHours          = result.getFloat("maxhours");
+//
+//                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
+//                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minHours,maxHours);
+//                cardlist.addCard(newCard);
+//            }
+//            return cardlist;
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//            return null;
+//        }
 
-            // initiliaze domain item
-            Cardlist cardlist = new Cardlist();
-            while(result.next()){
-                int cardid              = result.getInt("cardid");
-                String cardtitle        = result.getString("cardtitle");
-                String city             = result.getString("city");
-                String companyname      = result.getString("companyname");
-                String description      = result.getString("description");
-                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description);
-                cardlist.addCard(newCard);
-            }
-            return cardlist;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+        return null;
     }
 
     @Override
@@ -69,11 +81,15 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             int ConvertedStart = Integer.parseInt(start);
             int ConvertedAmount = Integer.parseInt(amount);
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1" +
-                    "                    WHERE t1.cardid NOT IN (SELECT t2.cardid from showedjobs t2 where t2.userid = ?)" +
-                    "                    and cardid > ?" +
-                    "                    order by t1.cardid" +
-                    " limit ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1 " +
+                    "join companies companyinfo " +
+                    "on companyinfo.company_id = t1.companyid " +
+                    "join joblocation jobloc " +
+                    "on jobloc.cardid = t1.jobid " +
+                    "and jobloc.defaultlocation = '1' " +
+                    "join webusers " +
+                    "on webusers.companyid = companyinfo.company_id " +
+                    "WHERE t1.jobid NOT IN (SELECT t2.jobid from showedjobs t2 where t2.userid = ?) and jobid > ? order by t1.jobid limit ?");
 
             preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,ConvertedStart);
@@ -83,19 +99,37 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             // initiliaze domain item
             Cardlist cardlist = new Cardlist();
             while(result.next()){
-                int cardid              = result.getInt("cardid");
-                String cardtitle        = result.getString("cardtitle");
-                String city             = result.getString("city");
-                String companyname      = result.getString("companyname");
-                String description      = result.getString("description");
+                /*
+                *   later seperate a card from the company info by making a company class
+                * */
+                int cardid              = result.getInt("jobid");
+                String cardtitle        = result.getString("jobtitle");
+                String companyname      = result.getString("name");
+                String companydesc      = result.getString("comanydesc");
+                String companyurl       = result.getString("weburl");
+                String description      = result.getString("jobdescription");
+                Float salary            = result.getFloat("salary");
+                Float maxhours          = result.getFloat("maxhours");
+                Float minhours          = result.getFloat("minhours");
+                String user             = result.getString("firstname");
+//                init card images
                 CardImageList imagelist = getCardimagesByCardid(cardid,connection);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description);
+//                initiliasing the card location seperated because of the seperated table in query
+                String streetname           = result.getString("streetname");
+                int housenumber             = result.getInt("housenumber");
+                String city                 = result.getString("city");
+                String zipcode              = result.getString("zipcode");
+                boolean defaultlocation     = result.getBoolean("defaultlocation");
+                int idjoblocation           = result.getInt("idjoblocation");
+                CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation);
+
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
                 cardlist.addCard(newCard);
             }
             return cardlist;
         }
         catch (Exception e){
-            e.printStackTrace();1
+            e.printStackTrace();
             return null;
         }
     }
@@ -113,9 +147,9 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             //looping through every image row
             while(result.next()){
                 //creating imagerow object
-                int imageId             = result.getInt("cardimageid");
+                int imageId             = result.getInt("jobimageid");
                 String imageurl         = result.getString("imageurl");
-                int imagecardid         = result.getInt("cardid");
+                int imagecardid         = result.getInt("jobid");
                 CardImage image = new CardImage(imageId,imageurl,imagecardid);
                 //add the image to the container class
                 imagelist.addCardimage(image);
@@ -131,7 +165,7 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
     public int newShowed( String userid, int cardid) {
         try{
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO showedcards (userid,cardid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO showedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,cardid);
 
