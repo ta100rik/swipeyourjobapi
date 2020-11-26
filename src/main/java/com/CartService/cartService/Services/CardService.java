@@ -36,8 +36,10 @@ public class CardService {
 //        }
         return null;
     }
-    public List<AppCard> getAppcardByUserid(String userid, String start, String amount){
+    public List<AppCard> getAppcardByUserid(String userid, String start, String amount,String lon, String lat){
+
         Cardlist result  = LikeImpl.getCardsByUserid(userid,start,amount);
+
         List<AppCard> cardlist = new ArrayList<>();
 
         for (Card currentcard : result.getCardList())
@@ -46,11 +48,15 @@ public class CardService {
             AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner());
 
             AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode());
-            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours(),location);
-//            AppJobInfo newcard = new AppJobInfo(currentcard.getCardid(),currentcard.getCardTitel(),currentcard.getDescription(), currentcard.getCity(),currentcard.getCompanyname());
-            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
-                jobinfo.addImage(cardimage.getImageurl());
+            if(!lon.isEmpty() && !lat.isEmpty()){
+                currentcard.getLocation().setJobdistance(lat,lon);
+                location.setJobdistance(currentcard.getLocation().getJobdistance());
             }
+            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours(),location);
+           for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
+                jobinfo.addImage(cardimage.getImageurl());
+           }
+
             AppCard newcard = new AppCard(companyinfo,jobinfo);
             cardlist.add(newcard);
         }

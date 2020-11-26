@@ -5,18 +5,18 @@ public class AppLocation {
     private String streetname;
     private int housenumber;
     private String zipcode;
-
+    private double jobdistance;
     public AppLocation(String city, String streetname, int housenumber, String zipcode) {
         this.city = city;
         this.streetname = streetname;
         this.housenumber = housenumber;
         this.zipcode = zipcode;
+
     }
 
     public void setCity(String city) {
         this.city = city;
     }
-
     public void setStreetname(String streetname) {
         this.streetname = streetname;
     }
@@ -27,6 +27,10 @@ public class AppLocation {
 
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    public void setJobdistance(double jobdistance) {
+        this.jobdistance = jobdistance;
     }
 
     public String getCity() {
@@ -43,5 +47,9 @@ public class AppLocation {
 
     public String getZipcode() {
         return zipcode;
+    }
+
+    public double getJobdistance() {
+        return jobdistance;
     }
 }

@@ -11,7 +11,6 @@ public class BaseDaoConnectionPoolingMySQL {
     private static List<Connection> usedConnections = new ArrayList<>();
     private int INITIAL_POOL_SIZE = 10;
     private String dbuserName = "u7281p15572_swipeyourjob";
-//    private String dbpassword = "$wipeYourJob@69";
 //    private String dbuserName = "root";
 //    private String dbpassword = "$wipeYourJob@69";
 

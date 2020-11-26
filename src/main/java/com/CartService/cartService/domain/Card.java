@@ -31,6 +31,7 @@ public class Card {
         this.owner              = user;
     }
 
+
     public void setCardid(int cardid) {
         this.cardid = cardid;
     }

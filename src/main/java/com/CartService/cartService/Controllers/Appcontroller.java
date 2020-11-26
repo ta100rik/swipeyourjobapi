@@ -38,16 +38,22 @@ public class Appcontroller {
     }
 
     @GetMapping("/cards")
-    public ResponseEntity<?> getCards(@RequestParam(required = false) String userid,@RequestParam(required = false) String start, @RequestParam(required = false) String amount){
+    public ResponseEntity<?> getCards(
+            @RequestParam(required = true) String userid,
+            @RequestParam(required = true) String start,
+            @RequestParam(required = true) String amount,
+            @RequestParam(required = false) String lon ,
+            @RequestParam(required = false) String lat
+        ){
         try{
-            if(userid == null){
-                return ResponseEntity.noContent().build();
-//                List<AppCard> result = ServiceProvider.getCardService().getAppCards();
-//                return ResponseEntity.ok(new Gson().toJson(result));
-            }else{
-                List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount);
-                return ResponseEntity.ok(new Gson().toJson(result));
+            if(lon == null){
+                lon = "";
             }
+            if(lat == null){
+                lat = "";
+            }
+           List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount,lon,lat);
+           return ResponseEntity.ok(new Gson().toJson(result));
         }catch (Exception e){
             return ResponseEntity.noContent().build();
         }

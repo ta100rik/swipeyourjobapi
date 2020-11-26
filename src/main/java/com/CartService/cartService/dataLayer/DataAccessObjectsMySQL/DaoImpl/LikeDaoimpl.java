@@ -121,8 +121,10 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
                 String zipcode              = result.getString("zipcode");
                 boolean defaultlocation     = result.getBoolean("defaultlocation");
                 int idjoblocation           = result.getInt("idjoblocation");
-                CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation);
+                double joblongtitude         = result.getDouble("joblongtitude");
+                double joblatitude           = result.getDouble("joblatitude");
 
+                CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
                 Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
                 cardlist.addCard(newCard);
             }
@@ -133,7 +135,6 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
             return null;
         }
     }
-
     public CardImageList getCardimagesByCardid(int cardid,Connection connection){
         try{
             //getting the current image list
