@@ -1,7 +1,7 @@
 package com.CartService.cartService.Controllers;
 
 import com.CartService.cartService.Services.ServiceProvider;
-import com.CartService.cartService.domain.AppViews.AppCard;
+import com.CartService.cartService.domain.AppViews.AppJobInfo;
 import com.CartService.cartService.domain.request.CardRequest;
 import com.google.gson.Gson;
 import org.json.JSONException;
@@ -36,7 +36,7 @@ public class WebController {
     @GetMapping("/companycards")
     public ResponseEntity<?> getCards(@RequestParam(required = false) String companyname){
         try{
-            List<AppCard> result = ServiceProvider.getCardService().getAppCards();
+            List<AppJobInfo> result = ServiceProvider.getCardService().getAppCards();
             return ResponseEntity.ok(new Gson().toJson(result));
         }catch (Exception e){
             return ResponseEntity.noContent().build();

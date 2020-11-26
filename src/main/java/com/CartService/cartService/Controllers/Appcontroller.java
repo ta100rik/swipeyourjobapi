@@ -2,6 +2,7 @@ package com.CartService.cartService.Controllers;
 
 import com.CartService.cartService.Services.ServiceProvider;
 import com.CartService.cartService.domain.AppViews.AppCard;
+import com.CartService.cartService.domain.AppViews.AppJobInfo;
 import com.CartService.cartService.domain.request.MatchRequest;
 import com.CartService.cartService.domain.request.showRequest;
 import com.google.gson.Gson;
@@ -40,8 +41,9 @@ public class Appcontroller {
     public ResponseEntity<?> getCards(@RequestParam(required = false) String userid,@RequestParam(required = false) String start, @RequestParam(required = false) String amount){
         try{
             if(userid == null){
-                List<AppCard> result = ServiceProvider.getCardService().getAppCards();
-                return ResponseEntity.ok(new Gson().toJson(result));
+                return ResponseEntity.noContent().build();
+//                List<AppCard> result = ServiceProvider.getCardService().getAppCards();
+//                return ResponseEntity.ok(new Gson().toJson(result));
             }else{
                 List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount);
                 return ResponseEntity.ok(new Gson().toJson(result));

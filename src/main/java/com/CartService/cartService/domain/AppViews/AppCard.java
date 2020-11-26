@@ -1,77 +1,27 @@
 package com.CartService.cartService.domain.AppViews;
 
-import com.CartService.cartService.domain.CardImage;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class AppCard {
-    private int id;
-    private String title;
-    private String description;
-    private String location;
-    private String companyName;
-    private List<String> images = new ArrayList<>();
+    private AppCompanyinfo company_info;
+    private AppJobInfo job_info;
 
-    public AppCard(int id, String title, String description, String location, String companyName) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.companyName = companyName;
+    public AppCard(AppCompanyinfo company_info, AppJobInfo job_info) {
+        this.company_info = company_info;
+        this.job_info = job_info;
     }
 
-    public String getTitle() {
-        return title;
+    public AppCompanyinfo getCompany_info() {
+        return company_info;
     }
 
-    public List<String> getImages() {
-        return images;
+    public void setCompany_info(AppCompanyinfo company_info) {
+        this.company_info = company_info;
     }
 
-    public int getId() {
-        return id;
+    public AppJobInfo getJob_info() {
+        return job_info;
     }
 
-    public String getDescription() {
-        return description;
+    public void setJob_info(AppJobInfo job_info) {
+        this.job_info = job_info;
     }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    public boolean addImage(String imageUrl){
-       return this.images.add(imageUrl);
-    }
-
-
 }

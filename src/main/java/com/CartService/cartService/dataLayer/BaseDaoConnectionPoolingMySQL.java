@@ -10,11 +10,14 @@ public class BaseDaoConnectionPoolingMySQL {
     private static List<Connection> openConnections;
     private static List<Connection> usedConnections = new ArrayList<>();
     private int INITIAL_POOL_SIZE = 10;
-    private String dbuserName = "u7281p15572_swipeyourjob";
+//    private String dbuserName = "u7281p15572_swipeyourjob";
 //    private String dbpassword = "$wipeYourJob@69";
+    private String dbuserName = "root";
+    private String dbpassword = "$wipeYourJob@69";
 
-    private String dbpassword = "pMeJFFhC3";
-    private String url = "jdbc:mysql://web0119.zxcs.nl:3306/u7281p15572_swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
+//  private String dbpassword = "pMeJFFhC3";
+//  private String url = "jdbc:mysql://web0119.zxcs.nl:3306/u7281p15572_swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
+    private String url = "jdbc:mysql://localhost:3306/u7281p15572_swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
     private String driverName = "com.mysql.cj.jdbc.Driver";
     private  Connection conn = null;
 
