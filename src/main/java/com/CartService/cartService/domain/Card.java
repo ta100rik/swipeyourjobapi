@@ -11,12 +11,12 @@ public class Card {
     private String description;
     private CardImageList imagelist;
     private float salary;
-    private float minHours;
-    private float maxhours;
+    private int minHours;
+    private int maxhours;
     private CardLocation location;
     private String owner;
 
-    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description,String companyDescription, String companyurl, float salary, float minHours, float maxhours, CardLocation cardlocation , String user) {
+    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
         this.cardid             = cardid;
         this.cardtitle          = cardTitel;
         this.companyname        = companyname;
@@ -65,11 +65,11 @@ public class Card {
         this.salary = salary;
     }
 
-    public void setMinHours(float minHours) {
+    public void setMinHours(int minHours) {
         this.minHours = minHours;
     }
 
-    public void setMaxhours(float maxhours) {
+    public void setMaxhours(int maxhours) {
         this.maxhours = maxhours;
     }
 
@@ -118,11 +118,11 @@ public class Card {
         return salary;
     }
 
-    public float getMinHours() {
+    public int getMinHours() {
         return minHours;
     }
 
-    public float getMaxhours() {
+    public int getMaxhours() {
         return maxhours;
     }
 

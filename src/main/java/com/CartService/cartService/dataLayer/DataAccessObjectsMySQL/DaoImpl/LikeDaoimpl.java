@@ -109,8 +109,8 @@ public class LikeDaoimpl extends BaseDaoMySQL implements likeDao {
                 String companyurl       = result.getString("weburl");
                 String description      = result.getString("jobdescription");
                 Float salary            = result.getFloat("salary");
-                Float maxhours          = result.getFloat("maxhours");
-                Float minhours          = result.getFloat("minhours");
+                int maxhours          = result.getInt("maxhours");
+                int minhours          = result.getInt("minhours");
                 String user             = result.getString("firstname");
 //                init card images
                 CardImageList imagelist = getCardimagesByCardid(cardid,connection);

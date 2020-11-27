@@ -1,19 +1,14 @@
 package com.CartService.cartService.domain.AppViews;
 
-import com.CartService.cartService.domain.CardImage;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class AppJobInfo {
     private int id;
     private String title;
     private String description;
     private float salary;
-    private float minhours;
-    private float maxhours;
+    private int minhours;
+    private int maxhours;
 
-    public AppJobInfo(int id, String title, String description, float salary, float minhours, float maxhours) {
+    public AppJobInfo(int id, String title, String description, float salary, int minhours, int maxhours) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -54,19 +49,19 @@ public class AppJobInfo {
         this.salary = salary;
     }
 
-    public float getMinhours() {
+    public int getMinhours() {
         return minhours;
     }
 
-    public void setMinhours(float minhours) {
+    public void setMinhours(int minhours) {
         this.minhours = minhours;
     }
 
-    public float getMaxhours() {
+    public int getMaxhours() {
         return maxhours;
     }
 
-    public void setMaxhours(float maxhours) {
+    public void setMaxhours(int maxhours) {
         this.maxhours = maxhours;
     }
 
