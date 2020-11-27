@@ -41,7 +41,7 @@ public class CardService {
         Cardlist result  = LikeImpl.getCardsByUserid(userid,start,amount);
 
         List<AppCard> cardlist = new ArrayList<>();
-
+        List<String> images = new ArrayList<>();
         for (Card currentcard : result.getCardList())
         {
 //            initiliaze the company info
@@ -52,12 +52,13 @@ public class CardService {
                 currentcard.getLocation().setJobdistance(lat,lon);
                 location.setJobdistance(currentcard.getLocation().getJobdistance());
             }
-            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours(),location);
+
+            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
-                jobinfo.addImage(cardimage.getImageurl());
+               images.add(cardimage.getImageurl());
            }
 
-            AppCard newcard = new AppCard(companyinfo,jobinfo);
+            AppCard newcard = new AppCard(companyinfo,jobinfo,images,location);
             cardlist.add(newcard);
         }
         return cardlist;
