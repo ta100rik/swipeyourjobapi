@@ -5,7 +5,7 @@ public class AppLocation {
     private String streetname;
     private int housenumber;
     private String zipcode;
-    private double jobdistance;
+    private double distance;
     public AppLocation(String city, String streetname, int housenumber, String zipcode) {
         this.city = city;
         this.streetname = streetname;
@@ -30,7 +30,7 @@ public class AppLocation {
     }
 
     public void setJobdistance(double jobdistance) {
-        this.jobdistance = jobdistance;
+        this.distance = jobdistance;
     }
 
     public String getCity() {
@@ -50,6 +50,6 @@ public class AppLocation {
     }
 
     public double getJobdistance() {
-        return jobdistance;
+        return distance;
     }
 }
