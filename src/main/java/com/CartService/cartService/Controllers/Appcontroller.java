@@ -1,13 +1,17 @@
 package com.CartService.cartService.Controllers;
 
+import com.CartService.cartService.Services.JWTTokenService;
 import com.CartService.cartService.Services.ServiceProvider;
 import com.CartService.cartService.domain.AppViews.AppCard;
 import com.CartService.cartService.domain.AppViews.AppJobInfo;
 import com.CartService.cartService.domain.request.MatchRequest;
 import com.CartService.cartService.domain.request.showRequest;
+import com.CartService.cartService.jwt.User;
 import com.google.gson.Gson;
 import org.json.JSONException;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +31,7 @@ public class Appcontroller {
 
     }
     @PostMapping("/addShowed")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addShowed(@RequestBody showRequest showrequest) throws JSONException {
         int result = ServiceProvider.getCardService().newShowed(showrequest.getUserid(),showrequest.getCardid());
         if(result != 0){
@@ -58,7 +63,17 @@ public class Appcontroller {
             return ResponseEntity.noContent().build();
         }
     }
-
+    @GetMapping("/jwttoken")
+    public ResponseEntity<?> givetoken(){
+        try{
+            User user = new User(1,"test","test",true);
+            JWTTokenService jwt = new JWTTokenService();
+            String token = jwt.generateToken(user);
+            return ResponseEntity.ok(token);
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
+    }
 
 
 
