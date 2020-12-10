@@ -1,0 +1,36 @@
+package com.Swipeyourjob.Rest_api.Controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("")
+public class IndexController {
+    @RequestMapping("/")
+    public String index() {
+        return "<h1>Rest Api Swipeyourjob</h1>" +
+                "<ul>" +
+                "   <li><a href='/app'>App list</a></li>" +
+                "   <ul>" +
+                "       <li>addLike - POST({\"userid\" :  ,\"cardid\":})</li>   " +
+                "       <li>addShowed - POST({\\\"userid\\\" :  ,\\\"cardid\\\":})</li>  " +
+
+                "       <li><a href='/app/cards?userid=sdf&start=15&amount=2&lon=52.0862270277778&lat=5.17661701666667'>cards?userid=sdf&start=15&amount=2 (optional: lon=52.0862270277778&lat=5.17661701666667) - GET</a></li> " +
+                "   </ul>" +
+                "   <li><a href='/web'>Web</a></li>" +
+                "   <ul>" +
+                "       <li>newCard - POST({\"cardtitel\" :  ,\"city\":  ,\"companyname\": })</li>" +
+                "   </ul>" +
+                "   <li><a href='/chat'>Chat</a></li>" +
+                "   <ul>" +
+                "       <li>createRoom - POST({ \"chatjobid\":32242,\n" +
+                "    \"chatname\":\"sdafjlaskdfjklasdjf\",\n" +
+                "    \"ownerid\":22,\n" +
+                "    \"roomGuest\":[\n" +
+                "        23232323,2312315\n" +
+                "    ]})</li>" +
+                "       <li><a href='/chat/rooms?userid=2312315&start=1&amount=100'>rooms?userid=2312315&start=1&amount=100 - GET</a>" +
+                "   </ul>" +
+                "</ul>";
+    }
+}
