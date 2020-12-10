@@ -6,12 +6,16 @@ public class AppLocation {
     private int housenumber;
     private String zipcode;
     private double distance;
-    public AppLocation(String city, String streetname, int housenumber, String zipcode) {
+    private double joblatitude;
+    private double joblongtitude;
+
+    public AppLocation(String city, String streetname, int housenumber, String zipcode, double lon, double lan) {
         this.city = city;
         this.streetname = streetname;
         this.housenumber = housenumber;
         this.zipcode = zipcode;
-
+        this.joblongtitude = lon;
+        this.joblatitude    = lan;
     }
 
     public void setCity(String city) {

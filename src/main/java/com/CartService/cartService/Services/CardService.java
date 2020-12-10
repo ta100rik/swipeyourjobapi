@@ -47,7 +47,7 @@ public class CardService {
 //            initiliaze the company info
             AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner());
 
-            AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode());
+            AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
             if(!lon.isEmpty() && !lat.isEmpty()){
                 currentcard.getLocation().setJobdistance(lat,lon);
                 location.setJobdistance(currentcard.getLocation().getJobdistance());
