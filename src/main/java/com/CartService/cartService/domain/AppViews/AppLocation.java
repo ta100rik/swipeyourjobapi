@@ -7,14 +7,14 @@ public class AppLocation {
     private String zipcode;
     private double distance;
     private double latitude;
-    private double longtitude;
+    private double longitude;
 
     public AppLocation(String city, String streetname, int housenumber, String zipcode, double lon, double lan) {
         this.city = city;
         this.streetname = streetname;
         this.housenumber = housenumber;
         this.zipcode = zipcode;
-        this.longtitude = lon;
+        this.longitude = lon;
         this.latitude    = lan;
     }
 
