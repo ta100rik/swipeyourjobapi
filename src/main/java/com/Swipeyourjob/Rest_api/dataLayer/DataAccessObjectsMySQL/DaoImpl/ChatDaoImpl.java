@@ -2,6 +2,7 @@ package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.DaoImpl;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.chatDao;
+import com.Swipeyourjob.Rest_api.domain.ChatMessage;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.GuestList;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.RoomList;
 import com.Swipeyourjob.Rest_api.domain.chatRoom;
@@ -123,5 +124,43 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
             return null;
         }
 
+    }
+    public boolean SendMessage(String userid, int roomid, String message){
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO chatmessages (chatmessage, roomid, userid) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,message);
+            preparedStatement.setInt(2,roomid);
+            preparedStatement.setString(3,userid);
+            super.executeQueryReturningId(preparedStatement,connection);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public chatRoom getChatHistory(int roomid, String amount){
+        try{
+            chatRoom chatroom = new chatRoom(roomid);
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM chatmessages where roomid = ? order by chatid desc limit ?");
+            int ConvertedAmount = Integer.parseInt(amount);
+            preparedStatement.setInt(1,roomid);
+            preparedStatement.setInt(2,ConvertedAmount);
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+            while(result.next()){
+                String userid = result.getString("userid");
+                String chatmessage = result.getString("chatmessage");
+                ChatMessage chatMessageObject = new ChatMessage(chatmessage, userid);
+                chatroom.addMessage(chatMessageObject);
+            }
+            return chatroom;
+            // initiliaze domain item
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

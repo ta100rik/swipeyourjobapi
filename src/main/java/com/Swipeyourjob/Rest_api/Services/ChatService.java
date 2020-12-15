@@ -1,7 +1,9 @@
 package com.Swipeyourjob.Rest_api.Services;
 
+import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppChatMessage;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.DaoImpl.ChatDaoImpl;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppRoom;
+import com.Swipeyourjob.Rest_api.domain.ChatMessage;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.GuestList;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.RoomList;
 import com.Swipeyourjob.Rest_api.domain.chatRoom;
@@ -38,5 +40,27 @@ public class ChatService {
             app_list.add(new_room);
         }
         return app_list;
+    }
+    public boolean SendMessage(String userid, int roomid, String message){
+        RoomList current_list = ChatImpl.getRoomList(userid,"0","1000");
+        if(current_list.isRoomInList(roomid)){
+            return ChatImpl.SendMessage(userid,roomid,message);
+        }else{
+            return false;
+        }
+    }
+    public List<AppChatMessage> getChatHistoryRoom(int roomid, String userid,String amount){
+        RoomList current_list = ChatImpl.getRoomList(userid,"0","1000");
+        if(current_list.isRoomInList(roomid)){
+             chatRoom chatroom = ChatImpl.getChatHistory(roomid,amount);
+             List<AppChatMessage> messagelist = new ArrayList<AppChatMessage>();
+             for (ChatMessage chatmessageobject : chatroom.getChatmessages()){
+                 AppChatMessage message = new AppChatMessage(chatmessageobject.getChatmessage(),chatmessageobject.getUserid());
+                 messagelist.add(message);
+             }
+             return messagelist;
+        }else{
+            return null;
+        }
     }
 }

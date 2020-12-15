@@ -29,6 +29,12 @@ public class IndexController {
                 "    \"roomGuest\":[\n" +
                 "        23232323,2312315\n" +
                 "    ]})</li>" +
+                "       <li>sendMessage  - POST ({\n" +
+                "    \"userid\": 888888,\n" +
+                "    \"roomid\" : 18, \n" +
+                "    \"message\" : \"Hi wil graag soliciteren voor deze bijbaan\"\n" +
+                "})</li>" +
+                "       <li><a href='/chat/getChatMessages?userid=2312315&amount=5&roomid=18'>getChatMessages?userid=2312315&amount=5&roomid=18 - GET</a>" +
                 "       <li><a href='/chat/rooms?userid=2312315&start=1&amount=100'>rooms?userid=2312315&start=1&amount=100 - GET</a>" +
                 "   </ul>" +
                 "</ul>";

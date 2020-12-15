@@ -1,5 +1,8 @@
 package com.Swipeyourjob.Rest_api.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class chatRoom {
     private int guest_id;
     private String userid;
@@ -8,7 +11,7 @@ public class chatRoom {
     private String chatname;
     private int chatjobid;
     private int roomAdmin;
-
+    private List<ChatMessage> chatmessages = new ArrayList<ChatMessage>();
     public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, int roomAdmin) {
         this.guest_id = guest_id;
         this.userid = userid;
@@ -17,6 +20,16 @@ public class chatRoom {
         this.chatname = chatname;
         this.chatjobid = chatjobid;
         this.roomAdmin = roomAdmin;
+    }
+    public chatRoom(int room_id){
+        this.room_id = room_id;
+    }
+    public boolean addMessage(ChatMessage chatMessage){
+       return chatmessages.add(chatMessage);
+    }
+
+    public List<ChatMessage> getChatmessages() {
+        return chatmessages;
     }
 
     public int getGuest_id() {

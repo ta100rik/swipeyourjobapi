@@ -23,4 +23,13 @@ public class RoomList {
             return false;
         }
     }
+    public boolean isRoomInList(int searchroomid){
+        for (chatRoom room : this.RoomsList){
+            int roomid = room.getRoom_id();
+            if(roomid == searchroomid){
+                return true;
+            }
+        }
+        return false;
+    }
 }
