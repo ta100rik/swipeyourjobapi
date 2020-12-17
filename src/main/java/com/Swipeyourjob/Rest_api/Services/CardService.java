@@ -49,7 +49,7 @@ public class CardService {
 
             AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
             if(!lon.isEmpty() && !lat.isEmpty()){
-                currentcard.getLocation().setJobdistance(lat,lon);
+                currentcard.getLocation().setJobdistance(lon,lat);
                 location.setJobdistance(currentcard.getLocation().getJobdistance());
             }
 

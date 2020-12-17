@@ -42,10 +42,10 @@ public class CardLocation {
         return jobdistance;
     }
 
-    public void setJobdistance(String lat, String lon) {
+    public void setJobdistance(String lon, String lat) {
         double lonconverted = Double.parseDouble(lon);
-        double latconveted  = Double.parseDouble(lat);
-        double distance =  distanceCalculator(lonconverted,latconveted,this.joblatitude,this.joblongtitude);
+        double latconverted  = Double.parseDouble(lat);
+        double distance =  distanceCalculator(latconverted,lonconverted,this.joblatitude,this.joblongtitude);
         System.out.println(distance);
         this.jobdistance = distance;
     }
