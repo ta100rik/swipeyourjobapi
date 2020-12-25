@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL;
+package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects;
 
 import com.Swipeyourjob.Rest_api.dataLayer.BaseDaoConnectionPoolingMySQL;
 

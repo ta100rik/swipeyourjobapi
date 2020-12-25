@@ -19,7 +19,7 @@ public class IndexController {
                 "   </ul>" +
                 "   <li><a href='/web'>Web</a></li>" +
                 "   <ul>" +
-                "       <li>newCard - POST({\"cardtitel\" :  ,\"city\":  ,\"companyname\": })</li>" +
+                "       <li>uploadimage - POST(\"imageFile\" : FILE )</li>" +
                 "   </ul>" +
                 "   <li><a href='/chat'>Chat</a></li>" +
                 "   <ul>" +

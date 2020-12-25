@@ -1,6 +1,6 @@
 package com.Swipeyourjob.Rest_api.Services;
 
-import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.DaoImpl.JobDaoImpl;
+import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.JobDaoImpl;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompanyinfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
@@ -41,9 +41,10 @@ public class CardService {
         Cardlist result  = JobImpl.getCardsByUserid(userid,start,amount);
 
         List<AppCard> cardlist = new ArrayList<>();
-        List<String> images = new ArrayList<>();
+
         for (Card currentcard : result.getCardList())
         {
+            List<String> images = new ArrayList<>();
 //            initiliaze the company info
             AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner());
 
@@ -54,10 +55,10 @@ public class CardService {
             }
 
             AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
-           for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
+
+            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
                images.add(cardimage.getImageurl());
            }
-
             AppCard newcard = new AppCard(companyinfo,jobinfo,images,location);
             cardlist.add(newcard);
         }

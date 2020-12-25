@@ -1,7 +1,7 @@
 package com.Swipeyourjob.Rest_api.Services;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppChatMessage;
-import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.DaoImpl.ChatDaoImpl;
+import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.ChatDaoImpl;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppRoom;
 import com.Swipeyourjob.Rest_api.domain.ChatMessage;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.GuestList;

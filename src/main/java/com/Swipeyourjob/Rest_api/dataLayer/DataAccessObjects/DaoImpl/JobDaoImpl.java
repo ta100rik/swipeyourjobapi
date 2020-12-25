@@ -1,6 +1,6 @@
-package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.DaoImpl;
+package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
-import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjectsMySQL.BaseDaoMySQL;
+import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.jobDao;
 import com.Swipeyourjob.Rest_api.domain.Card;
 import com.Swipeyourjob.Rest_api.domain.CardImage;
@@ -123,7 +123,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 int idjoblocation           = result.getInt("idjoblocation");
                 double joblongtitude         = result.getDouble("joblongtitude");
                 double joblatitude           = result.getDouble("joblatitude");
-
+//                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
                 Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
                 cardlist.addCard(newCard);
@@ -142,7 +142,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             PreparedStatement imageStatement = connection.prepareStatement(imagesql);
             imageStatement.setInt(1, cardid);
             ResultSet result = super.executeQuery(imageStatement,connection);
-
+            System.out.println(imageStatement);
             //creating a container class for all the images
             CardImageList imagelist = new CardImageList();
             //looping through every image row
