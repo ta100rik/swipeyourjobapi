@@ -9,7 +9,7 @@ public class BaseDaoConnectionPoolingMySQL {
     private static final BaseDaoConnectionPoolingMySQL INSTANCE = new BaseDaoConnectionPoolingMySQL();
     private static List<Connection> openConnections;
     private static List<Connection> usedConnections = new ArrayList<>();
-    private int INITIAL_POOL_SIZE = 10;
+    private int INITIAL_POOL_SIZE = 1;
     private String dbuserName = "u7281p15572_swipeyourjob";
 //    private String dbuserName = "root";
 //    private String dbpassword = "$wipeYourJob@69";

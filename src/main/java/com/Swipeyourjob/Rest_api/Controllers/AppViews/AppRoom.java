@@ -5,12 +5,32 @@ public class AppRoom {
     private String chatname;
     private int chatjobid;
     private int roomAdmin;
+    private String jobLogo;
+    private String jobTitle;
 
-    public AppRoom(int room_id, String chatname, int chatjobid, int roomAdmin) {
+    public AppRoom(int room_id, String chatname, int chatjobid, int roomAdmin,String joblogo,String jobtitle) {
         this.room_id = room_id;
         this.chatname = chatname;
         this.chatjobid = chatjobid;
         this.roomAdmin = roomAdmin;
+        this.jobLogo = joblogo;
+        this.jobTitle = jobtitle;
+    }
+
+    public String getJobLogo() {
+        return jobLogo;
+    }
+
+    public void setJobLogo(String jobLogo) {
+        this.jobLogo = jobLogo;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public int getRoom_id() {

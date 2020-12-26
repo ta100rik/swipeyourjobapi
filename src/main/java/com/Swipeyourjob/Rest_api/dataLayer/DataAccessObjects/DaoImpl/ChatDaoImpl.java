@@ -67,30 +67,36 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                     "SELECT * FROM room_users  " +
                     "join chat_rooms " +
                     "on chat_rooms.idchat_rooms = room_users.room_id " +
-                    "where userid = ? " +
-                    "and room_id > ? " +
-                    "limit ?");
-
+                    "join jobs " +
+                    "on jobs.jobid = chat_rooms.chatjobid " +
+                    "join companies " +
+                    "on companies.company_id = jobs.companyid " +
+                    "where room_users.userid = ? " +
+                    "and room_id > ?  " +
+                    "limit ? ");
             int ConvertedStart = Integer.parseInt(start);
-            int ConvertedAmount = Integer.parseInt(amount);
+           int ConvertedAmount = Integer.parseInt(amount);
 
-            preparedStatement.setString(1,useridentifier);
+           preparedStatement.setString(1,useridentifier);
 
-            preparedStatement.setInt(2,ConvertedStart);
+           preparedStatement.setInt(2,ConvertedStart);
 
-            preparedStatement.setInt(3,ConvertedAmount);
-            ResultSet result = super.executeQuery(preparedStatement,connection);
-            // initiliaze domain item
-            RoomList roomlist = new RoomList();
-            while(result.next()){
-                int guest_id = result.getInt("guest_id");
-                String userid = result.getString("userid");
-                int room_id = result.getInt("room_id");
-                int idchat_rooms = result.getInt("idchat_rooms");
-                String chatname = result.getString("chatname");
+           preparedStatement.setInt(3,ConvertedAmount);
+           System.out.println(preparedStatement);
+           ResultSet result = super.executeQuery(preparedStatement,connection);
+           // initiliaze domain item
+           RoomList roomlist = new RoomList();
+           while(result.next()){
+               int guest_id = result.getInt("guest_id");
+               String userid = result.getString("userid");
+               int room_id = result.getInt("room_id");
+               int idchat_rooms = result.getInt("idchat_rooms");
+               String chatname = result.getString("Chatname");
                 int chatjobid = result.getInt("chatjobid");
                 int roomAdmin = result.getInt("roomAdmin");
-                chatRoom new_room = new chatRoom(guest_id,userid,room_id,idchat_rooms,chatname,chatjobid,roomAdmin);
+                String jobTitle = result.getString("jobtitle");
+                String companylogo = result.getString("companylogo");
+                chatRoom new_room = new chatRoom(guest_id,userid,room_id,idchat_rooms,chatname,chatjobid,roomAdmin,jobTitle,companylogo);
                 roomlist.addChatRoom(new_room);
             }
             return roomlist;

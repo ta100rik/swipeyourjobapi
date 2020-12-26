@@ -10,9 +10,12 @@ public class chatRoom {
     private int idchat_rooms;
     private String chatname;
     private int chatjobid;
+    private String jobTitle;
+    private String companyLogo;
     private int roomAdmin;
+
     private List<ChatMessage> chatmessages = new ArrayList<ChatMessage>();
-    public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, int roomAdmin) {
+    public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, int roomAdmin,String jobTitle, String companyLogo) {
         this.guest_id = guest_id;
         this.userid = userid;
         this.room_id = room_id;
@@ -20,12 +23,34 @@ public class chatRoom {
         this.chatname = chatname;
         this.chatjobid = chatjobid;
         this.roomAdmin = roomAdmin;
+        this.jobTitle = jobTitle;
+        this.companyLogo = companyLogo;
     }
     public chatRoom(int room_id){
         this.room_id = room_id;
     }
     public boolean addMessage(ChatMessage chatMessage){
        return chatmessages.add(chatMessage);
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
+    }
+
+    public void setChatmessages(List<ChatMessage> chatmessages) {
+        this.chatmessages = chatmessages;
     }
 
     public List<ChatMessage> getChatmessages() {

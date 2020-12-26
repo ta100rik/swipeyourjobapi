@@ -8,6 +8,7 @@ public class RoomRequest {
     private int chatjobid;
     private int ownerid;
     private List<Integer> roomGuest = new ArrayList<Integer>();
+
     public int getOwnerid() {
         return ownerid;
     }

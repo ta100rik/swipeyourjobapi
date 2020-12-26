@@ -29,7 +29,7 @@ public class ChatController {
     }
 
     @GetMapping("/rooms")
-    public ResponseEntity<?> getCards(
+    public ResponseEntity<?> getRooms(
             @RequestParam(required = true) String userid,
             @RequestParam(required = true) String start,
             @RequestParam(required = true) String amount
