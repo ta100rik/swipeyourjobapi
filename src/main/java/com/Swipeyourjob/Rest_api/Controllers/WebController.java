@@ -1,5 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
+import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
 import com.Swipeyourjob.Rest_api.Controllers.request.CardRequest;
@@ -27,27 +29,10 @@ public class WebController {
             return ResponseEntity.status(500).body("Something went wrong");
         }
     }
-//    @PostMapping("/newCard")
-//    public ResponseEntity<?> Card(@RequestBody CardRequest cardrequest) throws JSONException {
-//
-//        int result = ServiceProvider.getCardService().newCard(cardrequest.getCardtitle(),cardrequest.getCity(),cardrequest.getCompanyname(),cardrequest.getDescription(),cardrequest.getImages());
-//        if(result != 0){
-//            return ResponseEntity.ok(result);
-//        }else{
-//            return ResponseEntity.status(500).body("Something went wrong");
-//        }
-//    }
-//    @GetMapping("/companycards")
-//    public ResponseEntity<?> getCards(@RequestParam(required = false) String companyname){
-//        try{
-//            List<AppJobInfo> result = ServiceProvider.getCardService().getAppCards();
-//            return ResponseEntity.ok(new Gson().toJson(result));
-//        }catch (Exception e){
-//            return ResponseEntity.noContent().build();
-//        }
-//    }
-
-
+    @PostMapping("/newCompany")
+    public ResponseEntity<?> newCompany(@RequestBody CompanyRequest companyRequest){
+        return ResponseEntity.ok("New Company");
+    }
 
 
 

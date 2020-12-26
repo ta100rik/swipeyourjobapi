@@ -5,8 +5,8 @@ import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompanyinfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppLocation;
-import com.Swipeyourjob.Rest_api.domain.Card;
-import com.Swipeyourjob.Rest_api.domain.CardImage;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
 
 import java.util.ArrayList;
@@ -20,21 +20,6 @@ public class CardService {
     }
     public int newShowed(String userid, int cardid){
         return JobImpl.newShowed(userid,cardid);
-    }
-    public List<AppJobInfo> getAppCards(){
-//        Cardlist result  = LikeImpl.getCards();
-//        List<String> images = new ArrayList<>();
-//        List<AppJobInfo> cardlist = new ArrayList<>();
-//
-//        for (Card currentcard : result.getCardList())
-//        {
-//            AppJobInfo newcard = new AppJobInfo(currentcard.getCardid(),currentcard.getCardTitel(),currentcard.getDescription(), currentcard.getCity(),currentcard.getCompanyname());
-//            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
-//                newcard.addImage(cardimage.getImageurl());
-//            }
-//            cardlist.add(newcard);
-//        }
-        return null;
     }
     public AppCard getAppcardByJobid(String jobid,String lon, String lat){
         Card currentcard = JobImpl.getCardByJobid(jobid);
@@ -86,5 +71,5 @@ public class CardService {
     }
 
     //    web
-    public int newCard(String cardtitle, String city, String companyname, String description,List<String> images ) {return JobImpl.newCard(cardtitle,city,companyname,description,images); }
+
 }

@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.domain;
+package com.Swipeyourjob.Rest_api.domain.Cardsinfo;
 
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
 

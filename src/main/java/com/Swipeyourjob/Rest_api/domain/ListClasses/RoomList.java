@@ -1,6 +1,5 @@
 package com.Swipeyourjob.Rest_api.domain.ListClasses;
 
-import com.Swipeyourjob.Rest_api.domain.CardImage;
 import com.Swipeyourjob.Rest_api.domain.chatRoom;
 
 import java.util.ArrayList;

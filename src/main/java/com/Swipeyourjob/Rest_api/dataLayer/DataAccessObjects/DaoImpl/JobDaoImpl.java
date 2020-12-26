@@ -2,9 +2,9 @@ package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.jobDao;
-import com.Swipeyourjob.Rest_api.domain.Card;
-import com.Swipeyourjob.Rest_api.domain.CardImage;
-import com.Swipeyourjob.Rest_api.domain.CardLocation;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardLocation;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
 
@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.List;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     @Override
@@ -30,6 +29,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
 
     }
+    @Override
     public Card getCardByJobid(String jobid){
         try{
             // get connection
@@ -82,46 +82,6 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
         return null;
     }
-    @Override
-    public Cardlist getCards(){
-        /*
-        *   this function is turned off because it is decrypted
-        * */
-//        try{
-//            // get connection
-//            Connection connection  = super.getConnection();
-//            // getting all the cards
-//            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs;");
-//            ResultSet result = super.executeQuery(preparedStatement,connection);
-//
-//            // initiliaze domain item
-//            Cardlist cardlist = new Cardlist();
-//            while(result.next()){
-//                int cardid              = result.getInt("cardid");
-//                String cardtitle        = result.getString("cardtitle");
-//                String city             = result.getString("city");
-//                String companyname      = result.getString("companyname");
-//                String companydesc      = result.getString("companydesc");
-//                String companyurl       = result.getString("weburl");
-//                String description      = result.getString("description");
-//                float salary            = result.getFloat("salary");
-//                float minHours          = result.getFloat("minhours");
-//                float maxHours          = result.getFloat("maxhours");
-//
-//                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
-//                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minHours,maxHours);
-//                cardlist.addCard(newCard);
-//            }
-//            return cardlist;
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//            return null;
-//        }
-
-        return null;
-    }
-
     @Override
     public Cardlist getCardsByUserid(String userid,String start, String amount){
         try{
@@ -187,6 +147,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return null;
         }
     }
+    @Override
     public CardImageList getCardimagesByCardid(int cardid,Connection connection){
         try{
             //getting the current image list
@@ -214,7 +175,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return null;
         }
     }
-
+    @Override
     public int newShowed( String userid, int cardid) {
         try{
             Connection connection  = super.getConnection();
@@ -230,29 +191,5 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
 
     }
-    public int newCard(String cardtitle, String city, String companyname, String description, List<String> images) {
-        try{
-            Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cards (cardtitle,city,companyname,description) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,cardtitle);
-            preparedStatement.setString(2,city);
-            preparedStatement.setString(3,companyname);
-            preparedStatement.setString(4,description);
-            int result = super.executeQueryReturningId(preparedStatement,connection);
-            if(result != 0){
-                for (String image : images){
-                    PreparedStatement imagestatement = connection.prepareStatement("INSERT INTO cardsimages (imageurl,cardid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-                    imagestatement.setString(1,image);
-                    imagestatement.setInt(2,result);
-                    int imageresult = super.executeQueryReturningId(imagestatement,connection);
-                }
-                return result;
-            }
-            return result;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return 0;
-        }
-    }
+
 }

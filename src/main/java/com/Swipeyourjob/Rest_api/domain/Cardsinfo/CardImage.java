@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.domain;
+package com.Swipeyourjob.Rest_api.domain.Cardsinfo;
 
 public class CardImage {
     private int cardimageid;
