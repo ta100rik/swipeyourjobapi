@@ -67,7 +67,9 @@ public class CardService {
     }
 
     public Cardlist getCards(){
-        return JobImpl.getCards();
+        return null;
+//        return JobImpl.getCards();
+
     }
 
     //    web
