@@ -30,6 +30,58 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
 
     }
+    public Card getCardByJobid(String jobid){
+        try{
+            // get connection
+            int ConvertedJobid = Integer.parseInt(jobid);
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1 " +
+                    "join companies companyinfo " +
+                    "on companyinfo.company_id = t1.companyid " +
+                    "join joblocation jobloc " +
+                    "on jobloc.cardid = t1.jobid " +
+                    "and jobloc.defaultlocation = '1' " +
+                    "join webusers " +
+                    "on webusers.companyid = companyinfo.company_id " +
+                    " where jobid = ?");
+            preparedStatement.setInt(1,ConvertedJobid);
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+            while(result.next()){
+                /*
+                 *   later seperate a card from the company info by making a company class
+                 * */
+                int cardid              = result.getInt("jobid");
+                String cardtitle        = result.getString("jobtitle");
+                String companyname      = result.getString("name");
+                String companydesc      = result.getString("comanydesc");
+                String companyurl       = result.getString("weburl");
+                String description      = result.getString("jobdescription");
+                Float salary            = result.getFloat("salary");
+                int maxhours          = result.getInt("maxhours");
+                int minhours          = result.getInt("minhours");
+                String user             = result.getString("firstname");
+//                init card images
+                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
+//                initiliasing the card location seperated because of the seperated table in query
+                String streetname           = result.getString("streetname");
+                int housenumber             = result.getInt("housenumber");
+                String city                 = result.getString("city");
+                String zipcode              = result.getString("zipcode");
+                boolean defaultlocation     = result.getBoolean("defaultlocation");
+                int idjoblocation           = result.getInt("idjoblocation");
+                double joblongtitude         = result.getDouble("joblongtitude");
+                double joblatitude           = result.getDouble("joblatitude");
+//                System.out.println(imagelist.getCardImageList());
+                CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
+                return newCard;
+            }
+
+        }catch (Exception e){
+            return null;
+        }
+        return null;
+    }
     @Override
     public Cardlist getCards(){
         /*
@@ -142,7 +194,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             PreparedStatement imageStatement = connection.prepareStatement(imagesql);
             imageStatement.setInt(1, cardid);
             ResultSet result = super.executeQuery(imageStatement,connection);
-            System.out.println(imageStatement);
+//            System.out.println(imageStatement);
             //creating a container class for all the images
             CardImageList imagelist = new CardImageList();
             //looping through every image row

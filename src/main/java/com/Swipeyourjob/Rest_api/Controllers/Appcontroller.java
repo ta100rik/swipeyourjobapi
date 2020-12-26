@@ -57,6 +57,27 @@ public class Appcontroller {
             return ResponseEntity.noContent().build();
         }
     }
+    @GetMapping("/cards/{jobid}")
+    public ResponseEntity<?> getCardById(
+            @PathVariable("jobid") String id,
+            @RequestParam(required = false) String lon ,
+            @RequestParam(required = false) String lat
+
+            ){
+        try{
+            if(lon == null){
+                lon = "";
+            }
+            if(lat == null){
+                lat = "";
+            }
+            AppCard result = ServiceProvider.getCardService().getAppcardByJobid(id,lon,lat);
+            return ResponseEntity.ok(new Gson().toJson(result));
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
+    }
+
 
 
 

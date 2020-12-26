@@ -36,12 +36,28 @@ public class CardService {
 //        }
         return null;
     }
+    public AppCard getAppcardByJobid(String jobid,String lon, String lat){
+        Card currentcard = JobImpl.getCardByJobid(jobid);
+        List<String> images = new ArrayList<>();
+//            initiliaze the company info
+        AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner());
+
+        AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
+        if(!lon.isEmpty() && !lat.isEmpty()){
+            currentcard.getLocation().setJobdistance(lon,lat);
+            location.setJobdistance(currentcard.getLocation().getJobdistance());
+        }
+        AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
+
+        for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
+            images.add(cardimage.getImageurl());
+        }
+        AppCard newcard = new AppCard(companyinfo,jobinfo,images,location);
+        return newcard;
+    }
     public List<AppCard> getAppcardByUserid(String userid, String start, String amount,String lon, String lat){
-
         Cardlist result  = JobImpl.getCardsByUserid(userid,start,amount);
-
         List<AppCard> cardlist = new ArrayList<>();
-
         for (Card currentcard : result.getCardList())
         {
             List<String> images = new ArrayList<>();
