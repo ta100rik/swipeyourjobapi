@@ -13,9 +13,10 @@ public class chatRoom {
     private String jobTitle;
     private String companyLogo;
     private int roomAdmin;
-
+    private String lastmessage;
+    private boolean lastmessageboolean;
     private List<ChatMessage> chatmessages = new ArrayList<ChatMessage>();
-    public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, int roomAdmin,String jobTitle, String companyLogo) {
+    public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, int roomAdmin,String jobTitle, String companyLogo,String lastmessage,boolean lastmessageread) {
         this.guest_id = guest_id;
         this.userid = userid;
         this.room_id = room_id;
@@ -25,6 +26,8 @@ public class chatRoom {
         this.roomAdmin = roomAdmin;
         this.jobTitle = jobTitle;
         this.companyLogo = companyLogo;
+        this.lastmessage = lastmessage;
+        this.lastmessageboolean = lastmessageread;
     }
     public chatRoom(int room_id){
         this.room_id = room_id;
@@ -33,8 +36,24 @@ public class chatRoom {
        return chatmessages.add(chatMessage);
     }
 
+    public boolean getLastmessageboolean() {
+        return lastmessageboolean;
+    }
+
+    public void setLastmessageboolean(boolean lastmessageboolean) {
+        this.lastmessageboolean = lastmessageboolean;
+    }
+
     public String getJobTitle() {
         return jobTitle;
+    }
+
+    public String getLastmessage() {
+        return lastmessage;
+    }
+
+    public void setLastmessage(String lastmessage) {
+        this.lastmessage = lastmessage;
     }
 
     public void setJobTitle(String jobTitle) {

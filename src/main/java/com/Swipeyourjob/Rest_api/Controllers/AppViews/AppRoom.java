@@ -7,14 +7,33 @@ public class AppRoom {
     private int roomAdmin;
     private String jobLogo;
     private String jobTitle;
-
-    public AppRoom(int room_id, String chatname, int chatjobid, int roomAdmin,String joblogo,String jobtitle) {
+    private String chatLastMessage;
+    private boolean lastmessageboolean;
+    public AppRoom(int room_id, String chatname, int chatjobid, int roomAdmin,String joblogo,String jobtitle,String chatLastMessage,boolean lastmessageboolean) {
         this.room_id = room_id;
         this.chatname = chatname;
         this.chatjobid = chatjobid;
         this.roomAdmin = roomAdmin;
         this.jobLogo = joblogo;
         this.jobTitle = jobtitle;
+        this.chatLastMessage = chatLastMessage;
+        this.lastmessageboolean = lastmessageboolean;
+    }
+
+    public boolean getLastmessageboolean() {
+        return lastmessageboolean;
+    }
+
+    public void setLastmessageboolean(boolean lastmessageboolean) {
+        this.lastmessageboolean = lastmessageboolean;
+    }
+
+    public String getChatLastMessage() {
+        return chatLastMessage;
+    }
+
+    public void setChatLastMessage(String chatLastMessage) {
+        this.chatLastMessage = chatLastMessage;
     }
 
     public String getJobLogo() {

@@ -1,5 +1,8 @@
 package com.Swipeyourjob.Rest_api.Controllers.request;
 
+import java.lang.reflect.Field;
+import java.util.stream.Stream;
+
 public class CompanyRequest {
     public String Title;
     public String Description;
@@ -109,4 +112,19 @@ public class CompanyRequest {
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
+    public boolean  checkNull() {
+        for (Field f : getClass().getFields()) {
+            f.setAccessible(true);
+            try {
+                if (f.get(this) == null) {
+
+                  return true;
+                }
+            } catch (IllegalAccessException e) { // shouldn't happen because I used setAccessible
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

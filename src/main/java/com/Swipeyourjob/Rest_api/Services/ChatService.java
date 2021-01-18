@@ -13,6 +13,9 @@ import java.util.List;
 
 public class ChatService {
     private final ChatDaoImpl ChatImpl = new ChatDaoImpl();
+    public int getRoomamountuser(String userid){
+        return ChatImpl.CountUserRooms(userid);
+    }
     public int CreateRoom(int chatjobid, String chatname, int ownerid,List<Integer> guests) {
 //        creating a room
         int roomid = ChatImpl.CreateRoom(chatjobid,chatname,ownerid);
@@ -36,8 +39,8 @@ public class ChatService {
         RoomList current_list = ChatImpl.getRoomList(useridentifier,start,amount);
         List<AppRoom> app_list = new ArrayList<AppRoom>();
         for (chatRoom room : current_list.getRoomsList()){
-//            System.out.println(room.getChatname());
-            AppRoom new_room = new AppRoom(room.getRoom_id(),room.getChatname(),room.getChatjobid(),room.getRoomAdmin(),room.getCompanyLogo(),room.getJobTitle());
+
+            AppRoom new_room = new AppRoom(room.getRoom_id(),room.getChatname(),room.getChatjobid(),room.getRoomAdmin(),room.getCompanyLogo(),room.getJobTitle(),room.getLastmessage(),room.getLastmessageboolean());
             app_list.add(new_room);
         }
         return app_list;
@@ -50,16 +53,28 @@ public class ChatService {
             return false;
         }
     }
+    private boolean readmessages(int roomid, String userid){
+        boolean readmeassageRequest = ChatImpl.readmessages(userid,roomid);
+        return readmeassageRequest;
+    }
     public List<AppChatMessage> getChatHistoryRoom(int roomid, String userid,String amount){
         RoomList current_list = ChatImpl.getRoomList(userid,"0","1000");
         if(current_list.isRoomInList(roomid)){
              chatRoom chatroom = ChatImpl.getChatHistory(roomid,amount);
              List<AppChatMessage> messagelist = new ArrayList<AppChatMessage>();
+             int lastchatid = 0;
+             boolean firstmessageboolean = true;
              for (ChatMessage chatmessageobject : chatroom.getChatmessages()){
                  AppChatMessage message = new AppChatMessage(chatmessageobject.getChatmessage(),chatmessageobject.getUserid());
+                 if(firstmessageboolean){
+                     lastchatid = chatmessageobject.getChatid();
+                     firstmessageboolean = false;
+                 }
                  messagelist.add(message);
              }
-             return messagelist;
+
+             ChatImpl.readmessages(userid,roomid,lastchatid); // setting the read parameter to last message
+            return messagelist;
         }else{
             return null;
         }

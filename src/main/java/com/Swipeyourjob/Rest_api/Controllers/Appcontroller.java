@@ -1,5 +1,6 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
+import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.Swipeyourjob.Rest_api.Controllers.request.MatchRequest;
@@ -9,6 +10,7 @@ import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.Repeatable;
 import java.util.List;
 
 @RestController
@@ -53,6 +55,16 @@ public class Appcontroller {
             }
            List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount,lon,lat);
            return ResponseEntity.ok(new Gson().toJson(result));
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
+    }
+    @GetMapping("/preloadinfo")
+    public ResponseEntity<?> getPreloadinfo(  @RequestParam(required = false) String userid ){
+        try{
+            int roomamount =  ServiceProvider.getChatService().getRoomamountuser(userid);
+            AppPreloadInfo appView = new AppPreloadInfo(roomamount);
+            return ResponseEntity.ok(appView);
         }catch (Exception e){
             return ResponseEntity.noContent().build();
         }

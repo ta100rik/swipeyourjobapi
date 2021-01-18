@@ -3,10 +3,10 @@ package com.Swipeyourjob.Rest_api.domain;
 public class ChatMessage {
     private String chatmessage;
     private String userid;
-
-    public ChatMessage(String chatmessage, String userid) {
+    private int chatid;
+    public ChatMessage(String chatmessage, String userid,int chatid) {
         this.chatmessage = chatmessage;
-
+        this.chatid = chatid;
         this.userid = userid;
     }
 
@@ -18,6 +18,13 @@ public class ChatMessage {
         this.chatmessage = chatmessage;
     }
 
+    public int getChatid() {
+        return chatid;
+    }
+
+    public void setChatid(int chatid) {
+        this.chatid = chatid;
+    }
 
     public String getUserid() {
         return userid;

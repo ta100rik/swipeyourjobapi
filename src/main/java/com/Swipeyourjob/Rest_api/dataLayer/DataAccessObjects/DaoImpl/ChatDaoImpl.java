@@ -15,7 +15,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
+    @Override
+//    this one is also getting the last messageid of the chat
+    public boolean readmessages(String userid, int roomid) {
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement lastmessageStatement = connection.prepareStatement("SELECT chatid FROM chatmessages where roomid = ? order by chatid desc limit 1;");
+            lastmessageStatement.setInt(1,roomid);
+            ResultSet result = super.executeQuery(lastmessageStatement,connection);
+            while(result.next()){
+                int chatid = result.getInt("chatid");
+                PreparedStatement insertreadstatement = connection.prepareStatement("INSERT INTO showedmessages(messageid,roomid,userid) VALUES (?,?,?)",Statement.RETURN_GENERATED_KEYS);
+                insertreadstatement.setInt(1,chatid);
+                insertreadstatement.setInt(2,roomid);
+                insertreadstatement.setString(3,userid);
+                int newitem = super.executeQueryReturningId(insertreadstatement,connection);
+                return true;
+            }
 
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+//    this one you need to provide the last chat id
+    public boolean readmessages(String userid, int roomid,int chatid) {
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement insertreadstatement = connection.prepareStatement("INSERT INTO showedmessages(messageid,roomid,userid) VALUES (?,?,?)",Statement.RETURN_GENERATED_KEYS);
+            insertreadstatement.setInt(1,chatid);
+            insertreadstatement.setInt(2,roomid);
+            insertreadstatement.setString(3,userid);
+            int newitem = super.executeQueryReturningId(insertreadstatement,connection);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
     @Override
     public int CreateRoom(int chatjobid, String chatname, int ownerid) {
 
@@ -64,7 +104,10 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
        try{
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("" +
-                    "SELECT * FROM room_users  " +
+                    "SELECT *, " +
+                    "(SELECT chatmessage FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1)  as 'lastmessage',  " +
+                    "IF((SELECT chatid FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1) <= (SELECT messageid FROM showedmessages where roomid = room_users.room_id and userid =  room_users.userid  order by moment desc limit 1) ,true, false) as 'readbolean' " +
+                    "FROM room_users  " +
                     "join chat_rooms " +
                     "on chat_rooms.idchat_rooms = room_users.room_id " +
                     "join jobs " +
@@ -75,14 +118,12 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                     "and room_id > ?  " +
                     "limit ? ");
             int ConvertedStart = Integer.parseInt(start);
-           int ConvertedAmount = Integer.parseInt(amount);
+            int ConvertedAmount = Integer.parseInt(amount);
 
            preparedStatement.setString(1,useridentifier);
 
            preparedStatement.setInt(2,ConvertedStart);
-
            preparedStatement.setInt(3,ConvertedAmount);
-           System.out.println(preparedStatement);
            ResultSet result = super.executeQuery(preparedStatement,connection);
            // initiliaze domain item
            RoomList roomlist = new RoomList();
@@ -96,7 +137,9 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                 int roomAdmin = result.getInt("roomAdmin");
                 String jobTitle = result.getString("jobtitle");
                 String companylogo = result.getString("companylogo");
-                chatRoom new_room = new chatRoom(guest_id,userid,room_id,idchat_rooms,chatname,chatjobid,roomAdmin,jobTitle,companylogo);
+                String lastmessage = result.getString("lastmessage");
+                boolean lastmessagebool = result.getBoolean("readbolean");
+                chatRoom new_room = new chatRoom(guest_id,userid,room_id,idchat_rooms,chatname,chatjobid,roomAdmin,jobTitle,companylogo,lastmessage,lastmessagebool);
                 roomlist.addChatRoom(new_room);
             }
             return roomlist;
@@ -106,6 +149,20 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
         e.printStackTrace();
         return null;
         }
+    }
+    public int CountUserRooms(String userid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT count(*) as 'roomamount' from room_users where userid = ?");
+            preparedStatement.setString(1,userid);
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+            while(result.next()){
+                return result.getInt("roomamount");
+            }
+        }catch (Exception e){
+            return 0;
+        }
+        return 0;
     }
     public GuestList getGuestInRoom(int roomid){
         try{
@@ -157,7 +214,8 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
             while(result.next()){
                 String userid = result.getString("userid");
                 String chatmessage = result.getString("chatmessage");
-                ChatMessage chatMessageObject = new ChatMessage(chatmessage, userid);
+                int chatid = result.getInt("chatid");
+                ChatMessage chatMessageObject = new ChatMessage(chatmessage, userid,chatid);
                 chatroom.addMessage(chatMessageObject);
             }
             return chatroom;

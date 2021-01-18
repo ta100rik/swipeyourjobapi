@@ -3,6 +3,8 @@ package com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao;
 import java.util.List;
 
 public interface chatDao {
-    public int CreateRoom(int chatjobid, String chatname, int ownerid);
-    public boolean SendMessage(String userid, int roomid, String message);
+    int CreateRoom(int chatjobid, String chatname, int ownerid);
+    boolean SendMessage(String userid, int roomid, String message);
+    boolean readmessages(String userid, int roomid);
+    boolean readmessages(String userid, int roomid,int chatid);
 }
