@@ -40,12 +40,12 @@ public class Appcontroller {
     }
     @PostMapping("/addBug")
     public ResponseEntity<?> addBug(@RequestBody bugRequest bugrequest){
-        int result = ServiceProvider.getBugService().newBug();
-        if(result != 0){
-            return ResponseEntity.ok("1");
-        }else{
-            return ResponseEntity.status(500).body(bugrequest);
-        }
+//        int result = ServiceProvider.getBugService().newBug();
+//        if(result != 0){
+            return ResponseEntity.ok(bugrequest);
+//        }else{
+//            return ResponseEntity.status(500).body(bugrequest);
+//        }
     }
 
     @GetMapping("/cards")
