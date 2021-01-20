@@ -3,12 +3,7 @@ package com.Swipeyourjob.Rest_api.dataLayer;
 import java.util.Properties;
 
 public class BaseDaoConnectionSMTP {
-    private static final BaseDaoConnectionSMTP INSTANCE = new BaseDaoConnectionSMTP();
-    private BaseDaoConnectionSMTP(){
-        if(INSTANCE == null) {
-            openConnections = createConnection(url, dbuserName, dbpassword);
-        }
-    }
+
 
 
 //prop.put("mail.smtp.auth", true);
