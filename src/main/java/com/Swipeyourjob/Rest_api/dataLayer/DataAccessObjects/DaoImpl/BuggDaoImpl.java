@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
+import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoSMTP;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.BuggDao;
 
 import java.sql.Connection;

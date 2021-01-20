@@ -1,14 +1,43 @@
 package com.Swipeyourjob.Rest_api.dataLayer;
 
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class BaseDaoConnectionSMTP {
+    private static final BaseDaoConnectionSMTP INSTANCE = new BaseDaoConnectionSMTP();
+    private static Session currentsession;
+    private static Properties props;
+    private BaseDaoConnectionSMTP(){
+        if(INSTANCE == null){
+            currentsession = OpenSession();
+        }
+    }
+    private Session OpenSession(){
+        props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+        props.put("mail.smtp.port", "587"); //TLS Port
+        props.put("mail.smtp.auth", "true"); //enable authentication
+        props.put("mail.smtp.starttls.enable", "true");
+        Authenticator auth = new Authenticator() {
+            //override the getPasswordAuthentication method
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("swipeyourjob@gmail.com", "YNkmQge7vsxHVJh");
+            }
+        };
+        Session session = Session.getInstance(props, auth);
+        return session;
 
-
-
-//prop.put("mail.smtp.auth", true);
-//prop.put("mail.smtp.starttls.enable", "true");
-//prop.put("mail.smtp.host", "smtp.mailtrap.io");
-//prop.put("mail.smtp.port", "25");
-//prop.put("mail.smtp.ssl.trust", "smtp.mailtrap.io");
+    }
+    public Session getCurrentsession(){
+        return currentsession;
+    }
+    public static BaseDaoConnectionSMTP getINSTANCE() {
+        return INSTANCE;
+    }
 }
