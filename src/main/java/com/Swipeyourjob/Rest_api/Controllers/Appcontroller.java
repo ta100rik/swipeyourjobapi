@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
+import com.Swipeyourjob.Rest_api.Controllers.request.bugRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.Swipeyourjob.Rest_api.Controllers.request.MatchRequest;
@@ -36,6 +37,15 @@ public class Appcontroller {
             return ResponseEntity.status(500).body(showrequest);
         }
 
+    }
+    @PostMapping("/addBug")
+    public ResponseEntity<?> addBug(@RequestBody bugRequest bugrequest){
+        int result = ServiceProvider.getBugService().newBug();
+        if(result != 0){
+            return ResponseEntity.ok("1");
+        }else{
+            return ResponseEntity.status(500).body(bugrequest);
+        }
     }
 
     @GetMapping("/cards")
