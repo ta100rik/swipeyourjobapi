@@ -101,7 +101,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     "and jobloc.defaultlocation = '1' " +
                     "join webusers " +
                     "on webusers.companyid = companyinfo.company_id " +
-                    "WHERE t1.jobid NOT IN (SELECT t2.jobid from showedjobs t2 where t2.userid = ?) and jobid >= ? order by t1.jobid limit ?");
+                    "WHERE t1.jobid NOT IN (SELECT t2.jobid from showedjobs t2 where t2.userid = ?) and jobid > ? order by t1.jobid limit ?");
 
             preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,ConvertedStart);
