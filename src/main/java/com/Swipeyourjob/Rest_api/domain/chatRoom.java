@@ -12,11 +12,11 @@ public class chatRoom {
     private int chatjobid;
     private String jobTitle;
     private String companyLogo;
-    private int roomAdmin;
+    private String roomAdmin;
     private String lastmessage;
     private boolean lastmessageboolean;
     private List<ChatMessage> chatmessages = new ArrayList<ChatMessage>();
-    public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, int roomAdmin,String jobTitle, String companyLogo,String lastmessage,boolean lastmessageread) {
+    public chatRoom(int guest_id, String userid, int room_id, int idchat_rooms, String chatname, int chatjobid, String roomAdmin, String jobTitle, String companyLogo, String lastmessage, boolean lastmessageread) {
         this.guest_id = guest_id;
         this.userid = userid;
         this.room_id = room_id;
@@ -124,11 +124,11 @@ public class chatRoom {
         this.chatjobid = chatjobid;
     }
 
-    public int getRoomAdmin() {
+    public String getRoomAdmin() {
         return roomAdmin;
     }
 
-    public void setRoomAdmin(int roomAdmin) {
+    public void setRoomAdmin(String roomAdmin) {
         this.roomAdmin = roomAdmin;
     }
 }

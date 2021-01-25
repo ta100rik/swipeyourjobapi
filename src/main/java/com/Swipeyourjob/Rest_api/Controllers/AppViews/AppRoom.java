@@ -4,12 +4,12 @@ public class AppRoom {
     private int room_id;
     private String chatname;
     private int chatjobid;
-    private int roomAdmin;
+    private String roomAdmin;
     private String jobLogo;
     private String jobTitle;
     private String chatLastMessage;
     private boolean lastmessageboolean;
-    public AppRoom(int room_id, String chatname, int chatjobid, int roomAdmin,String joblogo,String jobtitle,String chatLastMessage,boolean lastmessageboolean) {
+    public AppRoom(int room_id, String chatname, int chatjobid, String roomAdmin,String joblogo,String jobtitle,String chatLastMessage,boolean lastmessageboolean) {
         this.room_id = room_id;
         this.chatname = chatname;
         this.chatjobid = chatjobid;
@@ -76,11 +76,11 @@ public class AppRoom {
         this.chatjobid = chatjobid;
     }
 
-    public int getRoomAdmin() {
+    public String getRoomAdmin() {
         return roomAdmin;
     }
 
-    public void setRoomAdmin(int roomAdmin) {
+    public void setRoomAdmin(String roomAdmin) {
         this.roomAdmin = roomAdmin;
     }
 }

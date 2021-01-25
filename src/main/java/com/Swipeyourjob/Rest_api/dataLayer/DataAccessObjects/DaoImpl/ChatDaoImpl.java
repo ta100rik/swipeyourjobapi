@@ -134,7 +134,7 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                int idchat_rooms = result.getInt("idchat_rooms");
                String chatname = result.getString("Chatname");
                 int chatjobid = result.getInt("chatjobid");
-                int roomAdmin = result.getInt("roomAdmin");
+                String roomAdmin = result.getString("roomAdmin");
                 String jobTitle = result.getString("jobtitle");
                 String companylogo = result.getString("companylogo");
                 String lastmessage = result.getString("lastmessage");
