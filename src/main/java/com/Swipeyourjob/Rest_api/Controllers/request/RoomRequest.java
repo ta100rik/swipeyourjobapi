@@ -6,22 +6,22 @@ import java.util.List;
 public class RoomRequest {
     private String chatname;
     private int chatjobid;
-    private int ownerid;
-    private List<Integer> roomGuest = new ArrayList<Integer>();
+    private String ownerid;
+    private List<String> roomGuest = new ArrayList<String>();
 
-    public int getOwnerid() {
+    public String getOwnerid() {
         return ownerid;
     }
 
-    public List<Integer> getRoomGuest() {
+    public List<String> getRoomGuest() {
         return roomGuest;
     }
 
-    public void setRoomGuest(List<Integer> roomGuest) {
+    public void setRoomGuest(List<String> roomGuest) {
         this.roomGuest = roomGuest;
     }
 
-    public void setOwnerid(int ownerid) {
+    public void setOwnerid(String ownerid) {
         this.ownerid = ownerid;
     }
 

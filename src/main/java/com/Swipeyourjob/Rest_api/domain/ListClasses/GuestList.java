@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GuestList {
-    private List<Integer> guests;
-    public GuestList(List<Integer> guests) {
+    private List<String> guests;
+    public GuestList(List<String> guests) {
         this.guests = guests;
     }
 
-    public List<Integer> getGuests() {
+    public List<String> getGuests() {
         return guests;
     }
 
@@ -21,10 +21,10 @@ public class GuestList {
             return false;
         }
     }
-    public boolean addGuestList(List<Integer> guests){
+    public boolean addGuestList(List<String> guests){
 //        bolean to check if they can be added to the list
         boolean validateBolean = true;
-        for (int guest: guests){
+        for (String guest: guests){
             boolean currentuser = this.addGuestWithoutCheck(guest);
             if(!currentuser){
                 validateBolean = currentuser;
@@ -40,7 +40,7 @@ public class GuestList {
         }
 
     }
-    private boolean addGuestWithoutCheck(int guest){
+    private boolean addGuestWithoutCheck(String guest){
         try{
             guests.add(guest);
             return true;
@@ -49,7 +49,7 @@ public class GuestList {
         }
 
     }
-    public boolean addGuest(int newGuestId){
+    public boolean addGuest(String newGuestId){
         try{
             guests.add(newGuestId);
             this.ValidateGuestList();

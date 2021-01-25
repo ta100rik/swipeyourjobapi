@@ -57,14 +57,14 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
         }
     }
     @Override
-    public int CreateRoom(int chatjobid, String chatname, int ownerid) {
+    public int CreateRoom(int chatjobid, String chatname, String ownerid) {
 
         try{
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO chat_rooms (Chatname, chatjobid,roomadmin) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,chatname);
             preparedStatement.setInt(2,chatjobid);
-            preparedStatement.setInt(3,ownerid);
+            preparedStatement.setString(3,ownerid);
             return super.executeQueryReturningId(preparedStatement,connection);
         }
         catch (Exception e){
@@ -73,17 +73,17 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
         }
     }
 
-    public boolean addGuestsToRoom(int roomid,List<Integer> new_guest){
+    public boolean addGuestsToRoom(int roomid,List<String> new_guest){
         try{
 
             GuestList guestlist = this.getGuestInRoom(roomid);
 //            adding the new people to the list
            boolean add_member_boolean = guestlist.addGuestList(new_guest);
            if(add_member_boolean){
-               for(int guest: new_guest){
+               for(String guest: new_guest){
                    Connection connection  = super.getConnection();
                    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO room_users (userid, room_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-                   preparedStatement.setInt(1,guest);
+                   preparedStatement.setString(1,guest);
                    preparedStatement.setInt(2,roomid);
                    super.executeQueryReturningId(preparedStatement,connection);
                }
@@ -173,9 +173,9 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
             ResultSet result = super.executeQuery(preparedStatement,connection);
 
             // initiliaze domain item
-            List<Integer> CurrentGuestList = new ArrayList<Integer>();
+            List<String> CurrentGuestList = new ArrayList<String>();
             while(result.next()){
-                int userid = result.getInt("userid");
+                String userid = result.getString("userid");
                 CurrentGuestList.add(userid);
             }
             GuestList guestlist = new GuestList(CurrentGuestList);

@@ -16,7 +16,7 @@ public class ChatService {
     public int getRoomamountuser(String userid){
         return ChatImpl.CountUserRooms(userid);
     }
-    public int CreateRoom(int chatjobid, String chatname, int ownerid,List<Integer> guests) {
+    public int CreateRoom(int chatjobid, String chatname, String ownerid,List<String> guests) {
 //        creating a room
         int roomid = ChatImpl.CreateRoom(chatjobid,chatname,ownerid);
 //      creating a guest list class to do some preload validations
