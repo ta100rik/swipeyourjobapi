@@ -1,6 +1,8 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
+import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
+import com.Swipeyourjob.Rest_api.Controllers.request.RemoveRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.bugRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
@@ -99,7 +101,15 @@ public class Appcontroller {
             return ResponseEntity.noContent().build();
         }
     }
-
+    @PostMapping("/removeData")
+    public ResponseEntity<?> addBug(@RequestBody RemoveRequest removerequest){
+        AppPrivacy result = ServiceProvider.getAccountPrivacyService().accountPrivacy(removerequest.getUserid(),removerequest.isShowedjobs(),removerequest.isChats(),removerequest.isLikejobs());
+        if(result != null){
+            return ResponseEntity.ok(result);
+        }else{
+            return ResponseEntity.status(500).body("database error");
+        }
+    }
 
 
 

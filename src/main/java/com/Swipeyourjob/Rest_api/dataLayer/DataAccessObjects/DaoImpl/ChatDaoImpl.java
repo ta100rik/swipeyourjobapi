@@ -119,7 +119,7 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                     "limit ? ");
             int ConvertedStart = Integer.parseInt(start);
             int ConvertedAmount = Integer.parseInt(amount);
-
+            System.out.println(preparedStatement);
            preparedStatement.setString(1,useridentifier);
 
            preparedStatement.setInt(2,ConvertedStart);
