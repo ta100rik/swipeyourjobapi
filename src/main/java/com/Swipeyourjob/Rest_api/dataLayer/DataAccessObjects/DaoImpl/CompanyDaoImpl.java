@@ -19,7 +19,6 @@ public class CompanyDaoImpl extends BaseDaoMySQL implements CompanyDao {
             preparedStatement.setString(2,desc);
             preparedStatement.setString(3,weburl);
             preparedStatement.setString(4,Companylogo);
-            System.out.println(preparedStatement);
             int databaseID = super.executeQueryReturningId(preparedStatement,connection);
 
             Company newcompany = new Company(databaseID,desc,companyName,weburl,Companylogo);

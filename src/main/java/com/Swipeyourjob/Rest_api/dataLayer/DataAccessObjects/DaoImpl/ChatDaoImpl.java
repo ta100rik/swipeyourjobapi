@@ -105,6 +105,7 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("" +
                     "SELECT *, " +
+                    "(SELECT timestampmessage FROM chatmessages where roomid = room_users.room_id order by timestampmessage desc limit 1)  as 'TimestampLastMessage',  " +
                     "(SELECT chatmessage FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1)  as 'lastmessage',  " +
                     "IF((SELECT chatid FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1) <= (SELECT messageid FROM showedmessages where roomid = room_users.room_id and userid =  room_users.userid  order by moment desc limit 1) ,true, false) as 'readbolean' " +
                     "FROM room_users  " +
@@ -116,10 +117,10 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                     "on companies.company_id = jobs.companyid " +
                     "where room_users.userid = ? " +
                     "and room_id > ?  " +
+                    "order by TimestampLastMessage desc " +
                     "limit ? ");
             int ConvertedStart = Integer.parseInt(start);
             int ConvertedAmount = Integer.parseInt(amount);
-            System.out.println(preparedStatement);
            preparedStatement.setString(1,useridentifier);
 
            preparedStatement.setInt(2,ConvertedStart);
