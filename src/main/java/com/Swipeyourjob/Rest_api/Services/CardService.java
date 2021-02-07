@@ -97,4 +97,11 @@ public class CardService {
         return bookmarkamount;
     }
 
+    public boolean bookmarkAction(int bookmarkid, int Jobid,boolean liked,String userid){
+        if(liked){
+            JobImpl.newLike(userid,Jobid);
+        }
+        return JobImpl.removeBookmark(bookmarkid);
+    }
+
 }

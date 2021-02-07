@@ -2,12 +2,9 @@ package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
-import com.Swipeyourjob.Rest_api.Controllers.request.RemoveRequest;
-import com.Swipeyourjob.Rest_api.Controllers.request.bugRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.*;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
-import com.Swipeyourjob.Rest_api.Controllers.request.MatchRequest;
-import com.Swipeyourjob.Rest_api.Controllers.request.showRequest;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
@@ -131,10 +128,20 @@ public class Appcontroller {
         }
     }
     @PostMapping("/removeData")
-    public ResponseEntity<?> addBug(@RequestBody RemoveRequest removerequest){
+    public ResponseEntity<?> removeData(@RequestBody RemoveRequest removerequest){
         AppPrivacy result = ServiceProvider.getAccountPrivacyService().accountPrivacy(removerequest.getUserid(),removerequest.isShowedjobs(),removerequest.isChats(),removerequest.isLikejobs());
         if(result != null){
             return ResponseEntity.ok(result);
+        }else{
+            return ResponseEntity.status(500).body("database error");
+        }
+    }
+
+    @PostMapping("/removeBookmark")
+    public ResponseEntity<?> removeBookmark(@RequestBody RemoveBookmarkRequest removebookmarkrequest){
+        boolean Result = ServiceProvider.getCardService().bookmarkAction(removebookmarkrequest.getBookmarkid(),removebookmarkrequest.getJobid(),removebookmarkrequest.isLikeboolean(),removebookmarkrequest.getUserid());
+        if(Result){
+            return ResponseEntity.ok(Result);
         }else{
             return ResponseEntity.status(500).body("database error");
         }

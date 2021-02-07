@@ -269,6 +269,21 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return null;
         }
     }
+    public boolean removeBookmark(int bookmarkid){
+        String sql = "";
+        try{
+            Connection connection  = super.getConnection();
+            sql = "delete from bookmarkedjobs where idbookmarkedjobs = ? ";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,bookmarkid);
+            super.updateQuery(preparedStatement,connection);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
     @Override
     public int newShowed( String userid, int cardid) {
         try{
