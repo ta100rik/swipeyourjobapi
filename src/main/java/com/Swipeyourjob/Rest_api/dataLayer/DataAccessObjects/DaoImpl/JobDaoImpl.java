@@ -226,6 +226,21 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return null;
         }
     }
+
+    public int getBookmarkAmountuser(String userid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT count(*) as bookmarkamount FROM bookmarkedjobs where userid = ?");
+            preparedStatement.setString(1,userid);
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+            while(result.next()){
+                return result.getInt("bookmarkamount");
+            }
+        }catch (Exception e){
+            return 0;
+        }
+        return 0;
+    }
     @Override
     public CardImageList getCardimagesByCardid(int cardid,Connection connection){
         try{

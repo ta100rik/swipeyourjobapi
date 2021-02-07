@@ -92,12 +92,9 @@ public class CardService {
         return cardlist;
     }
 
-    public Cardlist getCards(){
-        return null;
-//        return JobImpl.getCards();
-
+    public int getBookmarkAmountuser(String userid){
+        int bookmarkamount = JobImpl.getBookmarkAmountuser(userid);
+        return bookmarkamount;
     }
-
-    //    web
 
 }

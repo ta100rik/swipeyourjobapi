@@ -104,7 +104,8 @@ public class Appcontroller {
     public ResponseEntity<?> getPreloadinfo(  @RequestParam(required = false) String userid ){
         try{
             int roomamount =  ServiceProvider.getChatService().getRoomamountuser(userid);
-            AppPreloadInfo appView = new AppPreloadInfo(roomamount);
+            int bookmarkamount = ServiceProvider.getCardService().getBookmarkAmountuser(userid);
+            AppPreloadInfo appView = new AppPreloadInfo(roomamount,bookmarkamount);
             return ResponseEntity.ok(appView);
         }catch (Exception e){
             return ResponseEntity.noContent().build();
@@ -115,7 +116,6 @@ public class Appcontroller {
             @PathVariable("jobid") String id,
             @RequestParam(required = false) String lon ,
             @RequestParam(required = false) String lat
-
             ){
         try{
             if(lon == null){
