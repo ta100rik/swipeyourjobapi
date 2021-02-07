@@ -15,6 +15,7 @@ public class Card {
     private int maxhours;
     private CardLocation location;
     private String owner;
+    private CardBookmark bookmark;
 
     public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
         this.cardid             = cardid;
@@ -31,6 +32,13 @@ public class Card {
         this.owner              = user;
     }
 
+    public CardBookmark getBookmark() {
+        return bookmark;
+    }
+
+    public void setBookmark(CardBookmark bookmark) {
+        this.bookmark = bookmark;
+    }
 
     public void setCardid(int cardid) {
         this.cardid = cardid;

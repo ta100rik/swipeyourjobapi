@@ -1,10 +1,7 @@
 package com.Swipeyourjob.Rest_api.Services;
 
+import com.Swipeyourjob.Rest_api.Controllers.AppViews.*;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.JobDaoImpl;
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompanyinfo;
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppLocation;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
@@ -64,6 +61,32 @@ public class CardService {
                images.add(cardimage.getImageurl());
            }
             AppCard newcard = new AppCard(companyinfo,jobinfo,images,location);
+            cardlist.add(newcard);
+        }
+        return cardlist;
+    }
+    public List<AppCard> getAppBookmarkedCardByUserId(String userid,String lon, String lat){
+        Cardlist result  = JobImpl.getCardsbyBookmark(userid);
+        List<AppCard> cardlist = new ArrayList<>();
+        for (Card currentcard : result.getCardList())
+        {
+            List<String> images = new ArrayList<>();
+//            initiliaze the company info
+            AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner());
+
+            AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
+            if(!lon.isEmpty() && !lat.isEmpty()){
+                currentcard.getLocation().setJobdistance(lon,lat);
+                location.setJobdistance(currentcard.getLocation().getJobdistance());
+            }
+
+            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
+
+            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
+                images.add(cardimage.getImageurl());
+            }
+            AppBookmark bookmark = new AppBookmark(currentcard.getBookmark().getBoomarkid(),currentcard.getBookmark().getBookmarkTimestamp());
+            AppCard newcard = new AppCard(companyinfo,jobinfo,images,location,bookmark);
             cardlist.add(newcard);
         }
         return cardlist;

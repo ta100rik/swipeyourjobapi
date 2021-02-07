@@ -61,9 +61,22 @@ public class Appcontroller {
     }
     @GetMapping("/getbookmarks")
     public ResponseEntity<?> getBookmarks(
-            @RequestParam(required = true) String userid
+            @RequestParam(required = true) String userid,
+            @RequestParam(required = false) String lon ,
+            @RequestParam(required = false) String lat
     ){
-        return ResponseEntity.ok(userid);
+        try{
+            if(lon == null){
+                lon = "";
+            }
+            if(lat == null){
+                lat = "";
+            }
+            List<AppCard> result = ServiceProvider.getCardService().getAppBookmarkedCardByUserId(userid,lon,lat);
+            return ResponseEntity.ok(new Gson().toJson(result));
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
 
     }
     @GetMapping("/cards")
