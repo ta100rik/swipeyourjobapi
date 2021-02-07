@@ -20,7 +20,6 @@ public class CompanyDaoImpl extends BaseDaoMySQL implements CompanyDao {
             preparedStatement.setString(3,weburl);
             preparedStatement.setString(4,Companylogo);
             int databaseID = super.executeQueryReturningId(preparedStatement,connection);
-
             Company newcompany = new Company(databaseID,desc,companyName,weburl,Companylogo);
             return newcompany;
         }catch (Exception e){

@@ -30,6 +30,16 @@ public class Appcontroller {
         }
 
     }
+    @PostMapping("/addBookmark")
+    public ResponseEntity<?> addBookmark(@RequestBody MatchRequest bookmarkRequest){
+        System.out.println(bookmarkRequest);
+        int result = ServiceProvider.getCardService().newBookmark(bookmarkRequest.getUserid(),bookmarkRequest.getCardid());
+        if(result != 0){
+            return ResponseEntity.ok(result);
+        }else{
+            return ResponseEntity.status(500).body("sorry not bookmarked because of a server error");
+        }
+    }
     @PostMapping("/addShowed")
     public ResponseEntity<?> addShowed(@RequestBody showRequest showrequest) throws JSONException {
         int result = ServiceProvider.getCardService().newShowed(showrequest.getUserid(),showrequest.getCardid());
@@ -49,7 +59,13 @@ public class Appcontroller {
             return ResponseEntity.status(500).body("database error");
         }
     }
+    @GetMapping("/getbookmarks")
+    public ResponseEntity<?> getBookmarks(
+            @RequestParam(required = true) String userid
+    ){
+        return ResponseEntity.ok(userid);
 
+    }
     @GetMapping("/cards")
     public ResponseEntity<?> getCards(
             @RequestParam(required = true) String userid,

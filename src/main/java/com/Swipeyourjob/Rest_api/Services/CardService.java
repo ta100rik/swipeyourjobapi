@@ -15,7 +15,10 @@ import java.util.List;
 public class CardService {
     private final JobDaoImpl JobImpl = new JobDaoImpl();
 //    app
-    public int newLike(int userid, int cardid){
+    public int newBookmark(String userid, int cardid){
+        return JobImpl.newBookmark(userid,cardid);
+    }
+    public int newLike(String userid, int cardid){
         return JobImpl.newLike(userid,cardid);
     }
     public int newShowed(String userid, int cardid){

@@ -7,7 +7,8 @@ import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
 import java.sql.Connection;
 
 public interface jobDao {
-    int newLike(int userid, int cardid);
+    int newBookmark(String userid, int cardid);
+    int newLike(String userid, int cardid);
 
     Card getCardByJobid(String jobid);
     CardImageList getCardimagesByCardid(int cardid, Connection connection);

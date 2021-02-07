@@ -1,10 +1,14 @@
 package com.Swipeyourjob.Rest_api.Controllers.request;
 
 public class MatchRequest {
-    private int userid;
+    private String userid;
     private int cardid;
 
-    public void setUserid(int userid) {
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 
@@ -12,9 +16,6 @@ public class MatchRequest {
         this.cardid = cardid;
     }
 
-    public int getUserid() {
-        return userid;
-    }
 
     public int getCardid() {
         return cardid;

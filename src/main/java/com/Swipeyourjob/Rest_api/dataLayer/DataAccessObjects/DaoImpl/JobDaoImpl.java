@@ -14,12 +14,24 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
+    public int newBookmark(String userid, int cardid){
+        try{
+            Connection connection = super.getConnection();
+            String query = "INSERT INTO bookmarkedjobs (userid,jobid) VALUES (?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,userid);
+            preparedStatement.setInt(2,cardid);
+            return super.executeQueryReturningId(preparedStatement,connection);
+        }catch (Exception e){
+            return 0;
+        }
+    }
     @Override
-    public int newLike(int userid, int cardid){
+    public int newLike(String userid, int cardid){
         try{
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO likedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1,userid);
+            preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,cardid);
             return super.executeQueryReturningId(preparedStatement,connection);
         }
