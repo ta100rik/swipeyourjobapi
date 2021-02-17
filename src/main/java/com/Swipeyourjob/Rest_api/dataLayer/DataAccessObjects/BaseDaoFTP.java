@@ -5,15 +5,19 @@ import com.Swipeyourjob.Rest_api.dataLayer.BaseDaoConnectionPoolingMySQL;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 
 public class BaseDaoFTP {
     public FTPClient getConnection(){
         return BaseDaoConnectionFtp.getINSTANCE().getCon();
     }
-    public boolean storeFile(MultipartFile file, FTPClient client){
+    public boolean storeFile(File file, FTPClient client){
         try{
-            boolean result = client.storeFile("/public_html/api_assets/" + file.getOriginalFilename(), file.getInputStream());
+            InputStream inputStream = new FileInputStream(file);
+            boolean result = client.storeFile("/public_html/api_assets/" + file.getName(),inputStream);
             return result;
         }catch (Exception e){
             System.out.println(e);

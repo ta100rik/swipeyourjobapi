@@ -24,6 +24,7 @@ public class WebController {
     public ResponseEntity<?>  uploadImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
         System.out.println("Original Image Byte Size - " + file.getBytes().length);
         try{
+
             return ResponseEntity.ok(ServiceProvider.getHostingService().UploadImage(file));
         }catch (Exception e){
             return ResponseEntity.status(500).body("Something went wrong");
