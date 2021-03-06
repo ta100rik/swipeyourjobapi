@@ -11,10 +11,7 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Iterator;
 
 public class HostingService {
@@ -33,32 +30,45 @@ public class HostingService {
             if(type.equals("image")){
 
 //                time to compress the file
-                BufferedImage image = ImageIO.read(tempFile);
-
                 File compressedImageFile = new File(tempFile + "2"+prefix);
-                OutputStream os =new FileOutputStream(compressedImageFile);
-                Iterator<ImageWriter> writers =  ImageIO.getImageWritersByFormatName(prefix);
-                ImageWriter writer = (ImageWriter) writers.next();
-                ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+                InputStream inputStream = new FileInputStream(tempFile);
+                OutputStream outputStream = new FileOutputStream(compressedImageFile);
+                float imageQuality = 0.6f;
+                BufferedImage bufferedImage =  ImageIO.read(inputStream);
+                String prefixwithouthpoint = prefix.replace(".","");
+                Iterator<ImageWriter> imageWriters = ImageIO.getImageWritersByFormatName(prefixwithouthpoint);
+
+                ImageWriter writer = (ImageWriter) imageWriters.next();
+
+                ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream);
                 writer.setOutput(ios);
 
                 ImageWriteParam param = writer.getDefaultWriteParam();
 
                 param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                param.setCompressionQuality(0.05f);
-                writer.write(null, new IIOImage(image, null, null), param);
+                param.setCompressionQuality(imageQuality);
+                writer.write(null, new IIOImage(bufferedImage, null, null), param);
 
-                os.close();
+                outputStream.close();
                 ios.close();
                 writer.dispose();
-                boolean uploadboolean =  HostImpl.uploadfile(tempFile);
+                System.out.println(getFileSizeMegaBytes(compressedImageFile));
+                System.out.println(getFileSizeMegaBytes(tempFile));
+                boolean uploadboolean =  HostImpl.uploadfile(compressedImageFile);
+                return webhost +"/"+folder+"/" + compressedImageFile.getName();
             }else{
-                System.out.println("nope");
+                boolean uploadboolean =  HostImpl.uploadfile(tempFile);
+                return webhost +"/"+folder+"/" + tempFile.getName();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
 
-        return webhost +"/"+folder+"/" + file.getOriginalFilename();
     }
+
+    private static String getFileSizeMegaBytes(File file) {
+        return (double) file.length() / (1024 * 1024) + " mb";
+    }
+
 }

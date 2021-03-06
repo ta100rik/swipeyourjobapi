@@ -94,7 +94,7 @@ public class Appcontroller {
            List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount,lon,lat);
            return ResponseEntity.ok(new Gson().toJson(result));
         }catch (Exception e){
-            return ResponseEntity.noContent().build();
+          2
         }
     }
     @GetMapping("/preloadinfo")
