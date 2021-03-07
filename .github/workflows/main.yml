@@ -33,4 +33,4 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: ls -lah
+          script: cd swipeyourjobapi && git pull origin master
