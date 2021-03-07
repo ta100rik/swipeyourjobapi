@@ -8,10 +8,10 @@
 		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.userService</groupId>
-	<artifactId>userMicroService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>userMicroService</name>
+	<groupId>com.swipeyourjob</groupId>
+	<artifactId>Swipeyourjob</artifactId>
+	<version>0.0.2-SNAPSHOT</version>
+	<name>Swipeyourjob</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -94,15 +94,16 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>GitHub IAC2020 Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/ta100rik/Microservice_shoppingcard</url>
-		</repository>
-	</distributionManagement>
+
+
 
 </project>
