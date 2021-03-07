@@ -26,11 +26,11 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: ls -a via ssh
+      - name: Deploying system
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd swipeyourjobapi && git pull origin master
+          script: cd swipeyourjobapi && git pull origin master && mvn install
