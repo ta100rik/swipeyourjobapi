@@ -17,7 +17,7 @@ public class IndexController {
                 "       <li>addBug - POST({ \"userid\":\"sdsd\", \"cardid\":2})</li>" +
                 "       <li>removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false})</li>" +
                 "       <li>removeBookmark - POST({\"jobid\":32242,\"bookmarkid\":2,\"likeboolean\":false, \"userid\":\"sdsd\"})</li>" +
-                "       <li>addBug - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false})</li>" +
+                "       <li>addBug - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"username\":'henk',    \"description\":'dit is een test' ,\"versionnumber\":'1.0.0'})</li>" +
                 "       <li><a href='/app/preloadinfo?userid=888888'>preloadinfo?userid=888888 - GET</a></li> " +
                 "       <li><a href='/app/getbookmarks?userid=sdsd&lon=52.0862270277778&lat=5.17661701666667'>getbookmarks?userid=sdsd(optional: lon=52.0862270277778&lat=5.17661701666667) - GET</a></li> " +
                 "       <li><a href='/app/cards?userid=sdf&start=15&amount=2&lon=52.0862270277778&lat=5.17661701666667'>cards?userid=sdf&start=15&amount=2 (optional: lon=52.0862270277778&lat=5.17661701666667) - GET</a></li> " +
