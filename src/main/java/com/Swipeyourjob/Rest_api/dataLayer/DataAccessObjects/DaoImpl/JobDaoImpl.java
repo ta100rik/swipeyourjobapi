@@ -9,10 +9,7 @@ import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardLocation;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Date;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
@@ -96,6 +93,64 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
         return null;
     }
+    @Override
+    public Cardlist getCardsByCompanyId(int Companyid) {
+        try {
+            // get connection
+            Connection connection = super.getConnection();
+            // getting all the cards
+
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1 " +
+                    "join companies companyinfo " +
+                    "on companyinfo.company_id = t1.companyid " +
+                    "join joblocation jobloc " +
+                    "on jobloc.cardid = t1.jobid " +
+                    "and jobloc.defaultlocation = '1' " +
+                    "join webusers " +
+                    "on webusers.companyid = companyinfo.company_id " +
+                    "where companyinfo.company_id = ?");
+
+            preparedStatement.setInt(1, Companyid);
+            ResultSet result = super.executeQuery(preparedStatement, connection);
+
+            // initiliaze domain item
+            Cardlist cardlist = new Cardlist();
+            while (result.next()) {
+                /*
+                 *   later seperate a card from the company info by making a company class
+                 * */
+                int cardid = result.getInt("jobid");
+                String cardtitle = result.getString("jobtitle");
+                String companyname = result.getString("name");
+                String companydesc = result.getString("comanydesc");
+                String companyurl = result.getString("weburl");
+                String description = result.getString("jobdescription");
+                Float salary = result.getFloat("salary");
+                int maxhours = result.getInt("maxhours");
+                int minhours = result.getInt("minhours");
+                String user = result.getString("firstname");
+//                init card images
+                CardImageList imagelist = getCardimagesByCardid(cardid, connection);
+//                initiliasing the card location seperated because of the seperated table in query
+                String streetname = result.getString("streetname");
+                int housenumber = result.getInt("housenumber");
+                String city = result.getString("city");
+                String zipcode = result.getString("zipcode");
+                boolean defaultlocation = result.getBoolean("defaultlocation");
+                int idjoblocation = result.getInt("idjoblocation");
+                double joblongtitude = result.getDouble("joblongtitude");
+                double joblatitude = result.getDouble("joblatitude");
+//                System.out.println(imagelist.getCardImageList());
+                CardLocation cardLocation = new CardLocation(streetname, housenumber, city, zipcode, defaultlocation, idjoblocation, joblatitude, joblongtitude);
+                Card newCard = new Card(cardid, cardtitle, city, companyname, imagelist, description, companydesc, companyurl, salary, minhours, maxhours, cardLocation, user);
+                cardlist.addCard(newCard);
+            }
+            return cardlist;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Override
     public Cardlist getCardsByUserid(String userid,String start, String amount){
         try{

@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompany;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
@@ -48,6 +49,23 @@ public class WebController {
             }else{
                 return ResponseEntity.status(500).body("Company isn't created sorry the information wasn't correct");
             }
+        }
+    }
+    @GetMapping("/getjobs")
+    public ResponseEntity<?> getjobs( @RequestParam(required = true) int companyid){
+        /*
+         *   Checking if all the information is there
+         * */
+        try{
+
+            List<WebJob> joblist = ServiceProvider.getCardService().getWebJobsByCompanyid(companyid);
+            if(joblist != null){
+                return ResponseEntity.ok(new Gson().toJson(joblist));
+            }else{
+                return ResponseEntity.status(500).body("Web jobs didn't wen't well");
+            }
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
         }
     }
 
