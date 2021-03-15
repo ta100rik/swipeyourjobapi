@@ -12,7 +12,18 @@ public class BaseDaoMySQL {
     public Connection getConnection(){
         return BaseDaoConnectionPoolingMySQL.getInstance().getConnection();
     }
-
+    public int getRowCount(ResultSet res){
+        int totalRows = 0;
+        try {
+            res.last();
+            totalRows = res.getRow();
+            res.beforeFirst();
+        }
+        catch(Exception ex)  {
+            return 0;
+        }
+        return totalRows ;
+    }
     public ResultSet executeQuery(PreparedStatement preparedStatement, Connection connection){
         ResultSet resultSet = null;
         try {

@@ -16,11 +16,20 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     public int newBookmark(String userid, int cardid){
         try{
             Connection connection = super.getConnection();
-            String query = "INSERT INTO bookmarkedjobs (userid,jobid) VALUES (?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,userid);
-            preparedStatement.setInt(2,cardid);
-            return super.executeQueryReturningId(preparedStatement,connection);
+            PreparedStatement checkquery = connection.prepareStatement("select * FROM bookmarkedjobs where jobid = ? and userid = ?");
+            checkquery.setInt(1,cardid);
+            checkquery.setString(2, userid);
+            ResultSet result = super.executeQuery(checkquery, connection);
+            int rowsamounts = getRowCount(result);
+            if(rowsamounts == 0){
+                String query = "INSERT INTO bookmarkedjobs (userid,jobid) VALUES (?,?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1,userid);
+                preparedStatement.setInt(2,cardid);
+                return super.executeQueryReturningId(preparedStatement,connection);
+            }else{
+                return 0;
+            }
         }catch (Exception e){
             return 0;
         }
@@ -29,10 +38,19 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     public int newLike(String userid, int cardid){
         try{
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO likedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,userid);
-            preparedStatement.setInt(2,cardid);
-            return super.executeQueryReturningId(preparedStatement,connection);
+            PreparedStatement checkquery = connection.prepareStatement("select * FROM likedjobs where jobid = ? and userid = ?");
+            checkquery.setInt(1,cardid);
+            checkquery.setString(2, userid);
+            ResultSet result = super.executeQuery(checkquery, connection);
+            int rowsamounts = getRowCount(result);
+            if(rowsamounts == 0){
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO likedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1,userid);
+                preparedStatement.setInt(2,cardid);
+                return super.executeQueryReturningId(preparedStatement,connection);
+            }else{
+                return 0;
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -343,11 +361,20 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     public int newShowed( String userid, int cardid) {
         try{
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO showedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,userid);
-            preparedStatement.setInt(2,cardid);
+            PreparedStatement checkquery = connection.prepareStatement("select * FROM showedjobs where jobid = ? and userid = ?");
+            checkquery.setInt(1,cardid);
+            checkquery.setString(2, userid);
+            ResultSet result = super.executeQuery(checkquery, connection);
+            int rowsamounts = getRowCount(result);
+            if(rowsamounts == 0) {
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO showedjobs (userid,jobid) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1, userid);
+                preparedStatement.setInt(2, cardid);
+                return super.executeQueryReturningId(preparedStatement,connection);
+            }else {
+                return 0;
+            }
 
-            return super.executeQueryReturningId(preparedStatement,connection);
         }
         catch (Exception e){
             e.printStackTrace();
