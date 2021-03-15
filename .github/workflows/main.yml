@@ -33,4 +33,5 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd swipeyourjobapi && git pull origin master && mvn install
+          script: cd swipeyourjobapi && git pull origin master && mvn install 
+                  && cp target/Swipeyourjob-0.0.2-SNAPSHOT.jar /var/swipeyourjob/
