@@ -39,8 +39,7 @@ public class ChatService {
         RoomList current_list = ChatImpl.getRoomList(useridentifier,start,amount);
         List<AppRoom> app_list = new ArrayList<AppRoom>();
         for (chatRoom room : current_list.getRoomsList()){
-
-            AppRoom new_room = new AppRoom(room.getRoom_id(),room.getChatname(),room.getChatjobid(),room.getRoomAdmin(),room.getCompanyLogo(),room.getJobTitle(),room.getLastmessage(),room.getLastmessageboolean());
+            AppRoom new_room = new AppRoom(room.getRoom_id(),room.getChatname(),room.getChatjobid(),room.getRoomAdmin(),room.getCompanyLogo(),room.getJobTitle(),room.getLastmessage(),room.getLastmessageboolean(),room.getCompanyName());
             app_list.add(new_room);
         }
         return app_list;
