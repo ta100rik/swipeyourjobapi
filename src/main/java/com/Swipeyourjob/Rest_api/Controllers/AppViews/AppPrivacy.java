@@ -4,11 +4,20 @@ public class AppPrivacy {
     private boolean showedjobs;
     private boolean chats;
     private boolean likejobs;
-
-    public AppPrivacy(boolean showedjobs, boolean chats, boolean likejobs) {
+    private boolean bookmarks;
+    public AppPrivacy(boolean showedjobs, boolean chats, boolean likejobs, boolean bookmark) {
         this.showedjobs = showedjobs;
         this.chats = chats;
         this.likejobs = likejobs;
+        this.bookmarks = bookmark;
+    }
+
+    public boolean isBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(boolean bookmarks) {
+        this.bookmarks = bookmarks;
     }
 
     public boolean isShowedjobs() {

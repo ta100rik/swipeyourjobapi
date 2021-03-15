@@ -5,6 +5,15 @@ public class RemoveRequest {
     private boolean showedjobs;
     private boolean chats;
     private boolean likejobs;
+    private boolean bookmarks;
+
+    public boolean isBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(boolean bookmarks) {
+        this.bookmarks = bookmarks;
+    }
 
     public String getUserid() {
         return userid;

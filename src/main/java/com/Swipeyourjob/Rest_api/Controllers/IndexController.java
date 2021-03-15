@@ -15,7 +15,7 @@ public class IndexController {
                 "       <li>addLike - POST({\"userid\" :  ,\"cardid\":})</li>   " +
                 "       <li>addShowed - POST({\\\"userid\\\" :  ,\\\"cardid\\\":})</li>  " +
                 "       <li>addBug - POST({ \"userid\":\"sdsd\", \"cardid\":2})</li>" +
-                "       <li>removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false})</li>" +
+                "       <li>removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false,\"bookmarks\":false})</li>" +
                 "       <li>removeBookmark - POST({\"jobid\":32242,\"bookmarkid\":2,\"likeboolean\":false, \"userid\":\"sdsd\"})</li>" +
                 "       <li>addBug - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"username\":'henk',    \"description\":'dit is een test' ,\"versionnumber\":'1.0.0'})</li>" +
                 "       <li><a href='/app/preloadinfo?userid=888888'>preloadinfo?userid=888888 - GET</a></li> " +

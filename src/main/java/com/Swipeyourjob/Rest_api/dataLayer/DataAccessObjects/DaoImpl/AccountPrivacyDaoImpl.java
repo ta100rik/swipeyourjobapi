@@ -25,6 +25,22 @@ public class AccountPrivacyDaoImpl extends BaseDaoMySQL implements AccountPrivac
             return false;
         }
     }
+    public boolean removeBookmarks(String userid){
+        String sql = "";
+        try{
+            Connection connection  = super.getConnection();
+            sql = "delete from bookmarkedjobs where userid = ? ";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,userid);
+            super.updateQuery(preparedStatement,connection);
+            return true;
+        }
+        catch (Exception e){
+            System.out.println(sql);
+            e.printStackTrace();
+            return false;
+        }
+    }
     public boolean removeChatmessages(String userid){
         String sql = "";
         try{

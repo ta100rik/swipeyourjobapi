@@ -131,7 +131,7 @@ public class Appcontroller {
 
     @PostMapping("/removeData")
     public ResponseEntity<?> removeData(@RequestBody RemoveRequest removerequest){
-        AppPrivacy result = ServiceProvider.getAccountPrivacyService().accountPrivacy(removerequest.getUserid(),removerequest.isShowedjobs(),removerequest.isChats(),removerequest.isLikejobs());
+        AppPrivacy result = ServiceProvider.getAccountPrivacyService().accountPrivacy(removerequest.getUserid(),removerequest.isShowedjobs(),removerequest.isChats(),removerequest.isLikejobs(),removerequest.isBookmarks());
         if(result != null){
             return ResponseEntity.ok(result);
         }else{

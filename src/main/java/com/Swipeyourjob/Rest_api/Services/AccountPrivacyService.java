@@ -5,10 +5,11 @@ import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.AccountPriv
 
 public class AccountPrivacyService {
     AccountPrivacyDaoImpl AccountPrivacyImpl = new AccountPrivacyDaoImpl();
-    public AppPrivacy accountPrivacy(String userid, boolean showedjobs, boolean chats, boolean likejobs){
+    public AppPrivacy accountPrivacy(String userid, boolean showedjobs, boolean chats, boolean likejobs, boolean bookmarks){
         boolean showedjobsResult = false;
         boolean chatsResult = false;
         boolean likeResult = false;
+        boolean bookmarksResult = false;
         if(showedjobs){
             showedjobsResult = AccountPrivacyImpl.removeShowedJobs(userid);
         }
@@ -18,7 +19,10 @@ public class AccountPrivacyService {
         if(likejobs){
             likeResult =  AccountPrivacyImpl.removeLikejobs(userid);
         }
-        AppPrivacy privacy = new AppPrivacy(showedjobsResult,chatsResult,likeResult);
+        if(bookmarks){
+            bookmarksResult = AccountPrivacyImpl.removeBookmarks(userid);
+        }
+        AppPrivacy privacy = new AppPrivacy(showedjobsResult,chatsResult,likeResult,bookmarksResult);
         return privacy;
 
     }
