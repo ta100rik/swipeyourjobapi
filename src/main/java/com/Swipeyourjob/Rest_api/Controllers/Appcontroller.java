@@ -21,9 +21,9 @@ public class Appcontroller {
     public ResponseEntity<?> Addlike(@RequestBody MatchRequest matchRequest) throws JSONException {
         int result = ServiceProvider.getCardService().newLike(matchRequest.getUserid(),matchRequest.getCardid());
         if(result != 0){
-            return ResponseEntity.ok(matchRequest);
+            return ResponseEntity.ok(result);
         }else{
-            return ResponseEntity.status(500).body(matchRequest);
+            return ResponseEntity.status(500).body(result);
         }
 
     }
@@ -41,9 +41,9 @@ public class Appcontroller {
     public ResponseEntity<?> addShowed(@RequestBody showRequest showrequest) throws JSONException {
         int result = ServiceProvider.getCardService().newShowed(showrequest.getUserid(),showrequest.getCardid());
         if(result != 0){
-            return ResponseEntity.ok(showrequest);
+            return ResponseEntity.ok(result);
         }else{
-            return ResponseEntity.status(500).body(showrequest);
+            return ResponseEntity.status(500).body(result);
         }
 
     }
