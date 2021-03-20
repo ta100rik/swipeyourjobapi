@@ -3,6 +3,7 @@ package com.Swipeyourjob.Rest_api.Controllers;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
+import com.Swipeyourjob.Rest_api.Services.FirebaseService;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.google.gson.Gson;
@@ -56,6 +57,7 @@ public class Appcontroller {
             return ResponseEntity.status(500).body("database error");
         }
     }
+
     @GetMapping("/getbookmarks")
     public ResponseEntity<?> getBookmarks(
             @RequestParam(required = true) String userid,

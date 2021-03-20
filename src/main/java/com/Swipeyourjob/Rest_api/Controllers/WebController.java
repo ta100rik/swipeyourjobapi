@@ -3,6 +3,7 @@ package com.Swipeyourjob.Rest_api.Controllers;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompany;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.LoginRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
@@ -51,6 +52,7 @@ public class WebController {
             }
         }
     }
+
     @GetMapping("/getjobs")
     public ResponseEntity<?> getjobs( @RequestParam(required = true) int companyid){
         /*
@@ -67,6 +69,13 @@ public class WebController {
         }catch (Exception e){
             return ResponseEntity.noContent().build();
         }
+    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
+        String username = loginrequest.getUsername();
+        String userpassword = loginrequest.getPassword();
+        String result = ServiceProvider.getAuthenticationService().login(username,userpassword);
+        return ResponseEntity.ok(result);
     }
 
 

@@ -19,5 +19,35 @@ public class AuthenticationService {
         String jwttoken = this.passwordService.generateJWTtoken(newuser);
         return jwttoken;
     }
+    private Boolean checklogin(String username, String password){
+        String currentPassword = identicationService.getHashedPassword(username);
+        if(!currentPassword.equals("False")) {
+            String UserPassword = this.passwordService.hashpassword(password);
+            if(UserPassword.equals(currentPassword)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private WebUser getWebuserByUsername(String username){
+        return identicationService.getWebuserByUsername(username);
+    }
+    public String login(String username, String password){
+        boolean loggedin = this.checklogin(username,password);
+        if(loggedin){
+            WebUser user = this.getWebuserByUsername(username);
+            if(user != null){
+
+                String jwttoken = this.passwordService.generateJWTtoken(user);
+                return jwttoken;
+            }else{
+                return "Sorry but that username or password is incorrect";
+            }
+        }else{
+            return "Sorry but that username or password is incorrect";
+        }
+    }
+
+
 
 }

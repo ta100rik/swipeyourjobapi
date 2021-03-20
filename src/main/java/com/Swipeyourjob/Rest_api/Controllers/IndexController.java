@@ -26,6 +26,11 @@ public class IndexController {
                 "   <li><a href='/web'>Web</a></li>" +
                 "   <ul>" +
                 "       <li><a href='/web/getjobs?companyid=2'>getjobs?companyid=2 - GET</a></li> " +
+
+                "       <li>login - POST(\"{\n" +
+                "    \"username\":\"zyad\",\n" +
+                "    \"password\":\"1lasdfkjasldkfjasldkfjlaskdjf23\"\n" +
+                "}\")</li> " +
                 "       <li>uploadimage - POST(\"imageFile\" : FILE )</li>" +
                 "   </ul>" +
                 "   <li><a href='/chat'>Chat</a></li>" +

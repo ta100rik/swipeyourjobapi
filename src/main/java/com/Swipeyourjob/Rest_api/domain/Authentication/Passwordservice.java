@@ -31,6 +31,7 @@ public class Passwordservice {
             return null;
         }
     }
+
     @SuppressWarnings("deprecation")
     public String generateJWTtoken(WebUser user){
 
