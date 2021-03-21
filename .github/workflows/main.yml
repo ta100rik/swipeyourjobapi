@@ -33,6 +33,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd swipeyourjobapi && git pull origin master && mvn install 
+          script: cd swipeyourjobapi && git pull origin master &&  export GOOGLE_APPLICATION_CREDENTIALS="/home/zyad/firebase_config.json" && mvn install 
                   && cp target/Swipeyourjob-0.0.2-SNAPSHOT.jar /var/swipeyourjob/ && sudo systemctl daemon-reload
                   && sudo service swipeyourjob restart
