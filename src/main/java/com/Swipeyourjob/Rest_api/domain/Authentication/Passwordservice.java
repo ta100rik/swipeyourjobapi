@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.domain.Authentication;
 
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -31,6 +32,7 @@ public class Passwordservice {
             return null;
         }
     }
+
     @SuppressWarnings("deprecation")
     public String generateJWTtoken(WebUser user){
 
@@ -40,7 +42,7 @@ public class Passwordservice {
                 .setIssuer("Swipeyourjob")
                 .setSubject("UserInfo")
                 .claim("userid", user.getUserid())
-                .claim("scope", "admins")
+                .claim("Role", "admins")
                 // Fri Jun 24 2016 15:33:42 GMT-0400 (EDT)
                 .setIssuedAt(new Date())
                 // Sat Jun 24 2116 15:33:42 GMT-0400 (EDT)
@@ -49,6 +51,13 @@ public class Passwordservice {
                         SignatureAlgorithm.HS256,JWT_SECRET)
                 .compact();
         return jwttoken;
+    }
+    public Claims decodeJWT(String jwt) {
+        //This line will throw an exception if it is not a signed JWS (as expected)
+        Claims claims = Jwts.parser()
+                .setSigningKey(JWT_SECRET)
+                .parseClaimsJws(jwt).getBody();
+        return claims;
     }
 //    public static boolean validatePassword(char[] password, String goodHash)
 //            throws NoSuchAlgorithmException, InvalidKeySpecException
