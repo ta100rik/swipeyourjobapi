@@ -3,6 +3,7 @@ package com.Swipeyourjob.Rest_api.Services;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.IdenticationDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Authentication.Passwordservice;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -37,16 +38,26 @@ public class AuthenticationService {
         if(loggedin){
             WebUser user = this.getWebuserByUsername(username);
             if(user != null){
-
                 String jwttoken = this.passwordService.generateJWTtoken(user);
                 return jwttoken;
             }else{
-                return "Sorry but that username or password is incorrect";
+                return "False";
             }
         }else{
-            return "Sorry but that username or password is incorrect";
+            return "False";
         }
     }
+    private Claims decode(String jwt){
+        Claims claim = this.passwordService.decodeJWT(jwt);
+        return claim;
+    }
+    public String getUserRole(String jwt){
+        Claims claim = decode(jwt);
+        String role = (String) claim.get("Role");
+        return role;
+    }
+
+
 
 
 

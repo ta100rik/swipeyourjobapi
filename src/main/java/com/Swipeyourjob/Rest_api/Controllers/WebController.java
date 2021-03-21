@@ -72,10 +72,18 @@ public class WebController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
-        String username = loginrequest.getUsername();
-        String userpassword = loginrequest.getPassword();
-        String result = ServiceProvider.getAuthenticationService().login(username,userpassword);
-        return ResponseEntity.ok(result);
+        try{
+            String username = loginrequest.getUsername();
+            String userpassword = loginrequest.getPassword();
+            String result = ServiceProvider.getAuthenticationService().login(username,userpassword);
+            if(!result.equals("False")){
+                return ResponseEntity.ok(result);
+            }else{
+                return ResponseEntity.status(403).body("Sorry, your username or/and password combination wasn't correct");
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(50).body("Server error");
+        }
     }
 
 

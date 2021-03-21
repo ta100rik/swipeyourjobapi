@@ -34,7 +34,7 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
     public WebUser getWebuserByUsername(String username){
         try{
             Connection connection = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT  * FROM webusers");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT  * FROM webusers join userroles on userroles.iduserroles = webusers.roleid");
             ResultSet result    = super.executeQuery(preparedStatement,connection);
             int rowCount        = super.getRowCount(result);
             if(rowCount != 0){
@@ -44,7 +44,8 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
                     String db_lastname  = result.getString("lastname");
                     int db_companyid    = result.getInt("companyid");
                     int db_userid       = result.getInt("idwebusers");
-                    WebUser user        = new WebUser(db_username,db_firstname,db_lastname,db_companyid,db_userid);
+                    String db_role      = result.getString("rolename");
+                    WebUser user        = new WebUser(db_username,db_firstname,db_lastname,db_companyid,db_userid,db_role);
                     return user;
                 }
             }else{
@@ -68,7 +69,7 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
             preparedStatement.setString(4,lastname);
             preparedStatement.setInt(5,companyid);
             int returnedid = super.executeQueryReturningId(preparedStatement,connection);
-            WebUser webuser = new WebUser(username,firstname,lastname,companyid,returnedid);
+            WebUser webuser = new WebUser(username,firstname,lastname,companyid,returnedid,"companyadmin");
             return webuser;
         }catch (Exception e){
             e.printStackTrace();
