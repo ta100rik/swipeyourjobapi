@@ -1,4 +1,4 @@
 target/*
 .idea/*
 HELP.md
-src/main/resources/*
+src/main/resources/
