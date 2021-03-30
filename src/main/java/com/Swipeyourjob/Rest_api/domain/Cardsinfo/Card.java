@@ -8,6 +8,7 @@ public class Card {
     private String companyname;
     private String companyDescription;
     private String companyUrl;
+    private String compnayLogoUrl;
     private String description;
     private CardImageList imagelist;
     private float salary;
@@ -17,7 +18,8 @@ public class Card {
     private String owner;
     private CardBookmark bookmark;
 
-    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
+
+    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl,String compnayLogoUrl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
         this.cardid             = cardid;
         this.cardtitle          = cardTitel;
         this.companyname        = companyname;
@@ -30,6 +32,7 @@ public class Card {
         this.salary             = salary;
         this.location           = cardlocation;
         this.owner              = user;
+        this.compnayLogoUrl = compnayLogoUrl;
     }
 
     public CardBookmark getBookmark() {
@@ -38,6 +41,10 @@ public class Card {
 
     public void setBookmark(CardBookmark bookmark) {
         this.bookmark = bookmark;
+    }
+
+    public void setCompnayLogoUrl(String compnayLogoUrl) {
+        this.compnayLogoUrl = compnayLogoUrl;
     }
 
     public void setCardid(int cardid) {
@@ -140,5 +147,9 @@ public class Card {
 
     public String getOwner() {
         return owner;
+    }
+
+    public String getCompnayLogoUrl() {
+        return compnayLogoUrl;
     }
 }

@@ -85,6 +85,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 String companydesc      = result.getString("comanydesc");
                 String companyurl       = result.getString("weburl");
                 String description      = result.getString("jobdescription");
+                String companyLogo      = result.getString("companylogo");
                 Float salary            = result.getFloat("salary");
                 int maxhours          = result.getInt("maxhours");
                 int minhours          = result.getInt("minhours");
@@ -102,7 +103,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 double joblatitude           = result.getDouble("joblatitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
                 return newCard;
             }
 
@@ -141,6 +142,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 String cardtitle = result.getString("jobtitle");
                 String companyname = result.getString("name");
                 String companydesc = result.getString("comanydesc");
+
+                String comanydesclogo = result.getString("companylogo");
                 String companyurl = result.getString("weburl");
                 String description = result.getString("jobdescription");
                 Float salary = result.getFloat("salary");
@@ -160,7 +163,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 double joblatitude = result.getDouble("joblatitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation cardLocation = new CardLocation(streetname, housenumber, city, zipcode, defaultlocation, idjoblocation, joblatitude, joblongtitude);
-                Card newCard = new Card(cardid, cardtitle, city, companyname, imagelist, description, companydesc, companyurl, salary, minhours, maxhours, cardLocation, user);
+                Card newCard = new Card(cardid, cardtitle, city, companyname, imagelist, description, companydesc, companyurl,comanydesclogo, salary, minhours, maxhours, cardLocation, user);
                 cardlist.addCard(newCard);
             }
             return cardlist;
@@ -206,6 +209,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 String companyname      = result.getString("name");
                 String companydesc      = result.getString("comanydesc");
                 String companyurl       = result.getString("weburl");
+                String companyLogo      = result.getString("companylogo");
                 String description      = result.getString("jobdescription");
                 Float salary            = result.getFloat("salary");
                 int maxhours          = result.getInt("maxhours");
@@ -224,7 +228,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 double joblatitude           = result.getDouble("joblatitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
+                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
                 cardlist.addCard(newCard);
             }
             return cardlist;
@@ -268,6 +272,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 String companydesc      = result.getString("comanydesc");
                 String companyurl       = result.getString("weburl");
                 String description      = result.getString("jobdescription");
+
+                String companyLogo      = result.getString("companylogo");
                 Float salary            = result.getFloat("salary");
                 int maxhours          = result.getInt("maxhours");
                 int minhours          = result.getInt("minhours");
@@ -288,7 +294,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 int bookmarkid              = result.getInt("idbookmarkedjobs");
                 CardLocation  cardLocation  = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
                 CardBookmark  cardBookmark  = new CardBookmark(bookmarkid,bookmarktimestamp);
-                Card newCard                = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,salary,minhours,maxhours,cardLocation,user);
+                Card newCard                = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
                 newCard.setBookmark(cardBookmark);
                 cardlist.addCard(newCard);
             }
