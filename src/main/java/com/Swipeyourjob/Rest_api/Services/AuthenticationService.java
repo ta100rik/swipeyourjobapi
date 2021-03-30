@@ -53,8 +53,12 @@ public class AuthenticationService {
     }
     public String getUserRole(String jwt){
         Claims claim = decode(jwt);
-        String role = (String) claim.get("Role");
-        return role;
+        if(claim == null){
+            return null;
+        }else{
+            String role = (String) claim.get("Role");
+            return role;
+        }
     }
 
 

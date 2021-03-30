@@ -1,5 +1,6 @@
 package com.Swipeyourjob.Rest_api.securityFilter;
 
+import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import io.jsonwebtoken.io.IOException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,16 +22,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try{
 
                 final String requestTokenHeader = request.getHeader("Authorization");
-                System.out.println(requestTokenHeader);
-
                 if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                             null, null, null);
                     usernamePasswordAuthenticationToken
                             .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+                    String jwtToken = requestTokenHeader.substring(7);
+                    String role = ServiceProvider.getAuthenticationService().getUserRole(jwtToken);
+                    logger.warn(role);
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    logger.warn("We love you");
                 }else{
                     logger.warn("JWT Token does not begin with Bearer String");
                 }
