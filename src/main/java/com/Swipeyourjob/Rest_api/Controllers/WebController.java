@@ -11,6 +11,7 @@ import com.Swipeyourjob.Rest_api.Controllers.request.CardRequest;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,12 +55,14 @@ public class WebController {
     }
 
     @GetMapping("/getjobs")
-    public ResponseEntity<?> getjobs( @RequestParam(required = true) int companyid){
+    public ResponseEntity<?> getjobs(){
         /*
          *   Checking if all the information is there
          * */
         try{
-
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            System.out.println(userinfo[0]);
+            int companyid = Integer.parseInt(userinfo[1]);
             List<WebJob> joblist = ServiceProvider.getCardService().getWebJobsByCompanyid(companyid);
             if(joblist != null){
                 return ResponseEntity.ok(new Gson().toJson(joblist));

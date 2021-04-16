@@ -18,7 +18,6 @@ public class ApplicationConfigurerAdapter extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-
                 .authorizeRequests()
                 .antMatchers("/web/login").permitAll()
                 .antMatchers("/app/**").permitAll()
@@ -26,7 +25,6 @@ public class ApplicationConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .anyRequest()
                 .authenticated()
-
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

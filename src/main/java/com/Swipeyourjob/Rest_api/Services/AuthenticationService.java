@@ -59,6 +59,18 @@ public class AuthenticationService {
             String role = (String) claim.get("Role");
             return role;
         }
+
+    }
+
+    public int getCompanyid(String jwt){
+        Claims claim = decode(jwt);
+        if(claim == null){
+            return 0;
+        }else{
+            int role = (int) claim.get("Companyid");
+            return role;
+        }
+
     }
 
 

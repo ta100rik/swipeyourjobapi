@@ -37,12 +37,14 @@ public class Passwordservice {
     public String generateJWTtoken(WebUser user){
 
         Date validity = new Date();
+
         validity.setTime(validity.getTime() + days * 1000 * 60 * 60 * 24);
         String jwttoken = Jwts.builder()
                 .setIssuer("Swipeyourjob")
                 .setSubject("UserInfo")
                 .claim("userid", user.getUserid())
-                .claim("Role", "admins")
+                .claim("Role", user.getRole())
+                .claim("Companyid",user.getCompanyid())
                 // Fri Jun 24 2016 15:33:42 GMT-0400 (EDT)
                 .setIssuedAt(new Date())
                 // Sat Jun 24 2116 15:33:42 GMT-0400 (EDT)

@@ -23,21 +23,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 final String requestTokenHeader = request.getHeader("Authorization");
                 if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                            null, null, null);
-                    usernamePasswordAuthenticationToken
-                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     String jwtToken = requestTokenHeader.substring(7);
                     String role = ServiceProvider.getAuthenticationService().getUserRole(jwtToken);
-                    logger.warn(role);
+                    int companyid = ServiceProvider.getAuthenticationService().getCompanyid(jwtToken);
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                            role + "_" + companyid, null, null);
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }else{
                     logger.warn("JWT Token does not begin with Bearer String");
                 }
                 chain.doFilter(request, response);
             }catch (Exception e){
-                System.out.println(e);
+
             }
         }
 
