@@ -2,6 +2,7 @@ package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompany;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.LoginRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
@@ -80,9 +81,11 @@ public class WebController {
             String userpassword = loginrequest.getPassword();
             String result = ServiceProvider.getAuthenticationService().login(username,userpassword);
             if(!result.equals("False")){
-                return ResponseEntity.ok(result);
+                WebLoginResponse RESPONSE = new WebLoginResponse(result,"ok");
+                return ResponseEntity.ok(RESPONSE);
             }else{
-                return ResponseEntity.status(403).body("Sorry, your username or/and password combination wasn't correct");
+                WebLoginResponse RESPONSE = new WebLoginResponse("","Username or/and password combination wasn't correct");
+                return ResponseEntity.status(403).body(RESPONSE);
             }
         }catch (Exception e){
             return ResponseEntity.status(50).body("Server error");
