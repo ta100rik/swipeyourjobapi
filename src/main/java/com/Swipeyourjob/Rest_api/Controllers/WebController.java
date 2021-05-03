@@ -72,6 +72,7 @@ public class WebController {
         /*
          *   Checking if all the information is there
          * */
+        //t
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
             System.out.println(userinfo[0]);
