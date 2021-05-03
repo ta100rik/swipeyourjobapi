@@ -92,6 +92,7 @@ public class WebController {
             return ResponseEntity.noContent().build();
         }
     }
+
     @GetMapping("/getjobs")
     public ResponseEntity<?> getjobs(){
         /*
