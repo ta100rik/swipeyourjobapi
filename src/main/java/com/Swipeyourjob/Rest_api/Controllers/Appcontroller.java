@@ -18,16 +18,6 @@ import java.util.List;
 @RequestMapping("/app")
 public class Appcontroller {
 
-    @PostMapping("/addLike")
-    public ResponseEntity<?> Addlike(@RequestBody MatchRequest matchRequest) throws JSONException {
-        int result = ServiceProvider.getCardService().newLike(matchRequest.getUserid(),matchRequest.getCardid());
-        if(result != 0){
-            return ResponseEntity.ok(result);
-        }else{
-            return ResponseEntity.status(500).body(result);
-        }
-
-    }
     @PostMapping("/addBookmark")
     public ResponseEntity<?> addBookmark(@RequestBody MatchRequest bookmarkRequest){
         System.out.println(bookmarkRequest);
@@ -37,16 +27,6 @@ public class Appcontroller {
         }else{
             return ResponseEntity.status(500).body("sorry not bookmarked because of a server error");
         }
-    }
-    @PostMapping("/addShowed")
-    public ResponseEntity<?> addShowed(@RequestBody showRequest showrequest) throws JSONException {
-        int result = ServiceProvider.getCardService().newShowed(showrequest.getUserid(),showrequest.getCardid());
-        if(result != 0){
-            return ResponseEntity.ok(result);
-        }else{
-            return ResponseEntity.status(500).body(result);
-        }
-
     }
     @PostMapping("/addBug")
     public ResponseEntity<?> addBug(@RequestBody bugRequest bugrequest){
@@ -141,15 +121,6 @@ public class Appcontroller {
         }
     }
 
-    @PostMapping("/removeBookmark")
-    public ResponseEntity<?> removeBookmark(@RequestBody RemoveBookmarkRequest removebookmarkrequest){
-        boolean Result = ServiceProvider.getCardService().bookmarkAction(removebookmarkrequest.getBookmarkid(),removebookmarkrequest.getJobid(),removebookmarkrequest.isLikeboolean(),removebookmarkrequest.getUserid());
-        if(Result){
-            return ResponseEntity.ok(Result);
-        }else{
-            return ResponseEntity.status(500).body("database error");
-        }
-    }
 
 
 

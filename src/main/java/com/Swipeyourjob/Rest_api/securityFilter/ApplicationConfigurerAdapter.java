@@ -20,6 +20,7 @@ public class ApplicationConfigurerAdapter extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/web/login").permitAll()
+                .antMatchers("/web/newCompany").permitAll()
                 .antMatchers("/app/**").permitAll()
                 .antMatchers("/chat/**").permitAll()
                 .antMatchers("/").permitAll()

@@ -18,12 +18,7 @@ public class CardService {
     public int newBookmark(String userid, int cardid){
         return JobImpl.newBookmark(userid,cardid);
     }
-    public int newLike(String userid, int cardid){
-        return JobImpl.newLike(userid,cardid);
-    }
-    public int newShowed(String userid, int cardid){
-        return JobImpl.newShowed(userid,cardid);
-    }
+
     public AppCard getAppcardByJobid(String jobid,String lon, String lat){
         Card currentcard = JobImpl.getCardByJobid(jobid);
         List<String> images = new ArrayList<>();
@@ -115,11 +110,5 @@ public class CardService {
         return bookmarkamount;
     }
 
-    public boolean bookmarkAction(int bookmarkid, int Jobid,boolean liked,String userid){
-        if(liked){
-            JobImpl.newLike(userid,Jobid);
-        }
-        return JobImpl.removeBookmark(bookmarkid);
-    }
 
 }

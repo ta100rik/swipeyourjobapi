@@ -44,7 +44,6 @@ public class Passwordservice {
                 .setSubject("UserInfo")
                 .claim("userid", user.getUserid())
                 .claim("Role", user.getRole())
-                .claim("Companyid",user.getCompanyid())
                 // Fri Jun 24 2016 15:33:42 GMT-0400 (EDT)
                 .setIssuedAt(new Date())
                 // Sat Jun 24 2116 15:33:42 GMT-0400 (EDT)

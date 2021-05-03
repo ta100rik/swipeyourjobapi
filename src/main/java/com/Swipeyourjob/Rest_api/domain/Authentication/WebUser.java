@@ -2,19 +2,23 @@ package com.Swipeyourjob.Rest_api.domain.Authentication;
 
 public class WebUser {
     public int userid;
-    public String username;
+    public String email;
     public String firstname;
     public String lastname;
-    public int companyid;
     public String role;
 
-    public WebUser(String username, String firstname, String lastname, int companyid,int userid, String roles) {
+    public WebUser(String email,int userid, String roles) {
         this.userid     = userid;
-        this.username   = username;
-        this.firstname  = firstname;
-        this.lastname   = lastname;
-        this.companyid  = companyid;
+        this.email   = email;
         this.role       = roles;
+    }
+
+    public WebUser(int userid, String email, String firstname, String lastname, String role) {
+        this.userid = userid;
+        this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.role = role;
     }
 
     public String getRole() {
@@ -34,11 +38,11 @@ public class WebUser {
     }
 
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.email = username;
     }
 
     public String getFirstname() {
@@ -57,11 +61,4 @@ public class WebUser {
         this.lastname = lastname;
     }
 
-    public int getCompanyid() {
-        return companyid;
-    }
-
-    public void setCompanyid(int companyid) {
-        this.companyid = companyid;
-    }
 }

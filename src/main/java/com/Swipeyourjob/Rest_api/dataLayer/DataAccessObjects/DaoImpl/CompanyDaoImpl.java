@@ -1,30 +1,24 @@
 package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
-import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.CompanyDao;
-import com.Swipeyourjob.Rest_api.domain.Companyinfo.Company;
+import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.BuggDao;
+import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.companyDao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 
-public class CompanyDaoImpl extends BaseDaoMySQL implements CompanyDao {
-
+public class CompanyDaoImpl extends BaseDaoMySQL implements companyDao {
     @Override
-    public Company newCompany(String companyName, String weburl, String Companylogo, String desc) {
+    public int createCompany(String name, String kvk) {
         try{
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO companies (name,comanydesc,weburl,companylogo) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,companyName);
-            preparedStatement.setString(2,desc);
-            preparedStatement.setString(3,weburl);
-            preparedStatement.setString(4,Companylogo);
-            int databaseID = super.executeQueryReturningId(preparedStatement,connection);
-            Company newcompany = new Company(databaseID,desc,companyName,weburl,Companylogo);
-            return newcompany;
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
+            PreparedStatement insertreadstatement = connection.prepareStatement("INSERT INTO companies(name,kvk) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            insertreadstatement.setString(1,name);
+            insertreadstatement.setString(2,kvk);
+            return super.executeQueryReturningId(insertreadstatement,connection);
+        } catch (SQLException w){
+            return -1;
+        } catch (Exception e){
+            return 0;
         }
     }
 }
