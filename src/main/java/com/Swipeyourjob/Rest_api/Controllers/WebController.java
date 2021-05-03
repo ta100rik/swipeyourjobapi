@@ -48,15 +48,17 @@ public class WebController {
                 /*
                  * Because we have everything in place now we gonna create the company first and then create a webuser.
                  */
+
+
                 int companyid = ServiceProvider.getCompanyService().createcompany(companyRequest.getCompanyname(), companyRequest.getKvk());
-                if (companyid == -1) {throw new HandledException(500, "Error within sql");}
-                if (companyid == 0) {throw new HandledException(401, "Kvk is already taken");}
+                if (companyid == -1) {throw new HandledException(200, "Error within sql");}
+                if (companyid == 0) {throw new HandledException(200, "Kvk is already taken");}
                 WebUser admin = ServiceProvider.getAuthenticationService().register(companyRequest.getEmail(),companyRequest.getPassword(),4);
+
                 int estamblishmentid = ServiceProvider.getCompanyService().createEstamblishment(companyid,admin.getUserid(),"HQ",companyRequest.getZipcode(),1);
                 if(estamblishmentid == 0){throw new HandledException(401,"Your company is created but the estamblishment isn't");}
-                
-                // String jwttoken = ServiceProvider.getAuthenticationService().register(companyRequest.getUserName(),companyRequest.getPassword(),companyRequest.getFirstname(),companyRequest.getLastname(),2);
-                return ResponseEntity.ok("ok");
+                WebLoginResponse RESPONSE = new WebLoginResponse(ServiceProvider.getAuthenticationService().user2jwttoken(admin), "ok");
+                return ResponseEntity.ok(RESPONSE);
             }
         }catch (HandledException f){
             return ResponseEntity.status(f.getCode()).body(f.getMessage());
@@ -87,9 +89,9 @@ public class WebController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
         try{
-            String username = loginrequest.getUsername();
+            String email = loginrequest.getEmail();
             String userpassword = loginrequest.getPassword();
-            String result = ServiceProvider.getAuthenticationService().login(username,userpassword);
+            String result = ServiceProvider.getAuthenticationService().login(email,userpassword);
             if(!result.equals("False")){
                 WebLoginResponse RESPONSE = new WebLoginResponse(result,"ok");
                 return ResponseEntity.ok(RESPONSE);

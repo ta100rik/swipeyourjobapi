@@ -10,11 +10,11 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao {
-    public String getHashedPassword(String username){
+    public String getHashedPassword(String email){
         try{
             Connection connection = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT password from webusers where username = ?");
-            preparedStatement.setString(1,username);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT password from webusers where email = ?");
+            preparedStatement.setString(1,email);
             ResultSet result = super.executeQuery(preparedStatement,connection);
             int rows    = getRowCount(result);
             if(rows == 1){

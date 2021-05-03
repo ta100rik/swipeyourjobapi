@@ -9,17 +9,17 @@ public class AuthenticationService {
     Passwordservice passwordService = new Passwordservice();
     IdenticationDaoImpl identicationService = new IdenticationDaoImpl();
 
-    public  WebUser register(String username,String password, int roleid){
+    public  WebUser register(String email,String password, int roleid){
         String hashedpassword = this.passwordService.hashpassword(password);
-        WebUser newuser = identicationService.registerWebUser(username,hashedpassword,roleid);
+        WebUser newuser = identicationService.registerWebUser(email,hashedpassword,roleid);
         return newuser;
     }
     public String user2jwttoken(WebUser user){
         String jwttoken = this.passwordService.generateJWTtoken(user);
         return jwttoken;
     }
-    private Boolean checklogin(String username, String password){
-        String currentPassword = identicationService.getHashedPassword(username);
+    private Boolean checklogin(String email, String password){
+        String currentPassword = identicationService.getHashedPassword(email);
         if(!currentPassword.equals("False")) {
             String UserPassword = this.passwordService.hashpassword(password);
             if(UserPassword.equals(currentPassword)){
@@ -28,13 +28,13 @@ public class AuthenticationService {
         }
         return false;
     }
-    private WebUser getWebuserByUsername(String username){
-        return identicationService.getWebuserByEmail(username);
+    private WebUser getWebuserByEmail(String email){
+        return identicationService.getWebuserByEmail(email);
     }
-    public String login(String username, String password){
-        boolean loggedin = this.checklogin(username,password);
+    public String login(String email, String password){
+        boolean loggedin = this.checklogin(email,password);
         if(loggedin){
-            WebUser user = this.getWebuserByUsername(username);
+            WebUser user = this.getWebuserByEmail(email);
             if(user != null){
                 String jwttoken = this.passwordService.generateJWTtoken(user);
                 return jwttoken;
