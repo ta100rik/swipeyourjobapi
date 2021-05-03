@@ -3,6 +3,7 @@ package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.EstamblishmentDao;
 import com.Swipeyourjob.Rest_api.dataLayer.ResponseClasses.Locationiq;
+import com.Swipeyourjob.Rest_api.domain.Company.EstamblishmentProfile;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -12,10 +13,7 @@ import org.json.simple.parser.JSONParser;
 
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 
 public class EstamblishmentDaoImpl extends BaseDaoMySQL implements EstamblishmentDao {
     private int createEstamblishmentAdres(String zipcode, int companyid){
@@ -86,5 +84,102 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
             return 0;
         }
 
+    }
+    public EstamblishmentProfile getEstamblishmentProfile(int estamblishmentid){
+        try {
+            Connection connection = super.getConnection();
+            PreparedStatement Query = connection.prepareStatement("SELECT " +
+                    "es.description , " +
+                    "com.companylogo, " +
+                    "users.firstname, " +
+                    "users.lastname, " +
+                    "users.profilepicture," +
+                    "es.instagramurl," +
+                    "es.linkedinurl," +
+                    "es.facebookurl," +
+                    "adres.place," +
+                    "adres.streetname," +
+                    "adres.housenumber," +
+                    "adres.zipcode " +
+                    "FROM establishment as es " +
+                    "join companies as com " +
+                    "on com.company_id = es.companies_company_id " +
+                    "join webusers users " +
+                    "on users.idwebusers = es.establishmentowner " +
+                    "join establishment_adress adres " +
+                    "on es.idestablishment = adres.establishment_idestablishment " +
+                    "and adres.enddate is null " +
+                    "where es.idestablishment = ?");
+            Query.setInt(1,estamblishmentid);
+            ResultSet result = super.executeQuery(Query,connection);
+            while (result.next()){
+                String description = result.getString("description");
+                String companylogo = result.getString("companylogo");
+                String firstname = result.getString("firstname");
+                String lastname = result.getString("lastname");
+                String profilepicture = result.getString("profilepicture");
+                String instagramurl = result.getString("instagramurl");
+                String linkedinurl = result.getString("linkedinurl");
+                String facebookurl = result.getString("facebookurl");
+                String place = result.getString("place");
+                String streetname = result.getString("streetname");
+                int housenumber = result.getInt("housenumber");
+                String zipcode = result.getString("zipcode");
+
+                EstamblishmentProfile profile = new EstamblishmentProfile(
+                        description,
+                        companylogo,
+                        firstname,
+                        lastname,
+                        profilepicture,
+                        instagramurl,
+                        linkedinurl,
+                        facebookurl,
+                        place,
+                        streetname,
+                        housenumber,
+                        zipcode
+                        );
+                return profile;
+            }
+            return null;
+        }catch (Exception e){
+            return null;
+        }
+    }
+    public boolean WebUserAcces(int userid, int estamblishmentid){
+        try{
+
+            Connection connection  = super.getConnection();
+            PreparedStatement estamblishmentaccess = connection.prepareStatement("SELECT * FROM swipeyourjob2.Webusers_estamblishment where webusers_idwebusers = ? and establishment_idestablishment = ?");
+            estamblishmentaccess.setInt(1,userid);
+            estamblishmentaccess.setInt(2,estamblishmentid);
+            ResultSet result = super.executeQuery(estamblishmentaccess,connection);
+            int rowcount = super.getRowCount(result);
+            if(rowcount > 0){
+                return true;
+            }else{
+                return false;
+            }
+
+        }catch (Exception e){
+            return false;
+        }
+    }
+    public boolean WebUsertoEstamblishment(int userid, int estamblishmentid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Webusers_estamblishment (webusers_idwebusers, establishment_idestablishment) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1,userid);
+            preparedStatement.setInt(2,estamblishmentid);
+            int returnedid = super.executeQueryReturningId(preparedStatement,connection);
+            if(returnedid > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
     }
 }
