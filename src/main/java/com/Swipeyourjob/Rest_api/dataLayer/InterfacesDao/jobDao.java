@@ -8,12 +8,8 @@ import java.sql.Connection;
 
 public interface jobDao {
     int newBookmark(String userid, int cardid);
-    int newLike(String userid, int cardid);
-
     Card getCardByJobid(String jobid);
-
     CardImageList getCardimagesByCardid(int cardid, Connection connection);
     Cardlist getCardsByCompanyId(int Companyid);
     Cardlist getCardsByUserid(String userid, String start, String amount);
-    int newShowed( String userid, int cardid);
 }

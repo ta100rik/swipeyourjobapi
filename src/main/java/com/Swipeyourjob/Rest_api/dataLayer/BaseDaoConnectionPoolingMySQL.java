@@ -18,7 +18,7 @@ public class BaseDaoConnectionPoolingMySQL {
 
 //  private String dbpassword = "pMeJFFhC3";
 //  private String url = "jdbc:mysql://web0119.zxcs.nl:3306/u7281p15572_swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
-    private String url = "jdbc:mysql://84.247.13.137:3306/swipeyourjob?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
+    private String url = "jdbc:mysql://84.247.13.137:3306/swipeyourjob2?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true";
     private String driverName = "com.mysql.cj.jdbc.Driver";
     private  Connection conn = null;
 
@@ -60,6 +60,9 @@ public class BaseDaoConnectionPoolingMySQL {
             usedConnections.add(connection);
             openConnections.remove(connection);
             return connection;
+        }catch (ArrayIndexOutOfBoundsException e){
+            createConnection(url, dbuserName, dbpassword);
+            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;

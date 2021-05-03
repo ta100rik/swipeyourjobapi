@@ -9,6 +9,7 @@ import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
 import com.Swipeyourjob.Rest_api.Controllers.request.CardRequest;
+import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
@@ -39,19 +40,30 @@ public class WebController {
         /*
         *   Checking if all the information is there
         * */
-        if(companyRequest.checkNull()){
-            return ResponseEntity.status(500).body("You are missing a value of the required one's");
-        }else{
-            /*
-                * Because we have everything in place now we gonna create the company first and then create a webuser.
-            */
-            int newcompany = ServiceProvider.getCompanyService().createCompany(companyRequest.getDescription(),companyRequest.getTitle(),companyRequest.getWeburl(),companyRequest.getCompanyLogo());
-            if(newcompany != 0){
-                String jwttoken = ServiceProvider.getAuthenticationService().register(companyRequest.getUserName(),companyRequest.getPassword(),companyRequest.getFirstname(),companyRequest.getLastname(),2);
-                return ResponseEntity.ok(jwttoken);
-            }else{
-                return ResponseEntity.status(500).body("Company isn't created sorry the information wasn't correct");
+        try {
+
+            if (companyRequest.checkNull()) {
+                return ResponseEntity.status(400).body("You are missing a value of the required one's");
+            } else {
+                /*
+                 * Because we have everything in place now we gonna create the company first and then create a webuser.
+                 */
+
+
+                int companyid = ServiceProvider.getCompanyService().createcompany(companyRequest.getCompanyname(), companyRequest.getKvk());
+                if (companyid == -1) {throw new HandledException(200, "Error within sql");}
+                if (companyid == 0) {throw new HandledException(200, "Kvk is already taken");}
+                WebUser admin = ServiceProvider.getAuthenticationService().register(companyRequest.getEmail(),companyRequest.getPassword(),4);
+
+                int estamblishmentid = ServiceProvider.getCompanyService().createEstamblishment(companyid,admin.getUserid(),"HQ",companyRequest.getZipcode(),1);
+                if(estamblishmentid == 0){throw new HandledException(401,"Your company is created but the estamblishment isn't");}
+                WebLoginResponse RESPONSE = new WebLoginResponse(ServiceProvider.getAuthenticationService().user2jwttoken(admin), "ok");
+                return ResponseEntity.ok(RESPONSE);
             }
+        }catch (HandledException f){
+            return ResponseEntity.status(f.getCode()).body(f.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Undefined error");
         }
     }
 
@@ -77,9 +89,9 @@ public class WebController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
         try{
-            String username = loginrequest.getUsername();
+            String email = loginrequest.getEmail();
             String userpassword = loginrequest.getPassword();
-            String result = ServiceProvider.getAuthenticationService().login(username,userpassword);
+            String result = ServiceProvider.getAuthenticationService().login(email,userpassword);
             if(!result.equals("False")){
                 WebLoginResponse RESPONSE = new WebLoginResponse(result,"ok");
                 return ResponseEntity.ok(RESPONSE);

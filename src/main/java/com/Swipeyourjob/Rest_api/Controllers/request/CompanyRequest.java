@@ -1,84 +1,23 @@
 package com.Swipeyourjob.Rest_api.Controllers.request;
 
 import java.lang.reflect.Field;
-import java.util.stream.Stream;
 
 public class CompanyRequest {
-    public String Title;
-    public String Description;
-    public String Weburl;
-    public String companyLogo;
-    public String lastname;
-    public String streetname;
-    public String housenumber;
-    public String city;
+    public String companyname;
     public String zipcode;
-    public String userName;
+    public String kvk;
+    public String email;
     public String password;
-    public String firstname;
+    public String subscribe;
+    public String terms;
 
-    public String getTitle() {
-        return Title;
+
+    public String getCompanyname() {
+        return companyname;
     }
 
-    public void setTitle(String title) {
-        Title = title;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
-    }
-
-    public String getWeburl() {
-        return Weburl;
-    }
-
-    public void setWeburl(String weburl) {
-        Weburl = weburl;
-    }
-
-    public String getCompanyLogo() {
-        return companyLogo;
-    }
-
-    public void setCompanyLogo(String companyLogo) {
-        this.companyLogo = companyLogo;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getStreetname() {
-        return streetname;
-    }
-
-    public void setStreetname(String streetname) {
-        this.streetname = streetname;
-    }
-
-    public String getHousenumber() {
-        return housenumber;
-    }
-
-    public void setHousenumber(String housenumber) {
-        this.housenumber = housenumber;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 
     public String getZipcode() {
@@ -89,12 +28,20 @@ public class CompanyRequest {
         this.zipcode = zipcode;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getKvk() {
+        return kvk;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setKvk(String kvk) {
+        this.kvk = kvk;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -105,20 +52,29 @@ public class CompanyRequest {
         this.password = password;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getSubscribe() {
+        return subscribe;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setSubscribe(String subscribe) {
+        this.subscribe = subscribe;
     }
+
+    public String getTerms() {
+        return terms;
+    }
+
+    public void setTerms(String terms) {
+        this.terms = terms;
+    }
+
     public boolean  checkNull() {
         for (Field f : getClass().getFields()) {
             f.setAccessible(true);
             try {
                 if (f.get(this) == null) {
-
-                  return true;
+                    System.out.println(f);
+                    return true;
                 }
             } catch (IllegalAccessException e) { // shouldn't happen because I used setAccessible
                 return true;
@@ -126,5 +82,4 @@ public class CompanyRequest {
         }
         return false;
     }
-
 }
