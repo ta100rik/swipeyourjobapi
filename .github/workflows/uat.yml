@@ -33,4 +33,4 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd swipeyourjobapi-uat && git pull origin master && mvn install 
+          script: cd swipeyourjobapi-uat && git pull origin uat && mvn install 
