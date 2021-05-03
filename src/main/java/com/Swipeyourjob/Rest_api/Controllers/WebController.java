@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompany;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
@@ -54,9 +55,9 @@ public class WebController {
                 if (companyid == -1) {throw new HandledException(200, "Error within sql");}
                 if (companyid == 0) {throw new HandledException(200, "Kvk is already taken");}
                 WebUser admin = ServiceProvider.getAuthenticationService().register(companyRequest.getEmail(),companyRequest.getPassword(),4);
-
                 int estamblishmentid = ServiceProvider.getCompanyService().createEstamblishment(companyid,admin.getUserid(),"HQ",companyRequest.getZipcode(),1);
                 if(estamblishmentid == 0){throw new HandledException(401,"Your company is created but the estamblishment isn't");}
+                if(estamblishmentid == -2){throw new HandledException(401,"Your company is created and estamblishment but the owner is not assigned");}
                 WebLoginResponse RESPONSE = new WebLoginResponse(ServiceProvider.getAuthenticationService().user2jwttoken(admin), "ok");
                 return ResponseEntity.ok(RESPONSE);
             }
@@ -66,7 +67,31 @@ public class WebController {
             return ResponseEntity.status(500).body("Undefined error");
         }
     }
+    @GetMapping("/getEstamblishmentProfile/{estamblishmentid}")
+    public ResponseEntity<?> getEstamblishmentprofile(@PathVariable("estamblishmentid") String estamblishmentid){
+        try {
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
 
+            if(estamblishmentid != null){
+                int userid = Integer.parseInt(userinfo[1]);
+                int estamblishmentidconv = Integer.parseInt(estamblishmentid);
+                boolean hasaccess = ServiceProvider.getCompanyService().hasEstamblishmentAccess(userid,estamblishmentidconv);
+                if(hasaccess){
+                    WebCompanyProfile profile = ServiceProvider.getCompanyService().getCompanyProfile(estamblishmentidconv);
+                    return ResponseEntity.ok(profile);
+                }else{
+                    return ResponseEntity.ok(hasaccess);
+                }
+            }else{
+                throw new HandledException(200,"Estamblishmentid not filled");
+            }
+        }catch (HandledException f){
+            return ResponseEntity.status(f.getCode()).body(f.getMessage());
+
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
+    }
     @GetMapping("/getjobs")
     public ResponseEntity<?> getjobs(){
         /*
@@ -74,7 +99,7 @@ public class WebController {
          * */
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-            System.out.println(userinfo[0]);
+
             int companyid = Integer.parseInt(userinfo[1]);
             List<WebJob> joblist = ServiceProvider.getCardService().getWebJobsByCompanyid(companyid);
             if(joblist != null){
@@ -86,6 +111,7 @@ public class WebController {
             return ResponseEntity.noContent().build();
         }
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
         try{
