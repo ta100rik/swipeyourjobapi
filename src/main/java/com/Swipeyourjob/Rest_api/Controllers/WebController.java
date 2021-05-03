@@ -76,6 +76,7 @@ public class WebController {
                 int userid = Integer.parseInt(userinfo[1]);
                 int estamblishmentidconv = Integer.parseInt(estamblishmentid);
                 boolean hasaccess = ServiceProvider.getCompanyService().hasEstamblishmentAccess(userid,estamblishmentidconv);
+                System.out.println("2");
                 if(hasaccess){
                     WebCompanyProfile profile = ServiceProvider.getCompanyService().getCompanyProfile(estamblishmentidconv);
                     return ResponseEntity.ok(profile);
