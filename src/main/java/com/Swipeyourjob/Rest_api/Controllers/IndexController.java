@@ -25,12 +25,28 @@ public class IndexController {
                 "   </ul>" +
                 "   <li><a href='/web'>Web</a></li>" +
                 "   <ul>" +
-                "       <li><a href='/web/getjobs?companyid=2'>getjobs?companyid=2 - GET</a></li> " +
-
-                "       <li>login - POST(\"{\n" +
-                "    \"username\":\"zyad\",\n" +
-                "    \"password\":\"1lasdfkjasldkfjasldkfjlaskdjf23\"\n" +
-                "}\")</li> " +
+                "       <li>login - POST({\n" +
+                "    \"email\":\"barteld@swipeyourjob.nl\",\n" +
+                "    \"password\":\"********\"\n" +
+                "})</li> " +
+                "       <li>updateCompanyProfile - POST {\n" +
+                "    \"introduction\": \"test\",\n" +
+                "    \"logo\": \"logourl\",\n" +
+                "    \"ownerFirstName\": \"Barteld\",\n" +
+                "    \"ownerLastname\": \"kuijt\",\n" +
+                "    \"ownerPicture\": \"Mooiefoto\",\n" +
+                "    \"weburl\": \"te\",\n" +
+                "    \"instagramUrl\": \"Instagram\",\n" +
+                "    \"linkedinUrl\": \"linkedin\",\n" +
+                "    \"facebookUrl\": \"facebook\",\n" +
+                "    \"place\": \"test\",\n" +
+                "    \"streetname\": \"Oude enghweg\",\n" +
+                "    \"housenumber\": 36,\n" +
+                "    \"zipcode\": \"1217JD\",\n" +
+                "    \"establishmentid\": 13\n" +
+                "}</li>" +
+                "       <li>getEstablishmentProfile/{estimblishmentprofile} - GET</li>" +
+                "       <li>getEstablishmentProfile - GET</li>" +
                 "       <li>uploadimage - POST(\"imageFile\" : FILE )</li>" +
                 "   </ul>" +
                 "   <li><a href='/chat'>Chat</a></li>" +
