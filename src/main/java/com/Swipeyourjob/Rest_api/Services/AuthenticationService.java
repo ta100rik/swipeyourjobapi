@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.Services;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.IdenticationDaoImpl;
+import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.MailDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Authentication.Passwordservice;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import io.jsonwebtoken.Claims;
@@ -8,7 +9,7 @@ import io.jsonwebtoken.Claims;
 public class AuthenticationService {
     Passwordservice passwordService = new Passwordservice();
     IdenticationDaoImpl identicationService = new IdenticationDaoImpl();
-
+    MailDaoImpl mailService = new MailDaoImpl();
     public  WebUser register(String email,String password, int roleid){
         String hashedpassword = this.passwordService.hashpassword(password);
         WebUser newuser = identicationService.registerWebUser(email,hashedpassword,roleid);
@@ -58,6 +59,10 @@ public class AuthenticationService {
             return role;
         }
 
+    }
+    public boolean Sendverificationmail(String mail,int verificationcode,int userid){
+        identicationService.saveVerficationcode(verificationcode,userid);
+        return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);
     }
     public int getUserid(String jwt){
         Claims claim = decode(jwt);

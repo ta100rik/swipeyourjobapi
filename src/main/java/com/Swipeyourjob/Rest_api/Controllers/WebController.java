@@ -53,7 +53,9 @@ public class WebController {
                 int estamblishmentid = ServiceProvider.getCompanyService().createEstamblishment(companyid,admin.getUserid(),"HQ",companyRequest.getZipcode(),1);
                 if(estamblishmentid == 0){throw new HandledException(401,"Your company is created but the estamblishment isn't");}
                 if(estamblishmentid == -2){throw new HandledException(401,"Your company is created and estamblishment but the owner is not assigned");}
-                WebLoginResponse RESPONSE = new WebLoginResponse(ServiceProvider.getAuthenticationService().user2jwttoken(admin), "ok");
+                WebLoginResponse RESPONSE = new WebLoginResponse("Check mail", "ok");
+                int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
+                ServiceProvider.getAuthenticationService().Sendverificationmail(companyRequest.getEmail(),random_int,admin.getUserid());
                 return ResponseEntity.ok(RESPONSE);
             }
         }catch (HandledException f){

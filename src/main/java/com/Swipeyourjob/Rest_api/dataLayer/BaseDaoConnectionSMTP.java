@@ -35,7 +35,7 @@ public class BaseDaoConnectionSMTP {
         Authenticator auth = new javax.mail.Authenticator() {
             //override the getPasswordAuthentication method
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("developer@swipeyourjob.nl", "v0dJUyvYd");
+                return new PasswordAuthentication("info@swipeyourjob.nl", "hV0FG0bZ");
             }
         };
         Session session = Session.getDefaultInstance(props, auth);

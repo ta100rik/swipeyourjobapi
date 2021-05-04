@@ -10,6 +10,18 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao {
+    public boolean saveVerficationcode(int code,int userid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement query = connection.prepareStatement("INSERT INTO verificationcodes (code,userid) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+            query.setInt(1,code);
+            query.setInt(2,userid);
+            int id = super.executeQueryReturningId(query,connection);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
     public String getHashedPassword(String email){
         try{
             Connection connection = super.getConnection();
