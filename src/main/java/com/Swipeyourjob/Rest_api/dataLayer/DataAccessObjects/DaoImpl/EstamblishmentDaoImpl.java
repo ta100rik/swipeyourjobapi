@@ -3,7 +3,9 @@ package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.EstamblishmentDao;
 import com.Swipeyourjob.Rest_api.dataLayer.ResponseClasses.Locationiq;
-import com.Swipeyourjob.Rest_api.domain.Company.EstamblishmentProfile;
+import com.Swipeyourjob.Rest_api.domain.Company.EstablishmentItem;
+import com.Swipeyourjob.Rest_api.domain.Company.EstablishmentProfile;
+import com.Swipeyourjob.Rest_api.domain.ListClasses.EstablishmentList;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -40,6 +42,48 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
             e.printStackTrace();
             return 0;
         }
+    }
+    public boolean updateEstablishmentProfile(String introduction,
+                                              String weburl,
+                                              String instagramUrl,
+                                              String linkedinUrl,
+                                              String facebookUrl,
+                                              String place,
+                                              String streetname,
+                                              int housenumber,
+                                              String zipcode,
+                                              int establishmentid){
+        try{
+            Connection connection = super.getConnection();
+            // entity Establishment
+            PreparedStatement updatestatementEstablishment = connection.prepareStatement("UPDATE establishment SET description = ? ,facebookurl = ?, linkedinurl = ?, instagramurl = ?, url = ? where idestablishment = ?");
+            updatestatementEstablishment.setString(1,introduction);
+            updatestatementEstablishment.setString(2,facebookUrl);
+            updatestatementEstablishment.setString(3,linkedinUrl);
+            updatestatementEstablishment.setString(4,instagramUrl);
+            updatestatementEstablishment.setString(5,weburl);
+            updatestatementEstablishment.setInt(6,establishmentid);
+            boolean establishmentupdate = super.updateQuery(updatestatementEstablishment,connection);
+            // entity Adress
+            if(!zipcode.isEmpty()){
+                Locationiq location = getAdressinfo(zipcode);
+                if(location != null){
+                    PreparedStatement updatestatementEstablishmentAdress = connection.prepareStatement("UPDATE establishment_adress SET latitude = ?,longtitude = ?, zipcode = ?, place = ?, streetname = ?, housenumber = ? where establishment_idestablishment = ? and enddate is null");
+                    updatestatementEstablishmentAdress.setString(1,location.getLat());
+                    updatestatementEstablishmentAdress.setString(2,location.getLon());
+                    updatestatementEstablishmentAdress.setString(3,zipcode);
+                    updatestatementEstablishmentAdress.setString(4,place);
+                    updatestatementEstablishmentAdress.setString(5,streetname);
+                    updatestatementEstablishmentAdress.setInt(6,housenumber);
+                    updatestatementEstablishmentAdress.setInt(7,establishmentid);
+                    boolean establishmentAdresUpdate = super.updateQuery(updatestatementEstablishmentAdress,connection);
+                }
+            }
+            return establishmentupdate;
+        }catch (Exception e){
+            return false;
+        }
+
     }
     private Locationiq getAdressinfo(String zipcode){
         try {
@@ -85,7 +129,7 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
         }
 
     }
-    public EstamblishmentProfile getEstamblishmentProfile(int estamblishmentid){
+    public EstablishmentProfile getEstablishmentProfile(int estamblishmentid){
         try {
             Connection connection = super.getConnection();
             PreparedStatement Query = connection.prepareStatement("SELECT " +
@@ -94,6 +138,7 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
                     "users.firstname, " +
                     "users.lastname, " +
                     "users.profilepicture," +
+                    "es.url," +
                     "es.instagramurl," +
                     "es.linkedinurl," +
                     "es.facebookurl," +
@@ -117,6 +162,7 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
                 String companylogo = result.getString("companylogo");
                 String firstname = result.getString("firstname");
                 String lastname = result.getString("lastname");
+                String website = result.getString("url");
                 String profilepicture = result.getString("profilepicture");
                 String instagramurl = result.getString("instagramurl");
                 String linkedinurl = result.getString("linkedinurl");
@@ -126,12 +172,13 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
                 int housenumber = result.getInt("housenumber");
                 String zipcode = result.getString("zipcode");
 
-                EstamblishmentProfile profile = new EstamblishmentProfile(
+                EstablishmentProfile profile = new EstablishmentProfile(
                         description,
                         companylogo,
                         firstname,
                         lastname,
                         profilepicture,
+                        website,
                         instagramurl,
                         linkedinurl,
                         facebookurl,
@@ -147,14 +194,14 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
             return null;
         }
     }
-    public boolean WebUserAcces(int userid, int estamblishmentid){
+    public boolean WebUserAcces(int userid, int establishmentid){
         try{
 
             Connection connection  = super.getConnection();
-            PreparedStatement estamblishmentaccess = connection.prepareStatement("SELECT * FROM swipeyourjob2.Webusers_estamblishment where webusers_idwebusers = ? and establishment_idestablishment = ?");
-            estamblishmentaccess.setInt(1,userid);
-            estamblishmentaccess.setInt(2,estamblishmentid);
-            ResultSet result = super.executeQuery(estamblishmentaccess,connection);
+            PreparedStatement establishmentaccess = connection.prepareStatement("SELECT * FROM swipeyourjob2.Webusers_establishment where webusers_idwebusers = ? and establishment_idestablishment = ?");
+            establishmentaccess.setInt(1,userid);
+            establishmentaccess.setInt(2,establishmentid);
+            ResultSet result = super.executeQuery(establishmentaccess,connection);
             int rowcount = super.getRowCount(result);
             if(rowcount > 0){
                 return true;
@@ -166,10 +213,31 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
             return false;
         }
     }
+    public EstablishmentList getEstablishmentlistByUser(int userid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT est.* FROM swipeyourjob2.Webusers_establishment  con  " +
+                    "join establishment est " +
+                    "on con.establishment_idestablishment = est.idestablishment " +
+                    "where webusers_idwebusers =?");
+            preparedStatement.setInt(1,userid);
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+            EstablishmentList list = new EstablishmentList();
+            while (result.next()){
+                int establishmentid         = result.getInt("idestablishment");
+                String establishmentName    = result.getString("name");
+                EstablishmentItem item      = new EstablishmentItem(establishmentid,establishmentName);
+                list.addestablishment(item);
+            }
+            return list;
+        }catch (Exception e){
+            return null;
+        }
+    }
     public boolean WebUsertoEstamblishment(int userid, int estamblishmentid){
         try{
             Connection connection = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Webusers_estamblishment (webusers_idwebusers, establishment_idestablishment) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Webusers_establishment (webusers_idwebusers, establishment_idestablishment) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1,userid);
             preparedStatement.setInt(2,estamblishmentid);
             int returnedid = super.executeQueryReturningId(preparedStatement,connection);

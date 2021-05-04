@@ -6,6 +6,7 @@ public class WebCompanyProfile {
     public String ownerFirstName;
     public String ownerLastname;
     public String ownerPicture;
+    public String weburl;
     public String instagramUrl;
     public String linkedinUrl;
     public String facebookUrl;
@@ -13,13 +14,15 @@ public class WebCompanyProfile {
     public String streetname;
     public int housenumber;
     public String zipcode;
+    public int establishmentid;
 
-    public WebCompanyProfile(String introduction, String logo, String ownerFirstName, String ownerLastname, String ownerPicture, String instagramUrl, String linkedinUrl, String facebookUrl, String place, String streetname, int housenumber, String zipcode) {
+    public WebCompanyProfile(String introduction, String logo, String ownerFirstName, String ownerLastname, String ownerPicture, String weburl, String instagramUrl, String linkedinUrl, String facebookUrl, String place, String streetname, int housenumber, String zipcode, int establishmentid) {
         this.introduction = introduction;
         this.logo = logo;
         this.ownerFirstName = ownerFirstName;
         this.ownerLastname = ownerLastname;
         this.ownerPicture = ownerPicture;
+        this.weburl = weburl;
         this.instagramUrl = instagramUrl;
         this.linkedinUrl = linkedinUrl;
         this.facebookUrl = facebookUrl;
@@ -27,6 +30,23 @@ public class WebCompanyProfile {
         this.streetname = streetname;
         this.housenumber = housenumber;
         this.zipcode = zipcode;
+        this.establishmentid = establishmentid;
+    }
+
+    public String getWeburl() {
+        return weburl;
+    }
+
+    public void setWeburl(String weburl) {
+        this.weburl = weburl;
+    }
+
+    public int getEstablishmentid() {
+        return establishmentid;
+    }
+
+    public void setEstablishmentid(int establishmentid) {
+        this.establishmentid = establishmentid;
     }
 
     public String getIntroduction() {

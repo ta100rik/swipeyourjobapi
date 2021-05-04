@@ -1,18 +1,13 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCompany;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.LoginRequest;
-import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppJobInfo;
-import com.Swipeyourjob.Rest_api.Controllers.request.CardRequest;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import com.google.gson.Gson;
-import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -67,16 +62,25 @@ public class WebController {
             return ResponseEntity.status(500).body("Undefined error");
         }
     }
-    @GetMapping("/getEstamblishmentProfile/{estamblishmentid}")
-    public ResponseEntity<?> getEstamblishmentprofile(@PathVariable("estamblishmentid") String estamblishmentid){
+    @GetMapping("/getEstablishmentProfile")
+    public ResponseEntity<?> getUserEstamblishments(){
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            int userid = Integer.parseInt(userinfo[1]);
+            return ResponseEntity.ok(ServiceProvider.getCompanyService().userEstablishments(userid));
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
+    }
+    @GetMapping("/getEstablishmentProfile/{establishmentid}")
+    public ResponseEntity<?> getEstablishmentprofile(@PathVariable("establishmentid") String estamblishmentid){
         try {
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
 
             if(estamblishmentid != null){
                 int userid = Integer.parseInt(userinfo[1]);
                 int estamblishmentidconv = Integer.parseInt(estamblishmentid);
-                boolean hasaccess = ServiceProvider.getCompanyService().hasEstamblishmentAccess(userid,estamblishmentidconv);
-                System.out.println("2");
+                boolean hasaccess = ServiceProvider.getCompanyService().hasEstablishmentAccess(userid,estamblishmentidconv);
                 if(hasaccess){
                     WebCompanyProfile profile = ServiceProvider.getCompanyService().getCompanyProfile(estamblishmentidconv);
                     return ResponseEntity.ok(profile);
@@ -101,9 +105,8 @@ public class WebController {
          * */
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-
-            int companyid = Integer.parseInt(userinfo[1]);
-            List<WebJob> joblist = ServiceProvider.getCardService().getWebJobsByCompanyid(companyid);
+            int userid = Integer.parseInt(userinfo[1]);
+            List<WebJob> joblist = ServiceProvider.getCardService().getWebJobsByCompanyid(userid);
             if(joblist != null){
                 return ResponseEntity.ok(new Gson().toJson(joblist));
             }else{
@@ -113,11 +116,20 @@ public class WebController {
             return ResponseEntity.noContent().build();
         }
     }
+    @PostMapping("/updateCompanyProfile")
+    public ResponseEntity<?> updateProfile(@RequestBody WebCompanyProfile profile){
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            int userid = Integer.parseInt(userinfo[1]);
+            return ResponseEntity.ok(ServiceProvider.getCompanyService().updateEstablishmentProfile(profile,userid));
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
 
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
         try{
-            //hi
             String email = loginrequest.getEmail();
             String userpassword = loginrequest.getPassword();
             String result = ServiceProvider.getAuthenticationService().login(email,userpassword);

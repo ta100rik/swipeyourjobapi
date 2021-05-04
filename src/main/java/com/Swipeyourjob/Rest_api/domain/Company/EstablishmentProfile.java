@@ -1,11 +1,12 @@
 package com.Swipeyourjob.Rest_api.domain.Company;
 
-public class EstamblishmentProfile {
+public class EstablishmentProfile {
     public String introduction;
     public String logo;
     public String ownerFirstName;
     public String ownerLastname;
     public String ownerPicture;
+    public String weburl;
     public String instagramUrl;
     public String linkedinUrl;
     public String facebookUrl;
@@ -14,12 +15,13 @@ public class EstamblishmentProfile {
     public int housenumber;
     public String zipcode;
 
-    public EstamblishmentProfile(String introduction, String logo, String ownerFirstName, String ownerLastname, String ownerPicture, String instagramUrl, String linkedinUrl, String facebookUrl, String place, String streetname, int housenumber, String zipcode) {
+    public EstablishmentProfile(String introduction, String logo, String ownerFirstName, String ownerLastname, String ownerPicture, String weburl, String instagramUrl, String linkedinUrl, String facebookUrl, String place, String streetname, int housenumber, String zipcode) {
         this.introduction = introduction;
         this.logo = logo;
         this.ownerFirstName = ownerFirstName;
         this.ownerLastname = ownerLastname;
         this.ownerPicture = ownerPicture;
+        this.weburl = weburl;
         this.instagramUrl = instagramUrl;
         this.linkedinUrl = linkedinUrl;
         this.facebookUrl = facebookUrl;
@@ -27,6 +29,14 @@ public class EstamblishmentProfile {
         this.streetname = streetname;
         this.housenumber = housenumber;
         this.zipcode = zipcode;
+    }
+
+    public String getWeburl() {
+        return weburl;
+    }
+
+    public void setWeburl(String weburl) {
+        this.weburl = weburl;
     }
 
     public String getIntroduction() {

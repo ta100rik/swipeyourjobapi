@@ -72,4 +72,17 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
             return null;
         }
     }
+    public Boolean updateWebUser(int userid, String firstname, String lastname, String profilepicture){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE webusers SET firstname = ?, lastname = ?, profilepicture = ? where idwebusers = ?");
+            preparedStatement.setString(1,firstname);
+            preparedStatement.setString(2,lastname);
+            preparedStatement.setString(3,profilepicture);
+            preparedStatement.setInt(4,userid);
+            return super.updateQuery(preparedStatement,connection);
+        }catch (Exception e){
+            return  false;
+        }
+    }
 }
