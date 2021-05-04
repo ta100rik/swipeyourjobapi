@@ -21,6 +21,7 @@ public class ApplicationConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/web/login").permitAll()
                 .antMatchers("/app/**").permitAll()
+                .antMatchers("/website/**").permitAll()
                 .antMatchers("/chat/**").permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest()

@@ -9,6 +9,8 @@ public class ServiceProvider {
     private static final BuggService BUGG_SERVICE = new BuggService();
     private static final AccountPrivacyService accountPrivacyService = new AccountPrivacyService();
     private static final FirebaseService firebaseService = new FirebaseService();
+    private static final WebsiteService WEBSITE_SERVICE = new WebsiteService();
+
     public static CardService getCardService(){return CARD_SERVICE;}
 
     public static ChatService getChatService() { return CHAT_SERVICE;}
@@ -18,4 +20,6 @@ public class ServiceProvider {
     public static AuthenticationService getAuthenticationService() {return AUTHENTICATION_SERVICE;}
     public static AccountPrivacyService getAccountPrivacyService() { return accountPrivacyService;}
     public static FirebaseService getFirebaseService() {return firebaseService;}
+
+    public static WebsiteService getWebsiteService() {return WEBSITE_SERVICE;   }
 }
