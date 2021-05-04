@@ -49,6 +49,10 @@ public class IndexController {
                 "       <li><a href='/chat/getChatMessages?userid=2312315&amount=5&roomid=18'>getChatMessages?userid=2312315&amount=5&roomid=18 - GET</a>" +
                 "       <li><a href='/chat/rooms?userid=2312315&start=1&amount=100'>rooms?userid=2312315&start=1&amount=100 - GET</a>" +
                 "   </ul>" +
+                "   <li>Website</li>" +
+                "   <ul>" +
+                "       <li>contact - POST  email,desc </li>" +
+                "   </ul>" +
                 "</ul>";
     }
 }
