@@ -21,6 +21,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
             try{
 
+
+                response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
+                response.setHeader("Access-Control-Allow-Credentials","true");
+                response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+                response.setHeader("Access-Control-Max-Age", "3600");
+                response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me, authorization, x-auth-token");
                 final String requestTokenHeader = request.getHeader("Authorization");
                 if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
                     String jwtToken = requestTokenHeader.substring(7);
@@ -35,7 +41,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }else{
                     logger.warn("JWT Token does not begin with Bearer String");
                 }
-                chain.doFilter(request, response);
+                if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                } else {
+                    chain.doFilter(request,response);
+                }
             }catch (Exception e){
 
             }

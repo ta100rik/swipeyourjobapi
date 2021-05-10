@@ -9,9 +9,11 @@ public class ServiceProvider {
     private static final AccountPrivacyService accountPrivacyService = new AccountPrivacyService();
     private static final FirebaseService firebaseService = new FirebaseService();
     private static final CompanyService COMPANY_SERVICE = new CompanyService();
-
+    private static final WebsiteService WEBSITE_SERVICE = new WebsiteService();
     public static CardService getCardService(){return CARD_SERVICE;}
 
+    public static WebsiteService getWebsiteService() {        return WEBSITE_SERVICE;
+    }
 
     public static ChatService getChatService() { return CHAT_SERVICE;}
     public static HostingService getHostingService() {return HOSTING_SERVICE;}

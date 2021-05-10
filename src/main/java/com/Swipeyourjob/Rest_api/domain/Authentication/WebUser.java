@@ -9,8 +9,10 @@ public class WebUser {
 
     public WebUser(String email,int userid, String roles) {
         this.userid     = userid;
-        this.email   = email;
+        this.email      = email;
         this.role       = roles;
+        this.firstname  = "";
+        this.lastname   = "";
     }
 
     public WebUser(int userid, String email, String firstname, String lastname, String role) {

@@ -39,9 +39,13 @@ public class Passwordservice {
         Date validity = new Date();
 
         validity.setTime(validity.getTime() + days * 1000 * 60 * 60 * 24);
+        System.out.println(user.getFirstname());
+        System.out.println(user.getLastname());
         String jwttoken = Jwts.builder()
                 .setIssuer("Swipeyourjob")
                 .setSubject("UserInfo")
+                .claim("firstname", user.getFirstname())
+                .claim("lastname", user.getLastname())
                 .claim("userid", user.getUserid())
                 .claim("Role", user.getRole())
                 // Fri Jun 24 2016 15:33:42 GMT-0400 (EDT)
