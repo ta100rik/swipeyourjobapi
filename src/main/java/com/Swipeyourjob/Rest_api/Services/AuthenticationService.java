@@ -34,6 +34,7 @@ public class AuthenticationService {
     }
     public String login(String email, String password){
         boolean loggedin = this.checklogin(email,password);
+        System.out.println(loggedin);
         if(loggedin){
             WebUser user = this.getWebuserByEmail(email);
             if(user != null){
@@ -61,7 +62,7 @@ public class AuthenticationService {
 
     }
     public boolean Sendverificationmail(String mail,int verificationcode,int userid){
-        identicationService.saveVerficationcode(verificationcode,userid);
+        //identicationService.saveVerficationcode(verificationcode,userid);
         return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);
     }
     public int getUserid(String jwt){

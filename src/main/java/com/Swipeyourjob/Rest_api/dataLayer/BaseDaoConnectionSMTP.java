@@ -18,30 +18,46 @@ public class BaseDaoConnectionSMTP {
             currentsession = OpenSession();
         }
     }
-    private Session OpenSession(){
-        props = new Properties();
-        props.put("mail.smtp.host", "mail.zxcs.nl"); //SMTP Host
-        props.put("mail.smtp.port", "465"); //TLS Port
-        // enable authentication
-        props.put("mail.smtp.auth", "true");
-        // SSL Factory
+////    private Session OpenSession(){
+////        props = new Properties();
+////        props.put("mail.smtp.host", "mail.zxcs.nl"); //SMTP Host
+////        props.put("mail.smtp.port", "465"); //TLS Port
+////        // enable authentication
+////        props.put("mail.smtp.auth", "true");
+////        // SSL Factory
+////
+////        props.put("mail.smtp.auth", "true"); //enable authentication
+//////        props.put("mail.smtp.starttls.enable", "true");
+////        props.put("mail.smtp.socketFactory.class",
+////                "javax.net.ssl.SSLSocketFactory");
+////
+////
+////        Authenticator auth = new javax.mail.Authenticator() {
+////            //override the getPasswordAuthentication method
+////            protected PasswordAuthentication getPasswordAuthentication() {
+////                return new PasswordAuthentication("info@swipeyourjob.nl", "hV0FG0bZ");
+////            }
+////        };
+////        Session session = Session.getDefaultInstance(props, auth);
+////        return session;
+//
+//    }
+private Session OpenSession(){
+    props = new Properties();
+    props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+    props.put("mail.smtp.port", "587"); //TLS Port
+    props.put("mail.smtp.auth", "true"); //enable authentication
+    props.put("mail.smtp.starttls.enable", "true");
+    Authenticator auth = new Authenticator() {
+        //override the getPasswordAuthentication method
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication("swipeyourjob@gmail.com", "YNkmQge7vsxHVJh");
+        }
+    };
+    Session session = Session.getInstance(props, auth);
+    return session;
 
-        props.put("mail.smtp.auth", "true"); //enable authentication
-//        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-
-
-        Authenticator auth = new javax.mail.Authenticator() {
-            //override the getPasswordAuthentication method
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("info@swipeyourjob.nl", "hV0FG0bZ");
-            }
-        };
-        Session session = Session.getDefaultInstance(props, auth);
-        return session;
-
-    }
+}
     public Session getCurrentsession(){
         return currentsession;
     }
