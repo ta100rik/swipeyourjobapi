@@ -33,4 +33,4 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: cd swipeyourjobapi-uat && sudo git pull origin uat && mvn install && sudo systemctl daemon-reload && sudo service swipeyourjob-uat restart
+          script: cd ~/swipeyourjobapi-uat && sudo git pull origin uat && mvn install && sudo systemctl daemon-reload && sudo service swipeyourjob-uat restart
