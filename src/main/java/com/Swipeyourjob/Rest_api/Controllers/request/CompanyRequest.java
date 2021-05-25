@@ -1,6 +1,8 @@
 package com.Swipeyourjob.Rest_api.Controllers.request;
 
 import java.lang.reflect.Field;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CompanyRequest {
     public String companyname;
@@ -81,5 +83,16 @@ public class CompanyRequest {
             }
         }
         return false;
+    }
+    private boolean zipcodevalidator(){
+        String currentzipcode = this.zipcode;
+        Pattern pattern = Pattern.compile("/^\\d{4}\\s?\\w{2}$/g");
+        Matcher matcher = pattern.matcher(currentzipcode);
+        System.out.println(currentzipcode);
+        return matcher.matches();
+    }
+    public boolean checkValid(){
+        this.zipcodevalidator();
+        return true;
     }
 }

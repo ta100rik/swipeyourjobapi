@@ -15,6 +15,15 @@ public class AuthenticationService {
         WebUser newuser = identicationService.registerWebUser(email,hashedpassword,roleid);
         return newuser;
     }
+    public String VerifyUser(String email, int verficationcode){
+        WebUser verification = identicationService.verifiyUser(email,verficationcode);
+        if(verification != null){
+            return this.user2jwttoken(verification);
+        }else{
+            return "False";
+        }
+    }
+
     public String user2jwttoken(WebUser user){
         String jwttoken = this.passwordService.generateJWTtoken(user);
         return jwttoken;
@@ -61,8 +70,19 @@ public class AuthenticationService {
         }
 
     }
+
+//    public boolean forgetmail(String email){
+//        int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
+//
+//        WebUser user = identicationService.getWebuserByEmail(email);
+//        Session session = this.mailService.getsession();
+//
+//        String body = "Sorry mail is nope";
+//        this.mailService.sendEmail(session,email,"Verfication mail Swipeyourjob",body);
+//        return true;
+//    }
     public boolean Sendverificationmail(String mail,int verificationcode,int userid){
-        //identicationService.saveVerficationcode(verificationcode,userid);
+        identicationService.saveVerficationcode(verificationcode,userid);
         return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);
     }
     public int getUserid(String jwt){

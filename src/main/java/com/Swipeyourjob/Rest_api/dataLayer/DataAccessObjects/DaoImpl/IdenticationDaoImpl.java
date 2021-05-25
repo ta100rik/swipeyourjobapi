@@ -42,6 +42,48 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
         }
         return "False";
     }
+    public WebUser verifiyUser(String email, int verificationcode){
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM swipeyourjob2.webusers " +
+                    "as webuser " +
+                    " join verificationcodes as vcd " +
+                    "on webuser.idwebusers = vcd.userid " +
+                    "join userroles as roles " +
+                    " on webuser.roleid = roles.iduserroles " +
+                    "where webuser.email = ? " +
+                    "and vcd.code = ? " +
+                    "and webuser.password is not null " +
+                    "and vcd.requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)");
+            preparedStatement.setString(1,email);
+            preparedStatement.setInt(2,verificationcode);
+            ResultSet result        = super.executeQuery(preparedStatement,connection);
+            int rowcount            = super.getRowCount(result);
+            if(rowcount != 0){
+                while(result.next()){
+                    int db_userid               = result.getInt("idwebusers");
+                    String db_email             = result.getString("email");
+                    String db_firstname         = result.getString("firstname");
+                    String db_lastname          = result.getString("lastname");
+                    String db_role              = result.getString("rolename");
+                    WebUser user                = new WebUser(db_userid,db_email,db_firstname,db_lastname,db_role);
+                    PreparedStatement InsertSql = connection.prepareStatement("UPDATE webusers set verified = 'True' where idwebusers = ?");
+                    InsertSql.setInt(1,db_userid);
+                    boolean Resultupdate = super.updateQuery(InsertSql,connection);
+                   if(Resultupdate){
+                        return user;
+                    }else{
+                        return null;
+                    }
+                }
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+         return null;
+        }
+        return null;
+    }
     public WebUser getWebuserByEmail(String email){
         try{
             Connection connection = super.getConnection();
@@ -51,8 +93,8 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
             int rowCount        = super.getRowCount(result);
             if(rowCount != 0){
                 while(result.next()){
-                    int db_userid      = result.getInt("idwebusers");
-                    String db_email  = result.getString("email");
+                    int db_userid       = result.getInt("idwebusers");
+                    String db_email     = result.getString("email");
                     String db_firstname = result.getString("firstname");
                     String db_lastname  = result.getString("lastname");
                     String db_role      = result.getString("rolename");

@@ -4,7 +4,9 @@ import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.ForgetpaswordRequest;
 import com.Swipeyourjob.Rest_api.Controllers.request.LoginRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.VerificationcodeRequest;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import com.google.gson.Gson;
@@ -37,15 +39,13 @@ public class WebController {
         *   Checking if all the information is there
         * */
         try {
-
+            companyRequest.checkValid();
             if (companyRequest.checkNull()) {
                 return ResponseEntity.status(400).body("You are missing a value of the required one's");
             } else {
                 /*
                  * Because we have everything in place now we gonna create the company first and then create a webuser.
                  */
-
-
                 int companyid = ServiceProvider.getCompanyService().createcompany(companyRequest.getCompanyname(), companyRequest.getKvk());
                 if (companyid == -1) {throw new HandledException(200, "Error within sql");}
                 if (companyid == 0) {throw new HandledException(200, "Kvk is already taken");}
@@ -56,7 +56,7 @@ public class WebController {
                 WebLoginResponse RESPONSE = new WebLoginResponse("Check mail", "ok");
                 int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
                 ServiceProvider.getAuthenticationService().Sendverificationmail(companyRequest.getEmail(),random_int,admin.getUserid());
-                return ResponseEntity.ok(RESPONSE);
+                return ResponseEntity.ok("ok");
             }
         }catch (HandledException f){
             return ResponseEntity.status(f.getCode()).body(f.getMessage());
@@ -64,6 +64,31 @@ public class WebController {
             return ResponseEntity.status(500).body("Undefined error");
         }
     }
+    @PostMapping("/verifcationcodeLogin")
+    public ResponseEntity<?> LoginVerification(@RequestBody VerificationcodeRequest logininfo){
+        String uservaldiation = ServiceProvider.getAuthenticationService().VerifyUser(logininfo.getEmail(),logininfo.getVerficationcode());
+        if(!uservaldiation.equals("False")){
+            WebLoginResponse RESPONSE = new WebLoginResponse(uservaldiation,"ok");
+            return ResponseEntity.ok(RESPONSE);
+        }else{
+            WebLoginResponse RESPONSE = new WebLoginResponse("Verification code expired or not valid","nok");
+            return ResponseEntity.status(402).body(RESPONSE);
+        }
+    }
+//    @PostMapping("/passwordforget")
+//    public ResponseEntity<?> sendForgotpassword(@RequestBody ForgetpaswordRequest forget){
+//     try{
+//         String email = forget.getEmail();
+//         boolean result = ServiceProvider.getAuthenticationService().forgetmail(email);
+//         return ResponseEntity.ok(result);
+//     }catch (Exception e){
+//         return ResponseEntity.status(500).body("Nope didn't work out");
+//     }
+//    }
+//    @PostMapping ("/resetpassword")
+//    public ResponseEntity<?> resetPassword(){
+//        return ResponseEntity.ok("sdfsd");
+//    }
     @GetMapping("/getEstablishmentProfile")
     public ResponseEntity<?> getUserEstamblishments(){
         try{

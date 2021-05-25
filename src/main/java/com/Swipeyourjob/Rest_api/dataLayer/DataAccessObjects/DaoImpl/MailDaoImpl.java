@@ -20,6 +20,7 @@ public class MailDaoImpl extends BaseDaoSMTP {
         return sendEmail(session,email,"Verfication mail Swipeyourjob",body);
 
     }
+
     public static boolean sendToTrello(Session session, String subject, String body){
         try{
             MimeMessage msg  = new MimeMessage(session);
