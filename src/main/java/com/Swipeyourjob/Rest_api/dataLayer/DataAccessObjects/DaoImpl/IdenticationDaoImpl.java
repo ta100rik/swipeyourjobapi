@@ -57,6 +57,7 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
                     "and vcd.requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)");
             preparedStatement.setString(1,email);
             preparedStatement.setInt(2,verificationcode);
+            System.out.println(preparedStatement);
             ResultSet result        = super.executeQuery(preparedStatement,connection);
             int rowcount            = super.getRowCount(result);
             if(rowcount != 0){

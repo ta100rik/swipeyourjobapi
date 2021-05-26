@@ -16,9 +16,8 @@ public class MailDaoImpl extends BaseDaoSMTP {
         return super.getMailSession();
     }
     public static  boolean sendVerificationMail(Session session, int verificationcode, String email){
-        String body = "Hi there /n Please enter the following code to verify your account: /n /n "+ verificationcode;
+        String body = "Hi there <br> Please enter the following code to verify your account:  <br> \n"+ verificationcode;
         return sendEmail(session,email,"Verfication mail Swipeyourjob",body);
-
     }
 
     public static boolean sendToTrello(Session session, String subject, String body){

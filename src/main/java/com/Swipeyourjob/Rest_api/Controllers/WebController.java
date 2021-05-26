@@ -56,7 +56,7 @@ public class WebController {
                 WebLoginResponse RESPONSE = new WebLoginResponse("Check mail", "ok");
                 int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
                 ServiceProvider.getAuthenticationService().Sendverificationmail(companyRequest.getEmail(),random_int,admin.getUserid());
-                return ResponseEntity.ok("ok");
+                return ResponseEntity.ok(RESPONSE);
             }
         }catch (HandledException f){
             return ResponseEntity.status(f.getCode()).body(f.getMessage());
@@ -89,6 +89,7 @@ public class WebController {
 //    public ResponseEntity<?> resetPassword(){
 //        return ResponseEntity.ok("sdfsd");
 //    }
+
     @GetMapping("/getEstablishmentProfile")
     public ResponseEntity<?> getUserEstamblishments(){
         try{
