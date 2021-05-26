@@ -16,7 +16,11 @@ public class MailDaoImpl extends BaseDaoSMTP {
         return super.getMailSession();
     }
     public static  boolean sendVerificationMail(Session session, int verificationcode, String email){
-        String body = "Hi there <br> Please enter the following code to verify your account:  <br> \n"+ verificationcode;
+        String body = "Beste, \n\n Welkom bij Swipe Your Job! Klik op onderstaande link om uw e0mailadres te verifiëren, daarna word u automatisch ingelogd. \n \n " +
+                " https://api.swipeyourjob.nl/verify?email="+email+"&verification="+ verificationcode + " \n" +
+                " Met vriendelijke groet, \n" +
+                "\n" +
+                "Het team van Swipe Your Job";
         return sendEmail(session,email,"Verfication mail Swipeyourjob",body);
     }
 
