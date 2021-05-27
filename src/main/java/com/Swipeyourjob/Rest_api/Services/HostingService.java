@@ -20,7 +20,6 @@ public class HostingService {
     private final HostDaoImpl HostImpl = new HostDaoImpl();
     public String UploadImage(MultipartFile file){
         try {
-
             String fileName = file.getOriginalFilename();
             String prefix = fileName.substring(fileName.lastIndexOf("."));
             File tempFile = File.createTempFile(fileName, prefix);
@@ -28,23 +27,20 @@ public class HostingService {
             String mimetype= new MimetypesFileTypeMap().getContentType(tempFile);
             String type = mimetype.split("/")[0];
             if(type.equals("image")){
-
 //                time to compress the file
-                File compressedImageFile = new File(tempFile + "2"+prefix);
+                File compressedImageFile = new File(file.getOriginalFilename());
+
                 InputStream inputStream = new FileInputStream(tempFile);
                 OutputStream outputStream = new FileOutputStream(compressedImageFile);
                 float imageQuality = 0.6f;
                 BufferedImage bufferedImage =  ImageIO.read(inputStream);
                 String prefixwithouthpoint = prefix.replace(".","");
                 Iterator<ImageWriter> imageWriters = ImageIO.getImageWritersByFormatName(prefixwithouthpoint);
-
                 ImageWriter writer = (ImageWriter) imageWriters.next();
 
                 ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream);
                 writer.setOutput(ios);
-
                 ImageWriteParam param = writer.getDefaultWriteParam();
-
                 param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                 param.setCompressionQuality(imageQuality);
                 writer.write(null, new IIOImage(bufferedImage, null, null), param);
@@ -52,8 +48,7 @@ public class HostingService {
                 outputStream.close();
                 ios.close();
                 writer.dispose();
-                System.out.println(getFileSizeMegaBytes(compressedImageFile));
-                System.out.println(getFileSizeMegaBytes(tempFile));
+
                 boolean uploadboolean =  HostImpl.uploadfile(compressedImageFile);
                 return webhost +"/"+folder+"/" + compressedImageFile.getName();
             }else{

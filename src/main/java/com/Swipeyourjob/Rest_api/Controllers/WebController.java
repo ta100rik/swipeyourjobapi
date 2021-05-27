@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -24,10 +23,8 @@ import java.util.List;
 public class WebController {
     
     @PostMapping("/uploadimage")
-    public ResponseEntity<?>  uploadImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
-        System.out.println("Original Image Byte Size - " + file.getBytes().length);
-        try{
-
+    public ResponseEntity<?>  uploadImage(@RequestParam("imageFile") MultipartFile file) {
+         try{
             return ResponseEntity.ok(ServiceProvider.getHostingService().UploadImage(file));
         }catch (Exception e){
             return ResponseEntity.status(500).body("Something went wrong");
@@ -75,21 +72,6 @@ public class WebController {
             return ResponseEntity.status(402).body(RESPONSE);
         }
     }
-//    @PostMapping("/passwordforget")
-//    public ResponseEntity<?> sendForgotpassword(@RequestBody ForgetpaswordRequest forget){
-//     try{
-//         String email = forget.getEmail();
-//         boolean result = ServiceProvider.getAuthenticationService().forgetmail(email);
-//         return ResponseEntity.ok(result);
-//     }catch (Exception e){
-//         return ResponseEntity.status(500).body("Nope didn't work out");
-//     }
-//    }
-//    @PostMapping ("/resetpassword")
-//    public ResponseEntity<?> resetPassword(){
-//        return ResponseEntity.ok("sdfsd");
-//    }
-
     @GetMapping("/getEstablishmentProfile")
     public ResponseEntity<?> getUserEstamblishments(){
         try{

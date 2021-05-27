@@ -22,6 +22,7 @@ public class ApplicationConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .antMatchers("/web/login").permitAll()
                 .antMatchers("/web/passwordforget").permitAll()
                 .antMatchers("/web/verifcationcodeLogin").permitAll()
+                .antMatchers("/web/uploadimage").permitAll()
                 .antMatchers("/web/newCompany").permitAll()
                 .antMatchers("/app/**").permitAll()
                 .antMatchers("/chat/**").permitAll()

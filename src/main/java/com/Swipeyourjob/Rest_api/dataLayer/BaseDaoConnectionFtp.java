@@ -6,9 +6,9 @@ import org.apache.commons.net.ftp.FTPClient;
 public class BaseDaoConnectionFtp {
     private static final BaseDaoConnectionFtp INSTANCE = new BaseDaoConnectionFtp();
 
-    private String FTP_ADDRESS = "web0119.zxcs.nl";
-    private String LOGIN = "zyad@swipeyourjob.nl";
-    private String PSW = "welkom";
+    private String FTP_ADDRESS = "web0138.zxcs.nl";
+    private String LOGIN = "developer@swipeyourjob.nl";
+    private String PSW = "$wipeY0urJ0b123485";
 
     private FTPClient con = null;
 
