@@ -22,6 +22,18 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
             return false;
         }
     }
+    public boolean saveForgetPasswordCode(int code,String email){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement query = connection.prepareStatement("INSERT INTO passwordforget (passwordforgotcode,email) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+            query.setInt(1,code);
+            query.setString(2,email);
+            int id = super.executeQueryReturningId(query,connection);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
     public String getHashedPassword(String email){
         try{
             Connection connection = super.getConnection();

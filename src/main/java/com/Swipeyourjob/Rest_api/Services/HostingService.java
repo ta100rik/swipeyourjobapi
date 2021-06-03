@@ -52,7 +52,7 @@ public class HostingService {
                 boolean uploadboolean =  HostImpl.uploadfile(compressedImageFile);
                 return webhost +"/"+folder+"/" + compressedImageFile.getName();
             }else{
-                boolean uploadboolean =  HostImpl.uploadfile(tempFile);
+                boolean uploadboolean =  HostImpl.uploadfile(tempFile); 
                 return webhost +"/"+folder+"/" + tempFile.getName();
             }
         } catch (Exception e) {

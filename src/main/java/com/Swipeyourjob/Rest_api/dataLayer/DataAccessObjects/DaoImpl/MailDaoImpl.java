@@ -23,6 +23,14 @@ public class MailDaoImpl extends BaseDaoSMTP {
                 "Het team van Swipe Your Job";
         return sendEmail(session,email,"Verfication mail Swipeyourjob",body);
     }
+    public static  boolean sendForgotPasswordMail(Session session, int verificationcode, String email,String userfirstname){
+        String subject = "Forgot your Password Swipeyourjob";
+        String body = "Beste " + userfirstname + ", \n Je hebt aangegeven dat je wachtwoord bent vergeten, klik op de volgende link om je wachtwoord op nieuw intestellen" +
+                "\n  https://api.swipeyourjob.nl/verification?code="+verificationcode+"&emai="+email;
+        return sendEmail(session,email,subject,body);
+    }
+
+
 
     public static boolean sendToTrello(Session session, String subject, String body){
         try{

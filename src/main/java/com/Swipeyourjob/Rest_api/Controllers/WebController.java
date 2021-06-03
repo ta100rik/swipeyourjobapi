@@ -61,17 +61,7 @@ public class WebController {
             return ResponseEntity.status(500).body("Undefined error");
         }
     }
-    @PostMapping("/verifcationcodeLogin")
-    public ResponseEntity<?> LoginVerification(@RequestBody VerificationcodeRequest logininfo){
-        String uservaldiation = ServiceProvider.getAuthenticationService().VerifyUser(logininfo.getEmail(),logininfo.getVerficationcode());
-        if(!uservaldiation.equals("False")){
-            WebLoginResponse RESPONSE = new WebLoginResponse(uservaldiation,"ok");
-            return ResponseEntity.ok(RESPONSE);
-        }else{
-            WebLoginResponse RESPONSE = new WebLoginResponse("Verification code expired or not valid","nok");
-            return ResponseEntity.status(402).body(RESPONSE);
-        }
-    }
+
     @GetMapping("/getEstablishmentProfile")
     public ResponseEntity<?> getUserEstamblishments(){
         try{
@@ -126,6 +116,7 @@ public class WebController {
             return ResponseEntity.noContent().build();
         }
     }
+
     @PostMapping("/updateCompanyProfile")
     public ResponseEntity<?> updateProfile(@RequestBody WebCompanyProfile profile){
         try{
@@ -136,6 +127,17 @@ public class WebController {
             return ResponseEntity.noContent().build();
         }
 
+    }
+    @PostMapping("/verifcationcodeLogin")
+    public ResponseEntity<?> LoginVerification(@RequestBody VerificationcodeRequest logininfo){
+        String uservaldiation = ServiceProvider.getAuthenticationService().VerifyUser(logininfo.getEmail(),logininfo.getVerficationcode());
+        if(!uservaldiation.equals("False")){
+            WebLoginResponse RESPONSE = new WebLoginResponse(uservaldiation,"ok");
+            return ResponseEntity.ok(RESPONSE);
+        }else{
+            WebLoginResponse RESPONSE = new WebLoginResponse("Verification code expired or not valid","nok");
+            return ResponseEntity.status(402).body(RESPONSE);
+        }
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest ){
@@ -154,6 +156,17 @@ public class WebController {
         }catch (Exception e){
             return ResponseEntity.status(50).body("Server error");
         }
+    }
+    @PostMapping("/forgotpassword")
+    public ResponseEntity<?> forgotpassword(@RequestBody ForgetpaswordRequest forgot){
+        try{
+            String email = forgot.getEmail();
+            return ResponseEntity.ok(ServiceProvider.getAuthenticationService().forgetmail(email));
+
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Server error");
+        }
+
     }
 
 

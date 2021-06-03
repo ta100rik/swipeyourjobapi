@@ -6,6 +6,8 @@ import com.Swipeyourjob.Rest_api.domain.Authentication.Passwordservice;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import io.jsonwebtoken.Claims;
 
+import javax.mail.Session;
+
 public class AuthenticationService {
     Passwordservice passwordService = new Passwordservice();
     IdenticationDaoImpl identicationService = new IdenticationDaoImpl();
@@ -71,16 +73,19 @@ public class AuthenticationService {
 
     }
 
-//    public boolean forgetmail(String email){
-//        int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
-//
-//        WebUser user = identicationService.getWebuserByEmail(email);
-//        Session session = this.mailService.getsession();
-//
-//        String body = "Sorry mail is nope";
-//        this.mailService.sendEmail(session,email,"Verfication mail Swipeyourjob",body);
-//        return true;
-//    }
+    public String forgetmail(String email){
+
+        WebUser user = identicationService.getWebuserByEmail(email);
+
+        if(user != null){
+            int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
+            identicationService.saveForgetPasswordCode(random_int,email);
+            mailService.sendForgotPasswordMail(mailService.getsession(),random_int,email,user.getFirstname());
+            return "Mail is send";
+        }else{
+            return "Sorry user does not exist";
+        }
+    }
     public boolean Sendverificationmail(String mail,int verificationcode,int userid){
         identicationService.saveVerficationcode(verificationcode,userid);
         return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);
