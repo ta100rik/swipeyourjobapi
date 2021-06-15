@@ -123,6 +123,35 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
         }
         return null;
     }
+    public boolean hasValidForgotcode(String email,int code){
+        try{
+            Connection connection = super.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM passwordforget where email = ? " +
+                    "and passwordforgotcode = ? " +
+                    "and requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)");
+            preparedStatement.setString(1,email);
+            preparedStatement.setInt(2,code);
+            ResultSet result = super.executeQuery(preparedStatement,connection);
+            int rowcount = super.getRowCount(result);
+            boolean res = (rowcount > 0);
+            return res;
+        }catch (Exception e){
+            return false;
+        }
+    }
+    public boolean UpdatePassword(WebUser user, String hashedpassword){
+        try{
+            Connection connection  = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE webusers set password = ? where idwebusers = ? ");
+            preparedStatement.setString(1,hashedpassword);
+            preparedStatement.setInt(2,user.getUserid());
+            return super.updateQuery(preparedStatement,connection);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
     @Override
     public WebUser registerWebUser(String email, String password, int roleid) {
         try{

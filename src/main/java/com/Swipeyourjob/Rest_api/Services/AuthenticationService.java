@@ -86,6 +86,26 @@ public class AuthenticationService {
             return "Sorry user does not exist";
         }
     }
+    public String ChangePassword(int code,String email, String password){
+        WebUser webuser = identicationService.getWebuserByEmail(email);
+        if(webuser != null){
+            boolean validpasswordcode = identicationService.hasValidForgotcode(email,code);
+            if(validpasswordcode){
+                String hashedpassword = passwordService.hashpassword(password);
+                boolean changedpassword = identicationService.UpdatePassword(webuser,hashedpassword);
+                if(changedpassword){
+                    String jwttoken = this.passwordService.generateJWTtoken(webuser);
+                    return jwttoken;
+                }else{
+                    return "False";
+                }
+            }else{
+                return "False";
+            }
+        }else{
+            return "False";
+        }
+    }
     public boolean Sendverificationmail(String mail,int verificationcode,int userid){
         identicationService.saveVerficationcode(verificationcode,userid);
         return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);

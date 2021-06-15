@@ -3,10 +3,7 @@ package com.Swipeyourjob.Rest_api.Controllers;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
-import com.Swipeyourjob.Rest_api.Controllers.request.CompanyRequest;
-import com.Swipeyourjob.Rest_api.Controllers.request.ForgetpaswordRequest;
-import com.Swipeyourjob.Rest_api.Controllers.request.LoginRequest;
-import com.Swipeyourjob.Rest_api.Controllers.request.VerificationcodeRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.*;
 import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import com.google.gson.Gson;
@@ -165,6 +162,17 @@ public class WebController {
 
         }catch (Exception e){
             return ResponseEntity.status(500).body("Server error");
+        }
+
+    }
+    @PostMapping("/resetPassword")
+    public ResponseEntity<?> ResetPassword(@RequestBody ChangeForgotPasswordRequest passwordrequest){
+        String resetpass = ServiceProvider.getAuthenticationService().ChangePassword(passwordrequest.getCode(),passwordrequest.getEmail(),passwordrequest.getPassword());
+        if(!resetpass.equals("False")){
+            WebLoginResponse RESPONSE = new WebLoginResponse(resetpass,"200");
+            return ResponseEntity.ok(RESPONSE);
+        }else{
+            return ResponseEntity.noContent().build();
         }
 
     }
