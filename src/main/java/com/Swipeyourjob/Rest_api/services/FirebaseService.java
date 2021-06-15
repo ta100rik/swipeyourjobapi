@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
@@ -7,21 +7,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.*;
 import com.google.firebase.cloud.FirestoreClient;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.IOException;
-
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
-import java.util.concurrent.ExecutionException;
-
-import static io.jsonwebtoken.SignatureAlgorithm.RS256;
 
 public class FirebaseService {
     FirebaseApp defaultApp;

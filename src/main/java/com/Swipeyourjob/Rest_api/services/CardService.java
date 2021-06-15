@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.*;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
@@ -90,18 +90,18 @@ public class CardService {
         return cardlist;
     }
     public List<WebJob> getWebJobsByCompanyid(int companyid){
-        Cardlist result = JobImpl.getCardsByCompanyId(companyid);
+//        Cardlist result = JobImpl.getCardsByCompanyId(companyid);
         List<WebJob> joblist = new ArrayList<>();
-        for (Card currentcard : result.getCardList()){
-            List<String> images = new ArrayList<>();
-            WebJobInfo jobInfo = new WebJobInfo(currentcard.getCardid(),currentcard.getCardtitle(),currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
-            WebJobLocation jobLocation = new WebJobLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblatitude(),currentcard.getLocation().getJoblongtitude());
-            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
-                images.add(cardimage.getImageurl());
-            }
-            WebJob job = new WebJob(jobInfo,jobLocation,images);
-            joblist.add(job);
-        }
+//        for (Card currentcard : result.getCardList()){
+//            List<String> images = new ArrayList<>();
+//            WebJobInfo jobInfo = new WebJobInfo(currentcard.getCardid(),currentcard.getCardtitle(),currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
+//            WebJobLocation jobLocation = new WebJobLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblatitude(),currentcard.getLocation().getJoblongtitude());
+//            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
+//                images.add(cardimage.getImageurl());
+//            }
+//            WebJob job = new WebJob(jobInfo,jobLocation,images);
+//            joblist.add(job);
+//        }
         return  joblist;
     }
 
@@ -109,6 +109,8 @@ public class CardService {
         int bookmarkamount = JobImpl.getBookmarkAmountuser(userid);
         return bookmarkamount;
     }
+
+
 
 
 }

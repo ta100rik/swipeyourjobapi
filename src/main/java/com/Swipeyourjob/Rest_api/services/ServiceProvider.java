@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 public class ServiceProvider {
     private static final CardService CARD_SERVICE = new CardService();

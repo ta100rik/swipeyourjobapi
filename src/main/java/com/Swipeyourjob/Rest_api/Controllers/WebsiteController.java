@@ -1,12 +1,9 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.request.ContactForm;
-import com.Swipeyourjob.Rest_api.Controllers.request.getTokenRequest;
-import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
-import org.springframework.http.MediaType;
+import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

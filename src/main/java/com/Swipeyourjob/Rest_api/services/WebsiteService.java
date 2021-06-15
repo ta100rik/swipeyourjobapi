@@ -1,8 +1,6 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.MailDaoImpl;
-
-import javax.mail.Session;
 
 public class WebsiteService {
     private final MailDaoImpl MailImpl = new MailDaoImpl();

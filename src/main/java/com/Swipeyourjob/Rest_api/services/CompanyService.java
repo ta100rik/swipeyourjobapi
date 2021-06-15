@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebEstablishmentItem;

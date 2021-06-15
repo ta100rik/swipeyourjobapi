@@ -1,4 +1,4 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.AccountPrivacyDaoImpl;

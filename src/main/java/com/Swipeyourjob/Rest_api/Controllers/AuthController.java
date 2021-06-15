@@ -1,7 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.request.getTokenRequest;
-import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
+import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

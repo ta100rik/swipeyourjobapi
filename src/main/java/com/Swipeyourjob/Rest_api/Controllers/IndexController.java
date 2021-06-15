@@ -45,6 +45,15 @@ public class IndexController {
                 "    \"zipcode\": \"1217JD\",\n" +
                 "    \"establishmentid\": 13\n" +
                 "}</li>" +
+                "       <li>ResetPassword - POST ({\n" +
+                "    \"password\":\"test\",\n" +
+                "    \"email\":\"zyadosseyran@gmail.com\",\n" +
+                "    \"code\":242946145\n" +
+                "\n" +
+                "})</li>" +
+                "       <li>forgotpassword - POST ({\n" +
+                "    \"email\":\"zyadosseyran@gmail.com\"\n" +
+                "})</li>" +
                 "       <li>getEstablishmentProfile/{estimblishmentprofile} - GET</li>" +
                 "       <li>getEstablishmentProfile - GET</li>" +
                 "       <li>uploadimage - POST(\"imageFile\" : FILE )</li>" +

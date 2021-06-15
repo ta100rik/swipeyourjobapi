@@ -4,7 +4,7 @@ import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
-import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
+import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
@@ -177,6 +177,13 @@ public class WebController {
 
     }
 
+    @PostMapping("/newjob")
+    public ResponseEntity<?> newjob(@RequestBody NewJobRequest req){
+        String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+
+        return ResponseEntity.ok(req);
+
+    }
 
 
 }

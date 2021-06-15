@@ -1,7 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.request.MessageRequest;
-import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
+import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.request.RoomRequest;
 import com.google.gson.Gson;
 import org.json.JSONException;

@@ -3,15 +3,12 @@ package com.Swipeyourjob.Rest_api.Controllers;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
-import com.Swipeyourjob.Rest_api.Services.FirebaseService;
-import com.Swipeyourjob.Rest_api.Services.ServiceProvider;
+import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.google.gson.Gson;
-import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.annotation.Repeatable;
 import java.util.List;
 
 @RestController

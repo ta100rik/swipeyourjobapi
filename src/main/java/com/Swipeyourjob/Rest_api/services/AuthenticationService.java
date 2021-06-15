@@ -1,12 +1,10 @@
-package com.Swipeyourjob.Rest_api.Services;
+package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.IdenticationDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.MailDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Authentication.Passwordservice;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import io.jsonwebtoken.Claims;
-
-import javax.mail.Session;
 
 public class AuthenticationService {
     Passwordservice passwordService = new Passwordservice();
