@@ -1,5 +1,7 @@
 package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
+import com.Swipeyourjob.Rest_api.Controllers.request.NewJobRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Salary;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.jobDao;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
@@ -8,9 +10,10 @@ import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardLocation;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
+import com.Swipeyourjob.Rest_api.ResultClass;
 
 import java.sql.*;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     public int newBookmark(String userid, int cardid){
@@ -338,6 +341,110 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         catch (Exception e){
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public ResultClass newJobHandler(NewJobRequest req,int companyid) {
+        ResultClass RESULT = null;
+        try{
+            /*
+                Jobs:
+                    jobsname*
+                    jobdescription*
+                    salary (only when 1)*
+                Salary (only when more than 1):
+                    Salary*
+                    age*
+                Job period:
+                    StartDate*
+                    enddate
+
+             */
+            int insertjob = 0;
+            Connection connection = super.getConnection();
+            int salaryamount = req.getSalaryLength();
+            if(salaryamount == 1){
+                String sql = "INSERT INTO jobs (jobtitle,jobdescription,salary,minage,establishment_idestablishment,establishment_companies_company_id) VALUES (?,?,?,?,?,?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1,req.getJobName());
+                preparedStatement.setString(2,req.getJobDescription());
+                preparedStatement.setDouble(3, req.getSalary().get(0).getSalary());
+                preparedStatement.setInt(4, req.getSalary().get(0).getAge());
+                preparedStatement.setInt(5,req.getEstamblishmentid());
+                preparedStatement.setInt(6,companyid);
+                insertjob = super.executeQueryReturningId(preparedStatement,connection);
+                RESULT = new ResultClass(insertjob,200,"Job and salary are uploaded.");
+            }else{
+                String sql = "INSERT INTO JOBS (jobtitle,jobdescription,establishment_idestablishment,establishment_companies_company_id) VALUES (?,?,?,?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setString(1,req.getJobName());
+                preparedStatement.setString(2,req.getJobDescription());
+                preparedStatement.setInt(3,req.getEstamblishmentid());
+                preparedStatement.setInt(4,companyid);
+                insertjob = super.executeQueryReturningId(preparedStatement,connection);
+                RESULT = new ResultClass(insertjob,200,"Job uploaded no salary");
+            }
+            // add additonal salary
+            if(insertjob != 0){
+                // Job uploaded
+                if(salaryamount > 1){
+                    for (Salary salary : req.getSalary()){
+                        String sql = "INSERT INTO salary (salary,age,jobs_jobid) VALUES (?,?,?)";
+                        PreparedStatement statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                        statement.setDouble(1,salary.getSalary());
+                        statement.setInt(2,salary.getAge());
+                        statement.setInt(3,insertjob);
+                        int addsalary = super.executeQueryReturningId(statement,connection);
+                        if(addsalary == 0){
+                            RESULT = new ResultClass(insertjob,500,"Job uploaded but salary was not completed filled.");
+                            break;
+                        }
+                    }
+                    if(RESULT.isOk()){
+                        RESULT = new ResultClass(insertjob,200,"Job and salary are uploaded.");
+                    }
+                }
+                // Uploading jobperiod
+                if(RESULT.isOk()){
+                    String sql = "INSERT INTO jobperiod (startdate,enddate) VALUES (?,?)";
+                    PreparedStatement insertJobPeriod = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                    insertJobPeriod.setString(1,req.getStartdate());
+                    if(req.getEnddate() != null && req.getEnddate().equals("")){
+                        insertJobPeriod.setDate(2,null);
+                    }else{
+                        insertJobPeriod.setString(2,req.getEnddate());
+                    }
+                    int addJobPeriod = super.executeQueryReturningId(insertJobPeriod,connection);
+                    if(addJobPeriod == 0){
+                        RESULT = new ResultClass(insertjob,500,"Job and Salary uploaded but jobperiod was not correct.");
+                    }else{
+                        RESULT = new ResultClass(insertjob,200,"Job, Salary and jobperiod are uploaded.");
+                    }
+                }
+
+                if(RESULT.isOk()){
+                    String sql = "INSERT INTO jobimages (imageurl,jobid) VALUES (?,?)";
+                    PreparedStatement insertimage = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                    insertimage.setString(1,req.getJobImage());
+                    insertimage.setInt(2,insertjob);
+                    int addimage = super.executeQueryReturningId(insertimage,connection);
+                    if(addimage == 0){
+                        RESULT = new ResultClass(insertjob,500,"Job, period and salary uploaded but image was not correct.");
+                    }else{
+                        RESULT = new ResultClass(insertjob,200,"Job, period, jobimage and salary are uploaded.");
+                    }
+                }
+
+
+                // TODO: Insert tags first check if tag is existing and only use reference
+                // TODO: insert Availbility
+            }else{
+                RESULT = new ResultClass(null,500,"The job can't be created.");
+            }
+            return RESULT;
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,e.getMessage());
+            return RESULT;
         }
     }
 

@@ -5,6 +5,7 @@ import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebEstablishmentItem;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.CompanyDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.EstamblishmentDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.IdenticationDaoImpl;
+import com.Swipeyourjob.Rest_api.domain.Company.Company;
 import com.Swipeyourjob.Rest_api.domain.Company.EstablishmentItem;
 import com.Swipeyourjob.Rest_api.domain.Company.EstablishmentProfile;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.EstablishmentList;
@@ -78,6 +79,9 @@ public class CompanyService {
        }catch (Exception e){
            return false;
        }
+     }
+     public Company getCompanydetailsByEstablishment(int estamblismentid){
+         return companyservice.getCompanydetailsByEstablishment(estamblismentid);
      }
      public List<WebEstablishmentItem> userEstablishments(int userid){
          try{

@@ -1,19 +1,23 @@
 package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.*;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
-import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJobInfo;
-import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJobLocation;
+import com.Swipeyourjob.Rest_api.Controllers.request.NewJobRequest;
+import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.CompanyDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.JobDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
+import com.Swipeyourjob.Rest_api.domain.Company.Company;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
+import com.Swipeyourjob.Rest_api.ResultClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardService {
-    private final JobDaoImpl JobImpl = new JobDaoImpl();
+    private final JobDaoImpl JobImpl            = new JobDaoImpl();
+    private final CompanyDaoImpl CompanyImpl    = new CompanyDaoImpl();
 //    app
     public int newBookmark(String userid, int cardid){
         return JobImpl.newBookmark(userid,cardid);
@@ -104,10 +108,14 @@ public class CardService {
 //        }
         return  joblist;
     }
-
     public int getBookmarkAmountuser(String userid){
         int bookmarkamount = JobImpl.getBookmarkAmountuser(userid);
         return bookmarkamount;
+    }
+
+    public ResultClass newJob(NewJobRequest req, Company companyinfo){
+        ResultClass result = JobImpl.newJobHandler(req,companyinfo.getCompany_id());
+        return result;
     }
 
 

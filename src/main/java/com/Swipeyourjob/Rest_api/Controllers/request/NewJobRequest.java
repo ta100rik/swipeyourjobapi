@@ -3,9 +3,11 @@ package com.Swipeyourjob.Rest_api.Controllers.request;
 import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Availbility;
 import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Salary;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class NewJobRequest {
+    public int estamblishmentid;
     public String jobName;
     public String jobDescription;
     public String JobImage;
@@ -14,6 +16,14 @@ public class NewJobRequest {
     public List<Availbility> avaibility;
     public List<String> tags;
     public List<Salary> salary;
+
+    public int getEstamblishmentid() {
+        return estamblishmentid;
+    }
+
+    public void setEstamblishmentid(int estamblishmentid) {
+        this.estamblishmentid = estamblishmentid;
+    }
 
     public String getJobName() {
         return jobName;
@@ -78,4 +88,25 @@ public class NewJobRequest {
     public void setSalary(List<Salary> salary) {
         this.salary = salary;
     }
+    public int getSalaryLength(){
+        return this.salary.size();
+    }
+    public int getAvaibilityLength(){
+        return this.avaibility.size();
+    }
+    public int getAvaibilitytimelength(){
+        int counter = 0;
+        for(Availbility aval : this.avaibility){
+            if(!aval.checkNull()){
+                counter += 4;
+            }
+        }
+        return counter;
+    }
+    public int getTagsLength(){
+        System.out.println(this.tags);
+        return this.tags.size();
+    }
+
 }
+

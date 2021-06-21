@@ -22,7 +22,7 @@ public class CompanyDaoImpl extends BaseDaoMySQL implements companyDao {
             return 0;
         }
     }
-    private Company getCompanydetailsByEstablishment(int establishmentid){
+    public Company getCompanydetailsByEstablishment(int establishmentid){
         try {
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM swipeyourjob2.companies com " +

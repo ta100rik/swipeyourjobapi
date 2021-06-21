@@ -4,6 +4,8 @@ import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
+import com.Swipeyourjob.Rest_api.ResultClass;
+import com.Swipeyourjob.Rest_api.domain.Company.Company;
 import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import com.google.gson.Gson;
@@ -12,6 +14,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -179,10 +185,69 @@ public class WebController {
 
     @PostMapping("/newjob")
     public ResponseEntity<?> newjob(@RequestBody NewJobRequest req){
+
         String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+        ResultClass RESULT = null;
+        // checking if the request is valid
+        boolean validrequest = true;
+        String reasonstring = "";
+        try{
 
-        return ResponseEntity.ok(req);
+            // checking the request
+            if(req.getJobImage() == null){
+                validrequest = false;
+                reasonstring += "There is no image \n";
+            }
 
+            if(req.getSalaryLength() == 0){ // salary need to be defined
+                validrequest = false;
+                reasonstring += "No salary defined\n";
+            }
+            // Length check
+            if(req.getAvaibilityLength() != 7){ // avaibility need to be 7 items
+                validrequest = false;
+                reasonstring += "The avaibility need to be a array of 7 items\n";
+            }
+            if(req.getAvaibilitytimelength() != 28){ // 4 types X 7 days = 28
+                validrequest = false;
+                reasonstring += "Sorry but you are missing a time zone in 1 of the days";
+            }
+            if(req.getTagsLength() == 0){
+                validrequest = false;
+                reasonstring += "No tags defined";
+            }
+
+            // Start and Enddate check
+            if(req.getStartdate() != null && req.getEnddate() != null){
+                if(!req.getStartdate().equals("") && !req.getEnddate().equals("")){
+                    Date startdate =new SimpleDateFormat("yyyy-MM-dd").parse(req.getStartdate());
+                    Date enddate =new SimpleDateFormat("yyyy-MM-dd").parse(req.getEnddate());
+                    if(startdate.after(enddate)){
+                        validrequest = false;
+                        reasonstring += "Sorry but your startdate is before the enddate";
+                    }
+                }
+            }else if(req.getStartdate() != null){
+                LocalDate date = LocalDate.now();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                req.setStartdate(dateFormat.format(date));
+            }
+
+
+            if(!validrequest){
+                RESULT = new ResultClass(null,400,reasonstring);
+            }
+            // TODO: add a database check
+
+            // Result is null this means no error so let start shooting it in to the database
+            if(RESULT == null){
+                Company companyProfile = ServiceProvider.getCompanyService().getCompanydetailsByEstablishment(req.getEstamblishmentid());
+                RESULT = ServiceProvider.getCardService().newJob(req,companyProfile);
+            }
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"You found a bug please show this to Swipe your job");
+        }
+        return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
     }
 
 
