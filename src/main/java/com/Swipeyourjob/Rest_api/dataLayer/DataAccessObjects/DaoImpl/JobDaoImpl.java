@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
 import com.Swipeyourjob.Rest_api.Controllers.request.NewJobRequest;
+import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Availbility;
 import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Salary;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.jobDao;
@@ -406,7 +407,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 }
                 // Uploading jobperiod
                 if(RESULT.isOk()){
-                    String sql = "INSERT INTO jobperiod (startdate,enddate) VALUES (?,?)";
+                    String sql = "INSERT INTO jobperiod (startdate,enddate,jobs_jobid) VALUES (?,?,?)";
                     PreparedStatement insertJobPeriod = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                     insertJobPeriod.setString(1,req.getStartdate());
                     if(req.getEnddate() != null && req.getEnddate().equals("")){
@@ -414,9 +415,10 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     }else{
                         insertJobPeriod.setString(2,req.getEnddate());
                     }
+                    insertJobPeriod.setInt(3,insertjob);
                     int addJobPeriod = super.executeQueryReturningId(insertJobPeriod,connection);
                     if(addJobPeriod == 0){
-                        RESULT = new ResultClass(insertjob,500,"Job and Salary uploaded but jobperiod was not correct.");
+                        RESULT = new ResultClass(insertjob,500,"Job and Salary uploaded but jobperiod where not correct.");
                     }else{
                         RESULT = new ResultClass(insertjob,200,"Job, Salary and jobperiod are uploaded.");
                     }
@@ -429,14 +431,56 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     insertimage.setInt(2,insertjob);
                     int addimage = super.executeQueryReturningId(insertimage,connection);
                     if(addimage == 0){
-                        RESULT = new ResultClass(insertjob,500,"Job, period and salary uploaded but image was not correct.");
+                        RESULT = new ResultClass(insertjob,500,"Job, period and salary uploaded but image where not correct.");
                     }else{
                         RESULT = new ResultClass(insertjob,200,"Job, period, jobimage and salary are uploaded.");
                     }
                 }
 
+                if(RESULT.isOk()){
+                    for(String tag : req.getTags()){
+                        // Putting the
+                        String firstLetStr = tag.substring(0, 1).toUpperCase();
+                        // Get remaining letter using substring
+                        String remLetStr = tag.substring(1).toLowerCase();
+                        tag = firstLetStr + remLetStr;
+                        String searchSQL = "SELECT tagid FROM tagbox where tagname =  limit 1";
+                        PreparedStatement SearchStatement = connection.prepareStatement(searchSQL);
+                        SearchStatement.setString(1,tag);
+                        ResultSet resultSet = super.executeQuery(SearchStatement,connection);
+                        int rowcount = super.getRowCount(resultSet);
+                        int tagid = 0;
+                        if(rowcount == 0){
+                            // insert
+                            String sql = "INSERT INTO tagbox (tagname) VALUES (?)";
+                            PreparedStatement newtagStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                            newtagStatement.setString(1,tag);
+                            tagid = super.executeQueryReturningId(newtagStatement,connection);
+                        }else{
+                            // found tag
+                            resultSet.first();
+                            tagid = resultSet.getInt("tagid");
+                        }
 
-                // TODO: Insert tags first check if tag is existing and only use reference
+                        if(tagid == 0){
+                            RESULT = new ResultClass(insertjob,500,"Job, period, jobimage and salary uploaded but tags where not correct.");
+                            break;
+                        }else{
+                            String sql = "INSERT INTO job_tag (jobid,tagid) VALUES (?,?)";
+                            PreparedStatement insertStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                            insertStatement.setInt(1,insertjob);
+                            insertStatement.setInt(2,tagid);
+                            int job_tag = super.executeQueryReturningId(insertStatement,connection);
+                            if(job_tag == 0){
+                                RESULT = new ResultClass(insertjob,500,"Job, period, jobimage and salary uploaded but tags where not correct.");
+                                break;
+                            }else{
+                                RESULT = new ResultClass(insertjob,200,"Job, period, jobimage, tags and salary are uploaded.");
+                            }
+                        }
+                    }
+                }
+
                 // TODO: insert Availbility
             }else{
                 RESULT = new ResultClass(null,500,"The job can't be created.");
