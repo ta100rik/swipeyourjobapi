@@ -444,7 +444,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                         // Get remaining letter using substring
                         String remLetStr = tag.substring(1).toLowerCase();
                         tag = firstLetStr + remLetStr;
-                        String searchSQL = "SELECT tagid FROM tagbox where tagname =  limit 1";
+                        String searchSQL = "SELECT tagid FROM tagbox where tagname = ? limit 1";
                         PreparedStatement SearchStatement = connection.prepareStatement(searchSQL);
                         SearchStatement.setString(1,tag);
                         ResultSet resultSet = super.executeQuery(SearchStatement,connection);
@@ -480,8 +480,28 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                         }
                     }
                 }
+                if(RESULT.isOk()){
+                    int dayCounter = 1;
+                    for(Availbility aval : req.getAvaibility()){
+                        String sql = "INSERT INTO jobavability (day,morning,afternoon,evening,night,jobid) VALUES (?,?,?,?,?,?)";
+                        PreparedStatement jobavability = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                        jobavability.setInt(1,dayCounter);
+                        jobavability.setBoolean(2,aval.isMorning());
+                        jobavability.setBoolean(3,aval.isAfternoon());
+                        jobavability.setBoolean(4,aval.isEvening());
+                        jobavability.setBoolean(5,aval.isNight());
+                        jobavability.setInt(6,insertjob);
+                        int addavaibility = super.executeQueryReturningId(jobavability,connection);
+                        if(addavaibility == 0){
+                            RESULT = new ResultClass(insertjob,500,"Job, period, jobimage, tags, salary uploaded but avaibility was not correct.");
+                            break;
+                        }else{
+                            RESULT = new ResultClass(insertjob,200,"Job, period, jobimage, tags, salary and avaibility are uploaded.");
+                        }
+                        dayCounter++;
+                    }
+                }
 
-                // TODO: insert Availbility
             }else{
                 RESULT = new ResultClass(null,500,"The job can't be created.");
             }

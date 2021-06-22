@@ -106,6 +106,7 @@ public class AuthenticationService {
     }
     public boolean Sendverificationmail(String mail,int verificationcode,int userid){
         identicationService.saveVerficationcode(verificationcode,userid);
+
         return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);
     }
     public int getUserid(String jwt){
