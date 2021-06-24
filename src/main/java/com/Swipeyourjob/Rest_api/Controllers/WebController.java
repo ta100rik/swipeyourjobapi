@@ -114,7 +114,7 @@ public class WebController {
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
             int userid = Integer.parseInt(userinfo[1]);
-            List<WebJob> joblist = ServiceProvider.getCardService().getWebJobsByCompanyid(userid);
+            List<WebJob> joblist = ServiceProvider.getJobService().getWebJobsByCompanyid(userid);
             if(joblist != null){
                 return ResponseEntity.ok(new Gson().toJson(joblist));
             }else{
@@ -246,7 +246,7 @@ public class WebController {
             // Result is null this means no error so let start shooting it in to the database
             if(RESULT == null){
                 Company companyProfile = ServiceProvider.getCompanyService().getCompanydetailsByEstablishment(req.getEstamblishmentid());
-                RESULT = ServiceProvider.getCardService().newJob(req,companyProfile);
+                RESULT = ServiceProvider.getJobService().newJob(req,companyProfile);
             }
         }catch (Exception e){
             System.out.println(e.getMessage());

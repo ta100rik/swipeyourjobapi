@@ -1,7 +1,7 @@
 package com.Swipeyourjob.Rest_api.services;
 
 public class ServiceProvider {
-    private static final CardService CARD_SERVICE = new CardService();
+    private static final JobService JOB_SERVICE = new JobService();
     private static final ChatService CHAT_SERVICE = new ChatService();
     private static final HostingService HOSTING_SERVICE = new HostingService();
     private static final AuthenticationService AUTHENTICATION_SERVICE = new AuthenticationService();
@@ -10,7 +10,7 @@ public class ServiceProvider {
     private static final FirebaseService firebaseService = new FirebaseService();
     private static final CompanyService COMPANY_SERVICE = new CompanyService();
     private static final WebsiteService WEBSITE_SERVICE = new WebsiteService();
-    public static CardService getCardService(){return CARD_SERVICE;}
+    public static JobService getJobService(){return JOB_SERVICE;}
 
     public static WebsiteService getWebsiteService() {        return WEBSITE_SERVICE;
     }

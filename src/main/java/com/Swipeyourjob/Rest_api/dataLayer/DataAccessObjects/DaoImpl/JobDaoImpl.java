@@ -6,7 +6,7 @@ import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Salary;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.jobDao;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardBookmark;
+
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardLocation;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
@@ -14,62 +14,57 @@ import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
 import com.Swipeyourjob.Rest_api.ResultClass;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
-    public int newBookmark(String userid, int cardid){
-        try{
-            Connection connection = super.getConnection();
-            PreparedStatement checkquery = connection.prepareStatement("select * FROM bookmarkedjobs where jobid = ? and userid = ?");
-            checkquery.setInt(1,cardid);
-            checkquery.setString(2, userid);
-            ResultSet result = super.executeQuery(checkquery, connection);
-            int rowsamounts = getRowCount(result);
-            if(rowsamounts == 0){
-                String query = "INSERT INTO bookmarkedjobs (userid,jobid) VALUES (?,?)";
-                PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setString(1,userid);
-                preparedStatement.setInt(2,cardid);
-                return super.executeQueryReturningId(preparedStatement,connection);
-            }else{
-                return 0;
-            }
-        }catch (Exception e){
-            return 0;
-        }
-    }
-
     @Override
     public Card getCardByJobid(String jobid){
         try{
             // get connection
             int ConvertedJobid = Integer.parseInt(jobid);
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1 " +
-                    "join companies companyinfo " +
-                    "on companyinfo.company_id = t1.companyid " +
-                    "join joblocation jobloc " +
-                    "on jobloc.cardid = t1.jobid " +
-                    "and jobloc.defaultlocation = '1' " +
-                    "join webusers " +
-                    "on webusers.companyid = companyinfo.company_id " +
-                    " where jobid = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT " +
+                    "    jobs.jobid, " +
+                    "    jobs.jobtitle, " +
+                    "    companies.name, " +
+                    "    estam.description as comanydesc, " +
+                    "    estam.url as weburl, " +
+                    "    companies.companylogo, " +
+                    "    jobs.jobdescription, " +
+                    "    jobs.salary, " +
+                    "    jobs.maxhours, " +
+                    "    jobs.minhours, " +
+                    "    concat(webusers.firstname , ' ' , webusers.lastname) as firstname, " +
+                    "    adres.streetname, " +
+                    "    adres.housenumber, " +
+                    "    adres.place as city, " +
+                    "    adres.zipcode, " +
+                    "    adres.idestablishment_adress, " +
+                    "    adres.latitude, " +
+                    "    adres.longtitude " +
+                    " FROM jobs " +
+                    "join establishment estam " +
+                    "on jobs.establishment_idestablishment  = estam.idestablishment " +
+                    "join establishment_adress adres " +
+                    "on estam.idestablishment = adres.establishment_idestablishment " +
+                    "join companies " +
+                    "on jobs.establishment_companies_company_id = companies.company_id " +
+                    "join webusers  " +
+                    "on estam.establishmentowner = webusers.idwebusers " +
+                    "where jobs.jobid = ?");
             preparedStatement.setInt(1,ConvertedJobid);
             ResultSet result = super.executeQuery(preparedStatement,connection);
             while(result.next()){
-                /*
-                 *   later seperate a card from the company info by making a company class
-                 * */
                 int cardid              = result.getInt("jobid");
                 String cardtitle        = result.getString("jobtitle");
                 String companyname      = result.getString("name");
                 String companydesc      = result.getString("comanydesc");
                 String companyurl       = result.getString("weburl");
-                String description      = result.getString("jobdescription");
                 String companyLogo      = result.getString("companylogo");
+                String description      = result.getString("jobdescription");
                 Float salary            = result.getFloat("salary");
-                int maxhours          = result.getInt("maxhours");
-                int minhours          = result.getInt("minhours");
+                int maxhours            = result.getInt("maxhours");
+                int minhours            = result.getInt("minhours");
                 String user             = result.getString("firstname");
 //                init card images
                 CardImageList imagelist = getCardimagesByCardid(cardid,connection);
@@ -78,10 +73,10 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 int housenumber             = result.getInt("housenumber");
                 String city                 = result.getString("city");
                 String zipcode              = result.getString("zipcode");
-                boolean defaultlocation     = result.getBoolean("defaultlocation");
-                int idjoblocation           = result.getInt("idjoblocation");
-                double joblongtitude         = result.getDouble("joblongtitude");
-                double joblatitude           = result.getDouble("joblatitude");
+                boolean defaultlocation     = true;
+                int idjoblocation           = result.getInt("idestablishment_adress");
+                double joblongtitude         = result.getDouble("longtitude");
+                double joblatitude           = result.getDouble("latitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
                 Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
@@ -93,63 +88,110 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
         return null;
     }
-    @Override
-    public Cardlist getCardsByCompanyId(int Companyid) {
-        try {
-            // get connection
-            Connection connection = super.getConnection();
-            // getting all the cards
-
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1 " +
-                    "join companies companyinfo " +
-                    "on companyinfo.company_id = t1.companyid " +
-                    "join joblocation jobloc " +
-                    "on jobloc.cardid = t1.jobid " +
-                    "and jobloc.defaultlocation = '1' " +
-                    "join webusers " +
-                    "on webusers.companyid = companyinfo.company_id " +
-                    "where companyinfo.company_id = ?");
-
-            preparedStatement.setInt(1, Companyid);
-            ResultSet result = super.executeQuery(preparedStatement, connection);
-
-            // initiliaze domain item
-            Cardlist cardlist = new Cardlist();
-            while (result.next()) {
-                /*
-                 *   later seperate a card from the company info by making a company class
-                 * */
-                int cardid = result.getInt("jobid");
-                String cardtitle = result.getString("jobtitle");
-                String companyname = result.getString("name");
-                String companydesc = result.getString("comanydesc");
-
-                String comanydesclogo = result.getString("companylogo");
-                String companyurl = result.getString("weburl");
-                String description = result.getString("jobdescription");
-                Float salary = result.getFloat("salary");
-                int maxhours = result.getInt("maxhours");
-                int minhours = result.getInt("minhours");
-                String user = result.getString("firstname");
-//                init card images
-                CardImageList imagelist = getCardimagesByCardid(cardid, connection);
-//                initiliasing the card location seperated because of the seperated table in query
-                String streetname = result.getString("streetname");
-                int housenumber = result.getInt("housenumber");
-                String city = result.getString("city");
-                String zipcode = result.getString("zipcode");
-                boolean defaultlocation = result.getBoolean("defaultlocation");
-                int idjoblocation = result.getInt("idjoblocation");
-                double joblongtitude = result.getDouble("joblongtitude");
-                double joblatitude = result.getDouble("joblatitude");
-//                System.out.println(imagelist.getCardImageList());
-                CardLocation cardLocation = new CardLocation(streetname, housenumber, city, zipcode, defaultlocation, idjoblocation, joblatitude, joblongtitude);
-                Card newCard = new Card(cardid, cardtitle, city, companyname, imagelist, description, companydesc, companyurl,comanydesclogo, salary, minhours, maxhours, cardLocation, user);
-                cardlist.addCard(newCard);
+    private int StatusToStatusid(String status){
+        status = status.toLowerCase();
+        int RESULT = 0;
+        switch (status){
+            case "liked":
+                RESULT = 1;
+                break;
+            case "denied":
+                RESULT = 2;
+            break;
+            case "bookmarked":
+                RESULT = 3;
+            break;
+            case "rejected":
+                RESULT = 4;
+            break;
+            case "accepted":
+                RESULT = 5;
+            break;
+        }
+        return RESULT;
+    }
+    private ResultClass updateJobstatus(String newStatus,Connection connection,int rowid){
+        ResultClass RESULT = null;
+        int statusid = StatusToStatusid(newStatus);
+        try{
+            String sql = "UDPATE jobstatus_users set statusid = ? where idjobstatus_users = ?";
+            PreparedStatement updatequery = connection.prepareStatement(sql);
+            updatequery.setInt(1,statusid);
+            updatequery.setInt(2,rowid);
+            if(super.updateQuery(updatequery,connection)){
+                RESULT = new ResultClass(true,200,"OK");
+            }else{
+                RESULT = new ResultClass(false,500,"Sorry the record wasn't updated");
             }
-            return cardlist;
-        } catch (Exception e) {
-            return null;
+            return RESULT;
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,e.getMessage());
+            return RESULT;
+        }
+    }
+    private ResultClass updateJobstatus(String newStatus,Connection connection,int rowid,int webuser){
+        ResultClass RESULT = null;
+        int statusid = StatusToStatusid(newStatus);
+        try{
+            String sql = "UDPATE jobstatus_users set statusid = ? , webuser = ? where idjobstatus_users = ?";
+            PreparedStatement updatequery = connection.prepareStatement(sql);
+            updatequery.setInt(1,statusid);
+            updatequery.setInt(2,rowid);
+            updatequery.setInt(3,webuser);
+            if(super.updateQuery(updatequery,connection)){
+                RESULT = new ResultClass(true,200,"OK");
+            }else{
+                RESULT = new ResultClass(false,500,"Sorry the record wasn't updated");
+            }
+            return RESULT;
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,e.getMessage());
+            return RESULT;
+        }
+    }
+    private ResultClass insertJobStatus(String newStatus,Connection connection,String appuser){
+        // TODO:
+        ResultClass RESULT = null;
+        try{
+            return RESULT;
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,e.getMessage());
+            return RESULT;
+        }
+    }
+
+    public ResultClass updateJobStatus(String status,String appuser,int jobid,int webuser){
+        ResultClass RESULT = null;
+        try{
+            Connection connection = super.getConnection();
+
+            String sql = "SELECT * FROM jobstatus_users " +
+                    "where jobid = ?" +
+                    "and userid = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,jobid);
+            preparedStatement.setString(2,appuser);
+            ResultSet QueryResult = super.executeQuery(preparedStatement,connection);
+            int rowcount = super.getRowCount(QueryResult);
+            if(rowcount != 0){
+                QueryResult.first();
+                int rowid = QueryResult.getInt("idjobstatus_users");
+                if(webuser == 0){
+                    updateJobstatus(status,connection,rowid);
+                }else{
+                    updateJobstatus(status,connection,rowid,webuser);
+                }
+            }else{
+                insertJobStatus(status,connection,appuser);
+            }
+            if(!RESULT.isOk()){
+                RESULT = new ResultClass(true,500,"Something in the database wen't wrong when updating");
+                return RESULT;
+            }
+//            PreparedStatement preparedStatement = ;
+        }catch(Exception e){
+            RESULT = new ResultClass(null,500,e.getMessage());
+            return RESULT;
         }
     }
 
@@ -164,15 +206,38 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             int ConvertedStart = Integer.parseInt(start);
             int ConvertedAmount = Integer.parseInt(amount);
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM jobs t1 " +
-                    "join companies companyinfo " +
-                    "on companyinfo.company_id = t1.companyid " +
-                    "join joblocation jobloc " +
-                    "on jobloc.cardid = t1.jobid " +
-                    "and jobloc.defaultlocation = '1' " +
-                    "join webusers " +
-                    "on webusers.companyid = companyinfo.company_id " +
-                    "WHERE t1.jobid NOT IN (SELECT t2.jobid from showedjobs t2 where t2.userid = ?) and jobid > ? order by t1.jobid limit ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT " +
+                    "    jobs.jobid, " +
+                    "    jobs.jobtitle, " +
+                    "    companies.name, " +
+                    "    estam.description as comanydesc, " +
+                    "    estam.url as weburl, " +
+                    "    companies.companylogo, " +
+                    "    jobs.jobdescription, " +
+                    "    jobs.salary, " +
+                    "    jobs.maxhours, " +
+                    "    jobs.minhours, " +
+                    "    concat(webusers.firstname , ' ' , webusers.lastname) as firstname, " +
+                    "    adres.streetname, " +
+                    "    adres.housenumber, " +
+                    "    adres.place as city, " +
+                    "    adres.zipcode, " +
+                    "    adres.idestablishment_adress, " +
+                    "    adres.latitude, " +
+                    "    adres.longtitude " +
+                    " FROM jobs " +
+                    "join establishment estam " +
+                    "on jobs.establishment_idestablishment  = estam.idestablishment " +
+                    "join establishment_adress adres " +
+                    "on estam.idestablishment = adres.establishment_idestablishment " +
+                    "join companies " +
+                    "on jobs.establishment_companies_company_id = companies.company_id " +
+                    "join webusers  " +
+                    "on estam.establishmentowner = webusers.idwebusers " +
+                    "where jobs.jobid NOT IN (SELECT jobstatus_users.jobid from jobstatus_users where jobstatus_users.userid = ?) " +
+                    "and jobs.jobid > ? " +
+                    "order by jobs.jobid " +
+                    "limit ?");
 
             preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,ConvertedStart);
@@ -182,9 +247,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             // initiliaze domain item
             Cardlist cardlist = new Cardlist();
             while(result.next()){
-                /*
-                *   later seperate a card from the company info by making a company class
-                * */
+
                 int cardid              = result.getInt("jobid");
                 String cardtitle        = result.getString("jobtitle");
                 String companyname      = result.getString("name");
@@ -193,8 +256,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 String companyLogo      = result.getString("companylogo");
                 String description      = result.getString("jobdescription");
                 Float salary            = result.getFloat("salary");
-                int maxhours          = result.getInt("maxhours");
-                int minhours          = result.getInt("minhours");
+                int maxhours            = result.getInt("maxhours");
+                int minhours            = result.getInt("minhours");
                 String user             = result.getString("firstname");
 //                init card images
                 CardImageList imagelist = getCardimagesByCardid(cardid,connection);
@@ -203,10 +266,10 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 int housenumber             = result.getInt("housenumber");
                 String city                 = result.getString("city");
                 String zipcode              = result.getString("zipcode");
-                boolean defaultlocation     = result.getBoolean("defaultlocation");
-                int idjoblocation           = result.getInt("idjoblocation");
-                double joblongtitude         = result.getDouble("joblongtitude");
-                double joblatitude           = result.getDouble("joblatitude");
+                boolean defaultlocation     = true;
+                int idjoblocation           = result.getInt("idestablishment_adress");
+                double joblongtitude         = result.getDouble("longtitude");
+                double joblatitude           = result.getDouble("latitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
                 Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
@@ -219,93 +282,93 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return null;
         }
     }
-
+    @Override
     public Cardlist getCardsbyBookmark(String userid){
-        try{
-            // get connection
-            Connection connection  = super.getConnection();
-            // getting all the cards
-
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM bookmarkedjobs " +
-                    "join jobs " +
-                    "on jobs.jobid = bookmarkedjobs.jobid " +
-                    "join companies " +
-                    "on companies.company_id = jobs.companyid " +
-                    "join joblocation jobloc " +
-                    "on jobloc.cardid = jobs.jobid " +
-                    "and jobloc.defaultlocation = '1' " +
-                    "join webusers " +
-                    "on webusers.companyid = companies.company_id " +
-                    "where userid = ? ");
-
-            preparedStatement.setString(1,userid);
-            ResultSet result = super.executeQuery(preparedStatement,connection);
-
-            // initiliaze domain item
-            Cardlist cardlist = new Cardlist();
-            while(result.next()){
-                /*
-                 *   later seperate a card from the company info by making a company class
-                 * */
-                int cardid              = result.getInt("jobid");
-                String cardtitle        = result.getString("jobtitle");
-                String companyname      = result.getString("name");
-                String companydesc      = result.getString("comanydesc");
-                String companyurl       = result.getString("weburl");
-                String description      = result.getString("jobdescription");
-
-                String companyLogo      = result.getString("companylogo");
-                Float salary            = result.getFloat("salary");
-                int maxhours          = result.getInt("maxhours");
-                int minhours          = result.getInt("minhours");
-                String user             = result.getString("firstname");
-//                init card images
-                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
-//                initiliasing the card location seperated because of the seperated table in query
-                String streetname           = result.getString("streetname");
-                int housenumber             = result.getInt("housenumber");
-                String city                 = result.getString("city");
-                String zipcode              = result.getString("zipcode");
-                boolean defaultlocation     = result.getBoolean("defaultlocation");
-                int idjoblocation           = result.getInt("idjoblocation");
-                double joblongtitude         = result.getDouble("joblongtitude");
-                double joblatitude           = result.getDouble("joblatitude");
-
-                Date bookmarktimestamp      = result.getDate("timesstamps");
-                int bookmarkid              = result.getInt("idbookmarkedjobs");
-                CardLocation  cardLocation  = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
-                CardBookmark  cardBookmark  = new CardBookmark(bookmarkid,bookmarktimestamp);
-                Card newCard                = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
-                newCard.setBookmark(cardBookmark);
-                cardlist.addCard(newCard);
-            }
-            return cardlist;
-        }
-        catch (Exception e){
-            e.printStackTrace();
+//        try{
+//            // get connection
+//            Connection connection  = super.getConnection();
+//            // getting all the cards
+//
+//            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM bookmarkedjobs " +
+//                    "join jobs " +
+//                    "on jobs.jobid = bookmarkedjobs.jobid " +
+//                    "join companies " +
+//                    "on companies.company_id = jobs.companyid " +
+//                    "join joblocation jobloc " +
+//                    "on jobloc.cardid = jobs.jobid " +
+//                    "and jobloc.defaultlocation = '1' " +
+//                    "join webusers " +
+//                    "on webusers.companyid = companies.company_id " +
+//                    "where userid = ? ");
+//
+//            preparedStatement.setString(1,userid);
+//            ResultSet result = super.executeQuery(preparedStatement,connection);
+//
+//            // initiliaze domain item
+//            Cardlist cardlist = new Cardlist();
+//            while(result.next()){
+//                /*
+//                 *   later seperate a card from the company info by making a company class
+//                 * */
+//                int cardid              = result.getInt("jobid");
+//                String cardtitle        = result.getString("jobtitle");
+//                String companyname      = result.getString("name");
+//                String companydesc      = result.getString("comanydesc");
+//                String companyurl       = result.getString("weburl");
+//                String description      = result.getString("jobdescription");
+//
+//                String companyLogo      = result.getString("companylogo");
+//                Float salary            = result.getFloat("salary");
+//                int maxhours          = result.getInt("maxhours");
+//                int minhours          = result.getInt("minhours");
+//                String user             = result.getString("firstname");
+////                init card images
+//                CardImageList imagelist = getCardimagesByCardid(cardid,connection);
+////                initiliasing the card location seperated because of the seperated table in query
+//                String streetname           = result.getString("streetname");
+//                int housenumber             = result.getInt("housenumber");
+//                String city                 = result.getString("city");
+//                String zipcode              = result.getString("zipcode");
+//                boolean defaultlocation     = result.getBoolean("defaultlocation");
+//                int idjoblocation           = result.getInt("idjoblocation");
+//                double joblongtitude         = result.getDouble("joblongtitude");
+//                double joblatitude           = result.getDouble("joblatitude");
+//
+//                Date bookmarktimestamp      = result.getDate("timesstamps");
+//                int bookmarkid              = result.getInt("idbookmarkedjobs");
+//                CardLocation  cardLocation  = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
+//                CardBookmark  cardBookmark  = new CardBookmark(bookmarkid,bookmarktimestamp);
+//                Card newCard                = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
+//                newCard.setBookmark(cardBookmark);
+//                cardlist.addCard(newCard);
+//            }
+//            return cardlist;
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
             return null;
-        }
+//        }
     }
 
     public int getBookmarkAmountuser(String userid){
-        try{
-            Connection connection = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT count(*) as bookmarkamount FROM bookmarkedjobs where userid = ?");
-            preparedStatement.setString(1,userid);
-            ResultSet result = super.executeQuery(preparedStatement,connection);
-            while(result.next()){
-                return result.getInt("bookmarkamount");
-            }
-        }catch (Exception e){
+//        try{
+//            Connection connection = super.getConnection();
+//            PreparedStatement preparedStatement = connection.prepareStatement("SELECT count(*) as bookmarkamount FROM bookmarkedjobs where userid = ?");
+//            preparedStatement.setString(1,userid);
+//            ResultSet result = super.executeQuery(preparedStatement,connection);
+//            while(result.next()){
+//                return result.getInt("bookmarkamount");
+//            }
+//        }catch (Exception e){
             return 0;
-        }
-        return 0;
+//        }
+//        return 0;
     }
     @Override
     public CardImageList getCardimagesByCardid(int cardid,Connection connection){
         try{
             //getting the current image list
-            String imagesql = "SELECT * FROM jobsimages where jobid = ?";
+            String imagesql = "SELECT * FROM jobimages where jobid = ?";
             PreparedStatement imageStatement = connection.prepareStatement(imagesql);
             imageStatement.setInt(1, cardid);
             ResultSet result = super.executeQuery(imageStatement,connection);
@@ -315,7 +378,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             //looping through every image row
             while(result.next()){
                 //creating imagerow object
-                int imageId             = result.getInt("jobimageid");
+                int imageId             = result.getInt("idjobimages");
                 String imageurl         = result.getString("imageurl");
                 int imagecardid         = result.getInt("jobid");
                 CardImage image = new CardImage(imageId,imageurl,imagecardid);
@@ -329,22 +392,13 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return null;
         }
     }
-    public boolean removeBookmark(int bookmarkid){
-        String sql = "";
-        try{
-            Connection connection  = super.getConnection();
-            sql = "delete from bookmarkedjobs where idbookmarkedjobs = ? ";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,bookmarkid);
-            super.updateQuery(preparedStatement,connection);
-            return true;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+
+    @Override
+    public Cardlist getCardsByCompanyId(int Companyid) {
+        return null;
     }
 
+    @Override
     public ResultClass newJobHandler(NewJobRequest req,int companyid) {
         ResultClass RESULT = null;
         try{

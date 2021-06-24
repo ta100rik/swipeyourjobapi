@@ -14,17 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/app")
 public class Appcontroller {
-
-    @PostMapping("/addBookmark")
-    public ResponseEntity<?> addBookmark(@RequestBody MatchRequest bookmarkRequest){
-        System.out.println(bookmarkRequest);
-        int result = ServiceProvider.getCardService().newBookmark(bookmarkRequest.getUserid(),bookmarkRequest.getCardid());
-        if(result != 0){
-            return ResponseEntity.ok(result);
-        }else{
-            return ResponseEntity.status(500).body("sorry not bookmarked because of a server error");
-        }
-    }
     @PostMapping("/addBug")
     public ResponseEntity<?> addBug(@RequestBody bugRequest bugrequest){
         int result = ServiceProvider.getBuggService().newBug(bugrequest.getUserid(),bugrequest.getUsername(),bugrequest.getDescription(),bugrequest.getVersionnumber());
@@ -34,6 +23,7 @@ public class Appcontroller {
             return ResponseEntity.status(500).body("database error");
         }
     }
+    @PostMapping("/updateJob")
 
     @GetMapping("/getbookmarks")
     public ResponseEntity<?> getBookmarks(
@@ -48,7 +38,7 @@ public class Appcontroller {
             if(lat == null){
                 lat = "";
             }
-            List<AppCard> result = ServiceProvider.getCardService().getAppBookmarkedCardByUserId(userid,lon,lat);
+            List<AppCard> result = ServiceProvider.getJobService().getAppBookmarkedCardByUserId(userid,lon,lat);
             return ResponseEntity.ok(new Gson().toJson(result));
         }catch (Exception e){
             return ResponseEntity.noContent().build();
@@ -70,7 +60,7 @@ public class Appcontroller {
             if(lat == null){
                 lat = "";
             }
-           List<AppCard> result = ServiceProvider.getCardService().getAppcardByUserid(userid , start, amount,lon,lat);
+           List<AppCard> result = ServiceProvider.getJobService().getAppcardByUserid(userid , start, amount,lon,lat);
            return ResponseEntity.ok(new Gson().toJson(result));
         }catch (Exception e){
             
@@ -81,7 +71,7 @@ public class Appcontroller {
     public ResponseEntity<?> getPreloadinfo(  @RequestParam(required = false) String userid ){
         try{
             int roomamount =  ServiceProvider.getChatService().getRoomamountuser(userid);
-            int bookmarkamount = ServiceProvider.getCardService().getBookmarkAmountuser(userid);
+            int bookmarkamount = ServiceProvider.getJobService().getBookmarkAmountuser(userid);
             AppPreloadInfo appView = new AppPreloadInfo(roomamount,bookmarkamount);
             return ResponseEntity.ok(appView);
         }catch (Exception e){
@@ -101,7 +91,7 @@ public class Appcontroller {
             if(lat == null){
                 lat = "";
             }
-            AppCard result = ServiceProvider.getCardService().getAppcardByJobid(id,lon,lat);
+            AppCard result = ServiceProvider.getJobService().getAppcardByJobid(id,lon,lat);
             return ResponseEntity.ok(new Gson().toJson(result));
         }catch (Exception e){
             return ResponseEntity.noContent().build();

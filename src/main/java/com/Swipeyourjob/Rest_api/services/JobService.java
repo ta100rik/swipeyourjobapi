@@ -15,13 +15,9 @@ import com.Swipeyourjob.Rest_api.ResultClass;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardService {
+public class JobService {
     private final JobDaoImpl JobImpl            = new JobDaoImpl();
     private final CompanyDaoImpl CompanyImpl    = new CompanyDaoImpl();
-//    app
-    public int newBookmark(String userid, int cardid){
-        return JobImpl.newBookmark(userid,cardid);
-    }
 
     public AppCard getAppcardByJobid(String jobid,String lon, String lat){
         Card currentcard = JobImpl.getCardByJobid(jobid);

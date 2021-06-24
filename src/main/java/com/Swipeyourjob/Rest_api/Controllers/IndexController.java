@@ -12,11 +12,9 @@ public class IndexController {
                 "<ul>" +
                 "   <li><a href='/app'>App list</a></li>" +
                 "   <ul>" +
-                "       <li>addLike - POST({\"userid\" :  ,\"cardid\":})</li>   " +
-                "       <li>addShowed - POST({\\\"userid\\\" :  ,\\\"cardid\\\":})</li>  " +
+                "       <li>updateJobStatus - POST({\"userid\" :  ,\"jobid\":})</li>   " +
                 "       <li>addBug - POST({ \"userid\":\"sdsd\", \"cardid\":2})</li>" +
                 "       <li>removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false,\"bookmarks\":false})</li>" +
-                "       <li>removeBookmark - POST({\"jobid\":32242,\"bookmarkid\":2,\"likeboolean\":false, \"userid\":\"sdsd\"})</li>" +
                 "       <li>addBug - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"username\":'henk',    \"description\":'dit is een test' ,\"versionnumber\":'1.0.0'})</li>" +
                 "       <li><a href='/app/preloadinfo?userid=888888'>preloadinfo?userid=888888 - GET</a></li> " +
                 "       <li><a href='/app/getbookmarks?userid=sdsd&lon=52.0862270277778&lat=5.17661701666667'>getbookmarks?userid=sdsd(optional: lon=52.0862270277778&lat=5.17661701666667) - GET</a></li> " +
