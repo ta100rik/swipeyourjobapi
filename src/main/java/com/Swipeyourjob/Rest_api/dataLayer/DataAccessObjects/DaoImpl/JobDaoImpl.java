@@ -114,7 +114,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         ResultClass RESULT = null;
         int statusid = StatusToStatusid(newStatus);
         try{
-            String sql = "UDPATE jobstatus_users set statusid = ? where idjobstatus_users = ?";
+            String sql = "UPDATE jobstatus_users set statusid = ? where idjobstatus_users = ?";
             PreparedStatement updatequery = connection.prepareStatement(sql);
             updatequery.setInt(1,statusid);
             updatequery.setInt(2,rowid);
@@ -149,10 +149,21 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             return RESULT;
         }
     }
-    private ResultClass insertJobStatus(String newStatus,Connection connection,String appuser){
-        // TODO:
+    private ResultClass insertJobStatus(String newStatus,Connection connection,String appuser,int jobid){
         ResultClass RESULT = null;
+        int statusid = StatusToStatusid(newStatus);
         try{
+            String sql = "INSERT INTO jobstatus_users (statusid,userid,jobid) VALUES (?,?,?)";
+            PreparedStatement insertStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            insertStatement.setInt(1,statusid);
+            insertStatement.setString(2,appuser);
+            insertStatement.setInt(3,jobid);
+            int QueryResult = super.executeQueryReturningId(insertStatement,connection);
+            if(QueryResult != 0){
+                RESULT = new ResultClass(QueryResult,200,"OK");
+            }else{
+                RESULT = new ResultClass(null,500,"Something wen't wrong in the database");
+            }
             return RESULT;
         }catch (Exception e){
             RESULT = new ResultClass(null,500,e.getMessage());
@@ -161,12 +172,12 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     }
 
     public ResultClass updateJobStatus(String status,String appuser,int jobid,int webuser){
-        ResultClass RESULT = null;
+        ResultClass  RESULT = new ResultClass(true,500,"Something in the database wen't wrong when updating");
         try{
             Connection connection = super.getConnection();
 
             String sql = "SELECT * FROM jobstatus_users " +
-                    "where jobid = ?" +
+                    "where jobid = ? " +
                     "and userid = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,jobid);
@@ -177,17 +188,14 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 QueryResult.first();
                 int rowid = QueryResult.getInt("idjobstatus_users");
                 if(webuser == 0){
-                    updateJobstatus(status,connection,rowid);
+                    RESULT = updateJobstatus(status,connection,rowid);
                 }else{
-                    updateJobstatus(status,connection,rowid,webuser);
+                    RESULT = updateJobstatus(status,connection,rowid,webuser);
                 }
             }else{
-                insertJobStatus(status,connection,appuser);
+                RESULT = insertJobStatus(status,connection,appuser,jobid);
             }
-            if(!RESULT.isOk()){
-                RESULT = new ResultClass(true,500,"Something in the database wen't wrong when updating");
-                return RESULT;
-            }
+            return RESULT;
 //            PreparedStatement preparedStatement = ;
         }catch(Exception e){
             RESULT = new ResultClass(null,500,e.getMessage());

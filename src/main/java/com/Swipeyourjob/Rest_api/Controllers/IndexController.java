@@ -12,7 +12,11 @@ public class IndexController {
                 "<ul>" +
                 "   <li><a href='/app'>App list</a></li>" +
                 "   <ul>" +
-                "       <li>updateJobStatus - POST({\"userid\" :  ,\"jobid\":})</li>   " +
+                "       <li>updateJobStatus - POST({\n" +
+                "     \"userid\":\"test\",\n" +
+                "    \"status\":\"bookmarked\", // liked , denied\n" +
+                "    \"jobid\":32261\n" +
+                "})</li>   " +
                 "       <li>addBug - POST({ \"userid\":\"sdsd\", \"cardid\":2})</li>" +
                 "       <li>removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false,\"bookmarks\":false})</li>" +
                 "       <li>addBug - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"username\":'henk',    \"description\":'dit is een test' ,\"versionnumber\":'1.0.0'})</li>" +
@@ -48,6 +52,11 @@ public class IndexController {
                 "    \"email\":\"zyadosseyran@gmail.com\",\n" +
                 "    \"code\":242946145\n" +
                 "\n" +
+                "})</li>" +
+                "<li>updateJobStatus - POST({\n" +
+                "     \"userid\":\"test\",\n" +
+                "    \"status\":\"accepted\",// rejected \n" +
+                "    \"jobid\":32265\n" +
                 "})</li>" +
                 "       <li>forgotpassword - POST ({\n" +
                 "    \"email\":\"zyadosseyran@gmail.com\"\n" +

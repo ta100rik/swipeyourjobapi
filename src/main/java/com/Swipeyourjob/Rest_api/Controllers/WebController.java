@@ -254,6 +254,22 @@ public class WebController {
         }
         return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
     }
-
+    @PostMapping("/updateJobStatus")
+    public ResponseEntity<?> updateUserJobStatus(@RequestBody AppJobStatusUpdateRequest jobrequest){
+        String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+        int userid = Integer.parseInt(userinfo[1]);
+        ResultClass RESULT = new ResultClass(null,500,"Api error");
+        try{
+            String jobstatus = jobrequest.getStatus().toLowerCase();
+            if(jobstatus.equals("rejected") || jobstatus.equals("accepted")){
+                RESULT = ServiceProvider.getJobService().updateJobStatus(jobrequest.getStatus(),jobrequest.getUserid(),jobrequest.getJobid(),userid);
+            }else{
+                RESULT = new ResultClass(null,400,"You not allowed to set this status");
+            }
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"Api error");
+        }
+        return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
+    }
 
 }

@@ -108,7 +108,10 @@ public class JobService {
         int bookmarkamount = JobImpl.getBookmarkAmountuser(userid);
         return bookmarkamount;
     }
-
+    public ResultClass updateJobStatus(String status,String appuser,int jobid,int webuser){
+        ResultClass result = JobImpl.updateJobStatus(status,appuser,jobid,webuser);
+        return result;
+    }
     public ResultClass newJob(NewJobRequest req, Company companyinfo){
         ResultClass result = JobImpl.newJobHandler(req,companyinfo.getCompany_id());
         return result;

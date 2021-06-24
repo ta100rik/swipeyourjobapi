@@ -3,6 +3,7 @@ package com.Swipeyourjob.Rest_api.Controllers;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
+import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.google.gson.Gson;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/app")
@@ -23,8 +25,21 @@ public class Appcontroller {
             return ResponseEntity.status(500).body("database error");
         }
     }
-    @PostMapping("/updateJob")
-
+    @PostMapping("/updateJobStatus")
+    public ResponseEntity<?> updateUserJobStatus(@RequestBody AppJobStatusUpdateRequest jobrequest){
+        ResultClass RESULT = new ResultClass(null,500,"Api error");
+        try{
+            String jobstatus = jobrequest.getStatus().toLowerCase();
+            if(jobstatus.equals("liked") || jobstatus.equals("denied") || jobstatus.equals("bookmarked")){
+                RESULT = ServiceProvider.getJobService().updateJobStatus(jobrequest.getStatus(),jobrequest.getUserid(),jobrequest.getJobid(),0);
+            }else{
+                RESULT = new ResultClass(null,400,"You not allowed to set this status");
+            }
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"Api error");
+        }
+        return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
+    }
     @GetMapping("/getbookmarks")
     public ResponseEntity<?> getBookmarks(
             @RequestParam(required = true) String userid,
