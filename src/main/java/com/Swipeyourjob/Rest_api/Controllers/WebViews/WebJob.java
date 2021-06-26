@@ -1,45 +1,49 @@
 package com.Swipeyourjob.Rest_api.Controllers.WebViews;
 
-
-import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppLocation;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class WebJob {
-    private WebJobInfo job_info;
-    private WebJobLocation job_location;
-    private List<String> job_images = new ArrayList<>();
+    public int jobid;
+    public String jobName;
+    public int daysValid;
+    public List<String> images;
 
-    public WebJob(WebJobInfo job_info, WebJobLocation job_location, List<String> job_images) {
-        this.job_info = job_info;
-        this.job_location = job_location;
-        this.job_images = job_images;
+    public WebJob(int jobid, String jobName, int daysValid, List<String> images) {
+        this.jobid = jobid;
+        this.jobName = jobName;
+        this.daysValid = daysValid;
+        this.images = images;
     }
 
-    public WebJobInfo getJob_info() {
-        return job_info;
+    public int getJobid() {
+        return jobid;
     }
 
-    public void setJob_info(WebJobInfo job_info) {
-        this.job_info = job_info;
+    public void setJobid(int jobid) {
+        this.jobid = jobid;
     }
 
-    public WebJobLocation getJob_location() {
-        return job_location;
+    public String getJobName() {
+        return jobName;
     }
 
-    public void setJob_location(WebJobLocation job_location) {
-        this.job_location = job_location;
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
-    public List<String> getJob_images() {
-        return job_images;
+    public int getDaysValid() {
+        return daysValid;
     }
 
-    public void setJob_images(List<String> job_images) {
-        this.job_images = job_images;
+    public void setDaysValid(int daysValid) {
+        this.daysValid = daysValid;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }
-
-

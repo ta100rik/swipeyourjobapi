@@ -5,21 +5,17 @@ import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Availbility;
 import com.Swipeyourjob.Rest_api.Controllers.request.SubclassesJob.Salary;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.jobDao;
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.*;
 
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardBookmark;
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardLocation;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
-import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
+import com.Swipeyourjob.Rest_api.domain.ListClasses.Joblist;
 import com.Swipeyourjob.Rest_api.ResultClass;
 
 import java.sql.*;
-import java.util.Locale;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     @Override
-    public Card getCardByJobid(String jobid){
+    public Job getCardByJobid(String jobid){
         try{
             // get connection
             int ConvertedJobid = Integer.parseInt(jobid);
@@ -80,8 +76,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 double joblatitude           = result.getDouble("latitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
-                return newCard;
+                Job newJob = new Job(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
+                return newJob;
             }
 
         }catch (Exception e){
@@ -205,7 +201,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     }
 
     @Override
-    public Cardlist getCardsByUserid(String userid,String start, String amount){
+    public Joblist getCardsByUserid(String userid, String start, String amount){
         try{
             // get connection
             Connection connection  = super.getConnection();
@@ -254,7 +250,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             ResultSet result = super.executeQuery(preparedStatement,connection);
 
             // initiliaze domain item
-            Cardlist cardlist = new Cardlist();
+            Joblist joblist = new Joblist();
             while(result.next()){
 
                 int cardid              = result.getInt("jobid");
@@ -281,10 +277,10 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 double joblatitude           = result.getDouble("latitude");
 //                System.out.println(imagelist.getCardImageList());
                 CardLocation  cardLocation = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
-                Card newCard            = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
-                cardlist.addCard(newCard);
+                Job newJob = new Job(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
+                joblist.addCard(newJob);
             }
-            return cardlist;
+            return joblist;
         }
         catch (Exception e){
             e.printStackTrace();
@@ -292,7 +288,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         }
     }
     @Override
-    public Cardlist getCardsbyBookmark(String userid){
+    public Joblist getCardsbyBookmark(String userid){
         try{
             // get connection
             Connection connection  = super.getConnection();
@@ -340,7 +336,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             ResultSet result = super.executeQuery(preparedStatement,connection);
 
             // initiliaze domain item
-            Cardlist cardlist = new Cardlist();
+            Joblist joblist = new Joblist();
             while(result.next()){
                 /*
                  *   later seperate a card from the company info by making a company class
@@ -373,11 +369,11 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 int bookmarkid              = result.getInt("idjobstatus_users");
                 CardLocation  cardLocation  = new CardLocation(streetname,housenumber,city,zipcode,defaultlocation,idjoblocation,joblatitude,joblongtitude);
                 CardBookmark cardBookmark  = new CardBookmark(bookmarkid,bookmarktimestamp);
-                Card newCard                = new Card(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
-                newCard.setBookmark(cardBookmark);
-                cardlist.addCard(newCard);
+                Job newJob = new Job(cardid,cardtitle,city,companyname,imagelist,description,companydesc,companyurl,companyLogo,salary,minhours,maxhours,cardLocation,user);
+                newJob.setBookmark(cardBookmark);
+                joblist.addCard(newJob);
             }
-            return cardlist;
+            return joblist;
         }
         catch (Exception e){
             e.printStackTrace();
@@ -405,12 +401,12 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         return 0;
     }
     @Override
-    public CardImageList getCardimagesByCardid(int cardid,Connection connection){
+    public CardImageList getCardimagesByCardid(int jobid,Connection connection){
         try{
             //getting the current image list
             String imagesql = "SELECT * FROM jobimages where jobid = ?";
             PreparedStatement imageStatement = connection.prepareStatement(imagesql);
-            imageStatement.setInt(1, cardid);
+            imageStatement.setInt(1, jobid);
             ResultSet result = super.executeQuery(imageStatement,connection);
 //            System.out.println(imageStatement);
             //creating a container class for all the images
@@ -434,8 +430,39 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     }
 
     @Override
-    public Cardlist getCardsByCompanyId(int Companyid) {
-        return null;
+    public ResultClass getCardsByCompanyUserid(int userid) {
+        ResultClass RESULT = null;
+        try{
+            Connection connection = super.getConnection();
+            String imagesql = "select * FROM jobs  " +
+                    "join Webusers_establishment conne " +
+                    "on conne.establishment_idestablishment = jobs.establishment_idestablishment " +
+                    "and conne.webusers_idwebusers = ? " +
+                    "join jobperiod " +
+                    "on jobperiod.jobs_jobid = jobs.jobid " +
+                    "where enddate > now() or enddate is null ";
+            PreparedStatement imageStatement = connection.prepareStatement(imagesql);
+            imageStatement.setInt(1, userid);
+            ResultSet result = super.executeQuery(imageStatement,connection);
+
+            Joblist jobs = new Joblist();
+            while(result.next()){
+                int jobid = result.getInt("jobid");
+                CardImageList imagelist = getCardimagesByCardid(jobid,connection);
+                String jobname = result.getString("jobtitle");
+                Date startdate = result.getDate("startdate");
+                Date enddate = result.getDate("enddate");
+                JobPeriod period = new JobPeriod(startdate,enddate);
+                Job newcard = new Job(jobid,jobname,null,null,imagelist,null,null,null,null,-1,-1,-1,null,null);
+                newcard.setPeriod(period);
+                jobs.addCard(newcard);
+            }
+            RESULT = new ResultClass(jobs,200,"OK");
+            return RESULT;
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"We didn't found your Jobs, try again later");
+            return RESULT;
+        }
     }
 
     @Override

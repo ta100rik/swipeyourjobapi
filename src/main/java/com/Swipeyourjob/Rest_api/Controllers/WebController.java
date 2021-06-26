@@ -1,14 +1,12 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
-import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
 import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.domain.Company.Company;
 import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
-import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -106,24 +103,7 @@ public class WebController {
         }
     }
 
-    @GetMapping("/getjobs")
-    public ResponseEntity<?> getjobs(){
-        /*
-         *   Checking if all the information is there
-         * */
-        try{
-            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-            int userid = Integer.parseInt(userinfo[1]);
-            List<WebJob> joblist = ServiceProvider.getJobService().getWebJobsByCompanyid(userid);
-            if(joblist != null){
-                return ResponseEntity.ok(new Gson().toJson(joblist));
-            }else{
-                return ResponseEntity.status(500).body("Web jobs didn't wen't well");
-            }
-        }catch (Exception e){
-            return ResponseEntity.noContent().build();
-        }
-    }
+
 
     @PostMapping("/updateCompanyProfile")
     public ResponseEntity<?> updateProfile(@RequestBody WebCompanyProfile profile){
@@ -270,6 +250,20 @@ public class WebController {
             RESULT = new ResultClass(null,500,"Api error");
         }
         return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
+
+    }
+    @GetMapping("/getjobs")
+    public ResponseEntity<?> getJobsCompany(){
+        ResultClass RESULT = null;
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            int userid = Integer.parseInt(userinfo[2]);
+            RESULT = ServiceProvider.getJobService().getWebJobsByUserId(userid);
+
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"api error");
+        }
+        return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
     }
 
 }

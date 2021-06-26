@@ -2,9 +2,12 @@ package com.Swipeyourjob.Rest_api.domain.Cardsinfo;
 
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
 
-public class Card {
-    private int cardid;
-    private String cardtitle;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Job {
+    private int jobid;
+    private String jobtitle;
     private String companyname;
     private String companyDescription;
     private String companyUrl;
@@ -17,11 +20,11 @@ public class Card {
     private CardLocation location;
     private String owner;
     private CardBookmark bookmark;
+    private JobPeriod period;
 
-
-    public Card(int cardid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl,String compnayLogoUrl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
-        this.cardid             = cardid;
-        this.cardtitle          = cardTitel;
+    public Job(int jobid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl, String compnayLogoUrl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
+        this.jobid = jobid;
+        this.jobtitle = cardTitel;
         this.companyname        = companyname;
         this.imagelist          = imagelist;
         this.description        = description;
@@ -33,6 +36,14 @@ public class Card {
         this.location           = cardlocation;
         this.owner              = user;
         this.compnayLogoUrl = compnayLogoUrl;
+    }
+
+    public JobPeriod getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(JobPeriod period) {
+        this.period = period;
     }
 
     public CardBookmark getBookmark() {
@@ -47,12 +58,12 @@ public class Card {
         this.compnayLogoUrl = compnayLogoUrl;
     }
 
-    public void setCardid(int cardid) {
-        this.cardid = cardid;
+    public void setJobid(int jobid) {
+        this.jobid = jobid;
     }
 
-    public void setCardtitle(String cardtitle) {
-        this.cardtitle = cardtitle;
+    public void setJobtitle(String jobtitle) {
+        this.jobtitle = jobtitle;
     }
 
 
@@ -96,12 +107,12 @@ public class Card {
         this.owner = owner;
     }
 
-    public int getCardid() {
-        return cardid;
+    public int getJobid() {
+        return jobid;
     }
 
     public String getCardTitel() {
-        return cardtitle;
+        return jobtitle;
     }
 
 
@@ -113,8 +124,8 @@ public class Card {
         return imagelist;
     }
 
-    public String getCardtitle() {
-        return cardtitle;
+    public String getJobtitle() {
+        return jobtitle;
     }
 
     public String getDescription() {
@@ -151,5 +162,13 @@ public class Card {
 
     public String getCompnayLogoUrl() {
         return compnayLogoUrl;
+    }
+
+    public List<String> getStringimageList(){
+        List<String> stringList = new ArrayList<String>();
+        for ( CardImage image : this.getImagelist().getCardImageList()){
+            stringList.add(image.getImageurl());
+        }
+        return stringList;
     }
 }

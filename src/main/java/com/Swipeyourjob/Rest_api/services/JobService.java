@@ -1,15 +1,15 @@
 package com.Swipeyourjob.Rest_api.services;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.*;
-import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJobList;
 import com.Swipeyourjob.Rest_api.Controllers.request.NewJobRequest;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.CompanyDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.JobDaoImpl;
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Job;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
 import com.Swipeyourjob.Rest_api.domain.Company.Company;
-import com.Swipeyourjob.Rest_api.domain.ListClasses.Cardlist;
+import com.Swipeyourjob.Rest_api.domain.ListClasses.Joblist;
 import com.Swipeyourjob.Rest_api.ResultClass;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class JobService {
     private final CompanyDaoImpl CompanyImpl    = new CompanyDaoImpl();
 
     public AppCard getAppcardByJobid(String jobid,String lon, String lat){
-        Card currentcard = JobImpl.getCardByJobid(jobid);
+        Job currentcard = JobImpl.getCardByJobid(jobid);
         List<String> images = new ArrayList<>();
 //            initiliaze the company info
         AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompnayLogoUrl());
@@ -30,7 +30,7 @@ public class JobService {
             currentcard.getLocation().setJobdistance(lon,lat);
             location.setJobdistance(currentcard.getLocation().getJobdistance());
         }
-        AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
+        AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getJobid(), currentcard.getJobtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
 
         for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
             images.add(cardimage.getImageurl());
@@ -39,9 +39,9 @@ public class JobService {
         return newcard;
     }
     public List<AppCard> getAppcardByUserid(String userid, String start, String amount,String lon, String lat){
-        Cardlist result  = JobImpl.getCardsByUserid(userid,start,amount);
+        Joblist result  = JobImpl.getCardsByUserid(userid,start,amount);
         List<AppCard> cardlist = new ArrayList<>();
-        for (Card currentcard : result.getCardList())
+        for (Job currentcard : result.getCardList())
         {
             List<String> images = new ArrayList<>();
 //            initiliaze the company info
@@ -53,7 +53,7 @@ public class JobService {
                 location.setJobdistance(currentcard.getLocation().getJobdistance());
             }
 
-            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
+            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getJobid(), currentcard.getJobtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
 
             for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
                images.add(cardimage.getImageurl());
@@ -64,9 +64,9 @@ public class JobService {
         return cardlist;
     }
     public List<AppCard> getAppBookmarkedCardByUserId(String userid,String lon, String lat){
-        Cardlist result  = JobImpl.getCardsbyBookmark(userid);
+        Joblist result  = JobImpl.getCardsbyBookmark(userid);
         List<AppCard> cardlist = new ArrayList<>();
-        for (Card currentcard : result.getCardList())
+        for (Job currentcard : result.getCardList())
         {
             List<String> images = new ArrayList<>();
 //            initiliaze the company info
@@ -78,7 +78,7 @@ public class JobService {
                 location.setJobdistance(currentcard.getLocation().getJobdistance());
             }
 
-            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getCardid(), currentcard.getCardtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
+            AppJobInfo     jobinfo     = new AppJobInfo(currentcard.getJobid(), currentcard.getJobtitle(), currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
 
             for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
                 images.add(cardimage.getImageurl());
@@ -89,21 +89,7 @@ public class JobService {
         }
         return cardlist;
     }
-    public List<WebJob> getWebJobsByCompanyid(int companyid){
-//        Cardlist result = JobImpl.getCardsByCompanyId(companyid);
-        List<WebJob> joblist = new ArrayList<>();
-//        for (Card currentcard : result.getCardList()){
-//            List<String> images = new ArrayList<>();
-//            WebJobInfo jobInfo = new WebJobInfo(currentcard.getCardid(),currentcard.getCardtitle(),currentcard.getDescription(),currentcard.getSalary(),currentcard.getMinHours(),currentcard.getMaxhours());
-//            WebJobLocation jobLocation = new WebJobLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblatitude(),currentcard.getLocation().getJoblongtitude());
-//            for (CardImage cardimage : currentcard.getImagelist().getCardImageList()){
-//                images.add(cardimage.getImageurl());
-//            }
-//            WebJob job = new WebJob(jobInfo,jobLocation,images);
-//            joblist.add(job);
-//        }
-        return  joblist;
-    }
+
     public int getBookmarkAmountuser(String userid){
         int bookmarkamount = JobImpl.getBookmarkAmountuser(userid);
         return bookmarkamount;
@@ -118,6 +104,23 @@ public class JobService {
     }
 
 
+    public ResultClass getWebJobsByUserId(int userid) {
+       try{
 
-
+           ResultClass result = JobImpl.getCardsByCompanyUserid(userid);
+           if(result.isOk()){
+               Joblist joblist = (Joblist) result.getResult();
+               WebJobList webjoblist = new WebJobList();
+               for (Job job: joblist.getCardList()){
+                   WebJob newWebjob = new WebJob(job.getJobid(),job.getJobtitle(),job.getPeriod().getValiddays(),job.getStringimageList());
+                   webjoblist.addJob(newWebjob);
+               }
+              result =  new ResultClass(webjoblist,200,"ok");
+           }
+           return result;
+       }catch (Exception e){
+           ResultClass result =  new ResultClass(null,500,"Sorry could get that");
+           return result;
+       }
+    }
 }

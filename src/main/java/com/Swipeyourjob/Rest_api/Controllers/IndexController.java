@@ -17,7 +17,7 @@ public class IndexController {
                 "    \"status\":\"bookmarked\", // liked , denied\n" +
                 "    \"jobid\":32261\n" +
                 "})</li>   " +
-                "       <li>removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false,\"bookmarks\":false})</li>" +
+                "       <li>(deprecated)removeData - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"showedjobs\":true,    \"chats\":false ,\"likejobs\":false,\"bookmarks\":false})</li>" +
                 "       <li>addBug - POST({\"userid\":\"V3NKrdMNiDO6CWZPCfIMEdIhw2s2\",    \"username\":'henk',    \"description\":'dit is een test' ,\"versionnumber\":'1.0.0'})</li>" +
                 "       <li><a href='/app/preloadinfo?userid=888888'>preloadinfo?userid=888888 - GET</a></li> " +
                 "       <li><a href='/app/getbookmarks?userid=sdsd&lon=52.0862270277778&lat=5.17661701666667'>getbookmarks?userid=sdsd(optional: lon=52.0862270277778&lat=5.17661701666667) - GET</a></li> " +

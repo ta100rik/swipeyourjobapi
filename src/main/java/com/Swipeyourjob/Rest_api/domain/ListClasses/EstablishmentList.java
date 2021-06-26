@@ -1,6 +1,5 @@
 package com.Swipeyourjob.Rest_api.domain.ListClasses;
 
-import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Card;
 import com.Swipeyourjob.Rest_api.domain.Company.EstablishmentItem;
 
 import java.util.ArrayList;
