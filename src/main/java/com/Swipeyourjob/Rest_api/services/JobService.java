@@ -98,8 +98,8 @@ public class JobService {
         ResultClass result = JobImpl.updateJobStatus(status,appuser,jobid,webuser);
         return result;
     }
-    public ResultClass newJob(NewJobRequest req, Company companyinfo){
-        ResultClass result = JobImpl.newJobHandler(req,companyinfo.getCompany_id());
+    public ResultClass newJob(NewJobRequest req, int companyid){
+        ResultClass result = JobImpl.newJobHandler(req,companyid);
         return result;
     }
 

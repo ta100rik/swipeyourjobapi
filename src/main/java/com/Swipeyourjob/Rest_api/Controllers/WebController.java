@@ -226,7 +226,8 @@ public class WebController {
             // Result is null this means no error so let start shooting it in to the database
             if(RESULT == null){
                 Company companyProfile = ServiceProvider.getCompanyService().getCompanydetailsByEstablishment(req.getEstamblishmentid());
-                RESULT = ServiceProvider.getJobService().newJob(req,companyProfile);
+
+                RESULT = ServiceProvider.getJobService().newJob(req,companyProfile.getCompany_id());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
