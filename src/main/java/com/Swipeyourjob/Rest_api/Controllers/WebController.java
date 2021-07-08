@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.transform.Result;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -266,5 +267,21 @@ public class WebController {
         }
         return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
     }
+
+    @GetMapping("/getlikes")
+    public ResponseEntity<?> getJoblikes(){
+        ResultClass RESULT = null;
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            int userid = Integer.parseInt(userinfo[2]);
+            RESULT = ServiceProvider.getJobService().getLikedJobs(userid,"liked");
+
+            return ResponseEntity.ok(RESULT.getResult());
+        }catch(Exception e){
+            RESULT = new ResultClass(null,500,"api error");
+            return ResponseEntity.ok("s");
+        }
+    }
+
 
 }

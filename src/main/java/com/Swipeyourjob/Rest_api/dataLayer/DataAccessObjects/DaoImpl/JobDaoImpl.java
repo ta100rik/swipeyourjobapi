@@ -10,7 +10,10 @@ import com.Swipeyourjob.Rest_api.domain.Cardsinfo.*;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.CardImageList;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Joblist;
 import com.Swipeyourjob.Rest_api.ResultClass;
+import com.Swipeyourjob.Rest_api.domain.ListClasses.LikedJobsList;
 
+import javax.xml.transform.Result;
+import java.awt.*;
 import java.sql.*;
 
 public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
@@ -426,6 +429,38 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public ResultClass getLikedJobs(int webuserid, String filter){
+        ResultClass RESULT = null;
+        try{
+            Connection connection = super.getConnection();
+            String sql = "select * FROM jobstatus_users stat " +
+                    "join jobs job " +
+                    "on job.jobid = stat.jobid " +
+                    "join Webusers_establishment webuser " +
+                    "on webuser.establishment_idestablishment = job.establishment_idestablishment " +
+                    "and webusers_idwebusers = ? " +
+                    "join jobstatuses jostat " +
+                    "on stat.statusid =  jostat.idjobstatuses " +
+                    "where jostat.statusname in (?)";
+            PreparedStatement preparedstatement = connection.prepareStatement(sql);
+            preparedstatement.setInt(1,webuserid);
+            preparedstatement.setString(2,filter);
+            ResultSet result = super.executeQuery(preparedstatement,connection);
+            LikedJobsList likedjobslist = new LikedJobsList();
+            while(result.next()){
+                String userid = result.getString("userid");
+                String status = result.getString("statusname");
+                LikedJob likedjob = new LikedJob(userid,status);
+                likedjobslist.addLikedJob(likedjob);
+            }
+            RESULT = new ResultClass(likedjobslist,200,"OK");
+            return RESULT;
+        }catch (Exception e){
+            return RESULT;
         }
     }
 

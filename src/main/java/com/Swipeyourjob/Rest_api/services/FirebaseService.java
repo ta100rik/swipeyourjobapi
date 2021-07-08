@@ -8,6 +8,10 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.*;
 import com.google.firebase.cloud.FirestoreClient;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class FirebaseService {
     FirebaseApp defaultApp;
     FirebaseAuth defaultAuth;
@@ -16,6 +20,7 @@ public class FirebaseService {
         defaultApp = FirebaseApp.initializeApp();
         db = FirestoreClient.getFirestore(defaultApp);
         defaultAuth = FirebaseAuth.getInstance(defaultApp);
+
     }
     public boolean validateUser(String uid){
         try {
@@ -34,18 +39,38 @@ public class FirebaseService {
         }
     }
 
-
-    public void getUid(){
+    public List<ExportedUserRecord> getUserList(){
         try{
+            List<ExportedUserRecord> userlist = new ArrayList<>();
             ListUsersPage page = defaultAuth.listUsers(null);
             while (page != null) {
                 for (ExportedUserRecord user : page.getValues()) {
-                    System.out.println("User: " + user.getUid());
+                    userlist.add(user);
                 }
                 page = page.getNextPage();
             }
+            return userlist;
         }catch (Exception e){
             System.out.println("test");
+            return null;
+        }
+    }
+    public Map<String, Object> getUid(String uid){
+        try {
+            UserRecord userRecord = defaultAuth.getUser(uid);
+            DocumentReference docRef = db.collection("Users").document(userRecord.getUid());
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            DocumentSnapshot document = future.get();
+
+            if (document.exists()) {
+                Map<String, Object> userdata = document.getData();
+                return userdata;
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
     }
 
