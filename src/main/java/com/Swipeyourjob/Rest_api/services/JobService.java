@@ -106,7 +106,6 @@ public class JobService {
 
     public ResultClass getWebJobsByUserId(int userid) {
        try{
-
            ResultClass result = JobImpl.getCardsByCompanyUserid(userid);
            if(result.isOk()){
                Joblist joblist = (Joblist) result.getResult();
@@ -122,5 +121,14 @@ public class JobService {
            ResultClass result =  new ResultClass(null,500,"Sorry could get that");
            return result;
        }
+    }
+
+    public ResultClass getLikedJobs(){
+        try{
+            return null;
+        }catch (Exception e){
+            ResultClass result = new ResultClass(null,500,"");
+            return result;
+        }
     }
 }

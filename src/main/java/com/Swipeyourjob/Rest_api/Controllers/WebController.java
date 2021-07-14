@@ -71,7 +71,8 @@ public class WebController {
     public ResponseEntity<?> getUserEstamblishments(){
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-            int userid = Integer.parseInt(userinfo[1]);
+
+            int userid = Integer.parseInt(userinfo[2]);
             return ResponseEntity.ok(ServiceProvider.getCompanyService().userEstablishments(userid));
         }catch (Exception e){
             return ResponseEntity.noContent().build();
@@ -83,7 +84,7 @@ public class WebController {
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
 
             if(estamblishmentid != null){
-                int userid = Integer.parseInt(userinfo[1]);
+                int userid = Integer.parseInt(userinfo[2]);
                 int estamblishmentidconv = Integer.parseInt(estamblishmentid);
                 boolean hasaccess = ServiceProvider.getCompanyService().hasEstablishmentAccess(userid,estamblishmentidconv);
                 if(hasaccess){
@@ -266,5 +267,16 @@ public class WebController {
         }
         return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
     }
-
+    @GetMapping("/getLikedJobs")
+    public ResponseEntity<?> getLikedJobs(){
+        ResultClass RESULT = null;
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            int userid = Integer.parseInt(userinfo[2]);
+            RESULT = ServiceProvider.getJobService().getWebJobsByUserId(userid);
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"Api error");
+        }
+        return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
+    }
 }

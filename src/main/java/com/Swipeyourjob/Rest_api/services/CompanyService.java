@@ -85,7 +85,7 @@ public class CompanyService {
      }
      public List<WebEstablishmentItem> userEstablishments(int userid){
          try{
-
+             System.out.println("test");
              EstablishmentList list = establishmentservice.getEstablishmentlistByUser(userid);
              List<WebEstablishmentItem> new_list = new ArrayList<>();
              for(EstablishmentItem item :list.getEstablishmentlist()){
@@ -94,6 +94,7 @@ public class CompanyService {
              }
              return new_list;
          }catch (Exception e){
+             System.out.println(e);
              return null;
          }
      }
