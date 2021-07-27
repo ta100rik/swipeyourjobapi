@@ -272,9 +272,8 @@ public class WebController {
     @GetMapping("/getlikes")
     public ResponseEntity<?> getJoblikes(@RequestParam("status") String status){
         if(status.equals("all")){
-                status = "\"liked\",\"denied\",\"denied\",\"accepted\",\"removed\"";
+            status = "\"liked\",\"denied\",\"denied\",\"accepted\",\"removed\"";
         }else{
-
             String[] options = {"liked","denied","accepted","removed"};
             Set<String> optionsset = new HashSet<String>(Arrays.asList(options));
             String[] filters =  status.split(",");
@@ -290,7 +289,6 @@ public class WebController {
                 count++;
 
             }
-            System.out.println(status);
         }
 
         ResultClass RESULT = null;
