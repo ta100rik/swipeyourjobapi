@@ -37,7 +37,8 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
     public String getHashedPassword(String email){
         try{
             Connection connection = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT password from webusers where email = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT password from webusers where email = ?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1,email);
             ResultSet result = super.executeQuery(preparedStatement,connection);
             int rows    = getRowCount(result);
@@ -100,7 +101,8 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
     public WebUser getWebuserByEmail(String email){
         try{
             Connection connection = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT  * FROM webusers join userroles on userroles.iduserroles = webusers.roleid and webusers.email = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT  * FROM webusers join userroles on userroles.iduserroles = webusers.roleid and webusers.email = ?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1,email);
             ResultSet result    = super.executeQuery(preparedStatement,connection);
             int rowCount        = super.getRowCount(result);
@@ -129,7 +131,8 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
 
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM passwordforget where email = ? " +
                     "and passwordforgotcode = ? " +
-                    "and requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)");
+                    "and requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1,email);
             preparedStatement.setInt(2,code);
             ResultSet result = super.executeQuery(preparedStatement,connection);

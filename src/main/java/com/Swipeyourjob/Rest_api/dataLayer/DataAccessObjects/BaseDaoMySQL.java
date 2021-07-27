@@ -21,6 +21,7 @@ public class BaseDaoMySQL {
         }
         catch(Exception ex)  {
             System.out.println(ex);
+
             return 0;
         }
         return totalRows ;
