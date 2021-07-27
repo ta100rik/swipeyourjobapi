@@ -22,6 +22,7 @@ public class CompanyDaoImpl extends BaseDaoMySQL implements companyDao {
             return 0;
         }
     }
+
     public Company getCompanydetailsByEstablishment(int establishmentid){
         try {
             Connection connection  = super.getConnection();
