@@ -445,11 +445,14 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     "and webusers_idwebusers = ? " +
                     "join jobstatuses jostat " +
                     "on stat.statusid =  jostat.idjobstatuses " +
-                    "where jostat.statusname in (?)";
+                    "where jostat.statusname in ("+filter+")";
+
             PreparedStatement preparedstatement = connection.prepareStatement(sql);
             preparedstatement.setInt(1,webuserid);
-            preparedstatement.setString(2,filter);
+
+            System.out.println(preparedstatement);
             ResultSet result = super.executeQuery(preparedstatement,connection);
+
             LikedJobsList likedjobslist = new LikedJobsList();
             while(result.next()){
                 String userid   = result.getString("userid");

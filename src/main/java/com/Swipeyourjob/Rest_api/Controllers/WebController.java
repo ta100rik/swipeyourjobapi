@@ -16,7 +16,7 @@ import javax.xml.transform.Result;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -270,12 +270,34 @@ public class WebController {
     }
 
     @GetMapping("/getlikes")
-    public ResponseEntity<?> getJoblikes(){
+    public ResponseEntity<?> getJoblikes(@RequestParam("status") String status){
+        if(status.equals("all")){
+                status = "\"liked\",\"denied\",\"denied\",\"accepted\",\"removed\"";
+        }else{
+
+            String[] options = {"liked","denied","accepted","removed"};
+            Set<String> optionsset = new HashSet<String>(Arrays.asList(options));
+            String[] filters =  status.split(",");
+            status = "";
+            int count = 1;
+            for (String item: filters){
+                if(!optionsset.contains(item)){
+                    status = "";
+                    break;
+                }
+                String comma = (count == filters.length)?"":",";
+                status += "\""+item+"\"" + comma;
+                count++;
+
+            }
+            System.out.println(status);
+        }
+
         ResultClass RESULT = null;
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
             int userid = Integer.parseInt(userinfo[2]);
-            RESULT = ServiceProvider.getJobService().getLikedJobs(userid,"liked");
+            RESULT = ServiceProvider.getJobService().getLikedJobs(userid,status);
             return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
         }catch(Exception e){
             RESULT = new ResultClass(null,500,"api error");
