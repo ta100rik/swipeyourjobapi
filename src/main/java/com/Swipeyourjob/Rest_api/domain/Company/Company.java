@@ -4,9 +4,9 @@ public class Company {
     public int company_id;
     public String companylogo;
     public String name;
-    public int kvk;
+    public String kvk;
 
-    public Company(int company_id, String companylogo, String name, int kvk) {
+    public Company(int company_id, String companylogo, String name, String kvk) {
         this.company_id = company_id;
         this.companylogo = companylogo;
         this.name = name;
@@ -37,11 +37,11 @@ public class Company {
         this.name = name;
     }
 
-    public int getKvk() {
+    public String getKvk() {
         return kvk;
     }
 
-    public void setKvk(int kvk) {
+    public void setKvk(String kvk) {
         this.kvk = kvk;
     }
 }
