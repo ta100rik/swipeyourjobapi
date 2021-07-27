@@ -5,6 +5,7 @@ import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.request.RoomRequest;
 import com.google.gson.Gson;
 import org.json.JSONException;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/chat")
 public class ChatController {
     @PostMapping("/createRoom")
+
     public ResponseEntity<?> AddRoom(@RequestBody RoomRequest roomrequest) throws JSONException {
         int roomid = ServiceProvider.getChatService().CreateRoom(roomrequest.getChatjobid(), roomrequest.getChatname(),roomrequest.getOwnerid(),roomrequest.getRoomGuest());
         return ResponseEntity.ok(new Gson().toJson(roomid));

@@ -25,20 +25,22 @@ public class CompanyDaoImpl extends BaseDaoMySQL implements companyDao {
     public Company getCompanydetailsByEstablishment(int establishmentid){
         try {
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM swipeyourjob2.companies com " +
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM companies com " +
                     "join establishment est " +
                     "on est.companies_company_id = com.company_id " +
                     "and est.idestablishment = ? limit 1");
             preparedStatement.setInt(1,establishmentid);
             ResultSet result = super.executeQuery(preparedStatement,connection);
+            int rowcount = super.getRowCount(result);
             while (result.next()){
                 int company_id = result.getInt("company_id");
                 String companylogo = result.getString("companylogo");
                 String name = result.getString("name");
-                int kvk = result.getInt("kvk");
+                String kvk = result.getString("kvk");
                 return new Company(company_id,companylogo,name,kvk);
             }
         }catch (Exception e){
+            System.out.println(e.getStackTrace());
             return null;
         }
         return  null;

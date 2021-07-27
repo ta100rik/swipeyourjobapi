@@ -16,4 +16,5 @@ public interface jobDao {
     CardImageList getCardimagesByCardid(int cardid, Connection connection);
     ResultClass getCardsByCompanyUserid(int Companyid);
     ResultClass newJobHandler(NewJobRequest req, int companyid);
+    ResultClass getLikedJobs(int webuserid,String filter);
 }

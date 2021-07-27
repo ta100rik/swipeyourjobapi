@@ -3,21 +3,26 @@ package com.Swipeyourjob.Rest_api.services;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.*;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJobList;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLikedJob;
 import com.Swipeyourjob.Rest_api.Controllers.request.NewJobRequest;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.CompanyDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.JobDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Job;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
-import com.Swipeyourjob.Rest_api.domain.Company.Company;
+import com.Swipeyourjob.Rest_api.domain.Cardsinfo.LikedJob;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.Joblist;
 import com.Swipeyourjob.Rest_api.ResultClass;
+import com.Swipeyourjob.Rest_api.domain.ListClasses.LikedJobsList;
+import com.google.cloud.firestore.DocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class JobService {
     private final JobDaoImpl JobImpl            = new JobDaoImpl();
-    private final CompanyDaoImpl CompanyImpl    = new CompanyDaoImpl();
 
     public AppCard getAppcardByJobid(String jobid,String lon, String lat){
         Job currentcard = JobImpl.getCardByJobid(jobid);
@@ -98,15 +103,14 @@ public class JobService {
         ResultClass result = JobImpl.updateJobStatus(status,appuser,jobid,webuser);
         return result;
     }
-    public ResultClass newJob(NewJobRequest req, Company companyinfo){
-        ResultClass result = JobImpl.newJobHandler(req,companyinfo.getCompany_id());
+    public ResultClass newJob(NewJobRequest req, int companyid){
+        ResultClass result = JobImpl.newJobHandler(req,companyid);
         return result;
     }
 
 
     public ResultClass getWebJobsByUserId(int userid) {
        try{
-
            ResultClass result = JobImpl.getCardsByCompanyUserid(userid);
            if(result.isOk()){
                Joblist joblist = (Joblist) result.getResult();
@@ -122,5 +126,39 @@ public class JobService {
            ResultClass result =  new ResultClass(null,500,"Sorry could get that");
            return result;
        }
+    }
+    public ResultClass getLikedJobs(int webuserid, String status){
+        ResultClass RESULT = null;
+        try{
+            ResultClass likes = JobImpl.getLikedJobs(webuserid,status);
+            if(likes.isOk()){
+                LikedJobsList likedList = (LikedJobsList) likes.getResult();
+                List<WebLikedJob> joblist = new ArrayList<WebLikedJob>();
+                for(LikedJob likejob : likedList.getLikedJobList()){
+                    DocumentSnapshot userdata =  ServiceProvider.getFirebaseService().getUid(likejob.getUserid());
+                    String firstname    = userdata.getString("firstName");
+                    String lastName     = userdata.getString("lastName");
+                    String email        = userdata.getString("emailAddress");
+                    String phone        = userdata.getString("phoneNumber");
+                    Date bday           = userdata.getDate("birthDate");
+                    likejob.setBirthday(bday);
+
+                    int age             = likejob.getage();
+                    WebLikedJob job = new WebLikedJob(likejob.getUserid(),firstname,lastName,age,null, likejob.getStatus(),"",likejob.getJobid(),likejob.getJobName());
+                    joblist.add(job);
+                }
+
+                RESULT = new ResultClass(joblist,200,"OK");
+                System.out.println(RESULT.getResult());
+                return RESULT;
+            }else{
+                return likes;
+            }
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"databasae error");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            return RESULT;
+        }
     }
 }

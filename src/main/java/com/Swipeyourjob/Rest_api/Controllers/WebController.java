@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.transform.Result;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -71,7 +72,8 @@ public class WebController {
     public ResponseEntity<?> getUserEstamblishments(){
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-            int userid = Integer.parseInt(userinfo[1]);
+
+            int userid = Integer.parseInt(userinfo[2]);
             return ResponseEntity.ok(ServiceProvider.getCompanyService().userEstablishments(userid));
         }catch (Exception e){
             return ResponseEntity.noContent().build();
@@ -83,7 +85,7 @@ public class WebController {
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
 
             if(estamblishmentid != null){
-                int userid = Integer.parseInt(userinfo[1]);
+                int userid = Integer.parseInt(userinfo[2]);
                 int estamblishmentidconv = Integer.parseInt(estamblishmentid);
                 boolean hasaccess = ServiceProvider.getCompanyService().hasEstablishmentAccess(userid,estamblishmentidconv);
                 if(hasaccess){
@@ -226,7 +228,8 @@ public class WebController {
             // Result is null this means no error so let start shooting it in to the database
             if(RESULT == null){
                 Company companyProfile = ServiceProvider.getCompanyService().getCompanydetailsByEstablishment(req.getEstamblishmentid());
-                RESULT = ServiceProvider.getJobService().newJob(req,companyProfile);
+
+                RESULT = ServiceProvider.getJobService().newJob(req,companyProfile.getCompany_id());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -266,4 +269,17 @@ public class WebController {
         return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
     }
 
+    @GetMapping("/getlikes")
+    public ResponseEntity<?> getJoblikes(){
+        ResultClass RESULT = null;
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            int userid = Integer.parseInt(userinfo[2]);
+            RESULT = ServiceProvider.getJobService().getLikedJobs(userid,"liked");
+            return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
+        }catch(Exception e){
+            RESULT = new ResultClass(null,500,"api error");
+            return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
+        }
+    }
 }
