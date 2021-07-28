@@ -6,13 +6,17 @@ public class WebJob {
     public int jobid;
     public String jobName;
     public int daysValid;
+    public String status;
+    public int amountofreactions;
     public List<String> images;
 
-    public WebJob(int jobid, String jobName, int daysValid, List<String> images) {
+    public WebJob(int jobid, String jobName, int daysValid, List<String> images,String status,int likesamount) {
         this.jobid = jobid;
         this.jobName = jobName;
         this.daysValid = daysValid;
         this.images = images;
+        this.status = status;
+        this.amountofreactions = likesamount;
     }
 
     public int getJobid() {

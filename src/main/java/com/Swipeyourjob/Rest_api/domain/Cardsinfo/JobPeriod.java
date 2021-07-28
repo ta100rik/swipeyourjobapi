@@ -27,6 +27,12 @@ public class JobPeriod {
     public void setEnddate(Date enddate) {
         this.enddate = enddate;
     }
+    public String getStatus(){
+        if(this.enddate == null){return "Unlimited";}
+        if(this.enddate.compareTo(this.startdate) != 1){return "Invalid";} // this should never happen
+        if(this.getValiddays() <= 0){return "expired";}else{return "Valid";}
+
+    }
     public int getValiddays(){
         if(this.enddate != null){
            if(this.enddate.compareTo(this.startdate) == 1){

@@ -70,7 +70,7 @@ public class FirebaseService {
                 return null;
             }
         } catch (Exception e) {
-            System.out.println(e);
+
             return null;
         }
     }

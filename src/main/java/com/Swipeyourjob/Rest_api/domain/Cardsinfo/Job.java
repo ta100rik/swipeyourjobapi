@@ -11,7 +11,7 @@ public class Job {
     private String companyname;
     private String companyDescription;
     private String companyUrl;
-    private String compnayLogoUrl;
+    private String companylogo;
     private String description;
     private CardImageList imagelist;
     private float salary;
@@ -21,6 +21,7 @@ public class Job {
     private String owner;
     private CardBookmark bookmark;
     private JobPeriod period;
+    private int amountlikes;
 
     public Job(int jobid, String cardTitel, String city, String companyname, CardImageList imagelist, String description, String companyDescription, String companyurl, String compnayLogoUrl, float salary, int minHours, int maxhours, CardLocation cardlocation , String user) {
         this.jobid = jobid;
@@ -35,11 +36,19 @@ public class Job {
         this.salary             = salary;
         this.location           = cardlocation;
         this.owner              = user;
-        this.compnayLogoUrl = compnayLogoUrl;
+        this.companylogo = compnayLogoUrl;
     }
 
     public JobPeriod getPeriod() {
         return period;
+    }
+
+    public int getAmountlikes() {
+        return amountlikes;
+    }
+
+    public void setAmountlikes(int amountlikes) {
+        this.amountlikes = amountlikes;
     }
 
     public void setPeriod(JobPeriod period) {
@@ -54,8 +63,8 @@ public class Job {
         this.bookmark = bookmark;
     }
 
-    public void setCompnayLogoUrl(String compnayLogoUrl) {
-        this.compnayLogoUrl = compnayLogoUrl;
+    public void setCompanylogo(String companylogo) {
+        this.companylogo = companylogo;
     }
 
     public void setJobid(int jobid) {
@@ -160,8 +169,8 @@ public class Job {
         return owner;
     }
 
-    public String getCompnayLogoUrl() {
-        return compnayLogoUrl;
+    public String getCompanylogo() {
+        return companylogo;
     }
 
     public List<String> getStringimageList(){

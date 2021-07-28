@@ -17,4 +17,5 @@ public interface jobDao {
     ResultClass getCardsByCompanyUserid(int Companyid);
     ResultClass newJobHandler(NewJobRequest req, int companyid);
     ResultClass getLikedJobs(int webuserid,String filter);
+    ResultClass getLikedJobs(int webuserid,String filter,int jobid);
 }

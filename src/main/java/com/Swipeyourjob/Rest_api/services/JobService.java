@@ -5,7 +5,6 @@ import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJob;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebJobList;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLikedJob;
 import com.Swipeyourjob.Rest_api.Controllers.request.NewJobRequest;
-import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.CompanyDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.JobDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.Job;
 import com.Swipeyourjob.Rest_api.domain.Cardsinfo.CardImage;
@@ -15,11 +14,9 @@ import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.domain.ListClasses.LikedJobsList;
 import com.google.cloud.firestore.DocumentSnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class JobService {
     private final JobDaoImpl JobImpl            = new JobDaoImpl();
@@ -28,7 +25,7 @@ public class JobService {
         Job currentcard = JobImpl.getCardByJobid(jobid);
         List<String> images = new ArrayList<>();
 //            initiliaze the company info
-        AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompnayLogoUrl());
+        AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompanylogo());
 
         AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
         if(!lon.isEmpty() && !lat.isEmpty()){
@@ -48,9 +45,10 @@ public class JobService {
         List<AppCard> cardlist = new ArrayList<>();
         for (Job currentcard : result.getCardList())
         {
+            System.out.println(currentcard.getCompanylogo());
             List<String> images = new ArrayList<>();
 //            initiliaze the company info
-            AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompnayLogoUrl());
+            AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompanylogo());
 
             AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
             if(!lon.isEmpty() && !lat.isEmpty()){
@@ -75,7 +73,7 @@ public class JobService {
         {
             List<String> images = new ArrayList<>();
 //            initiliaze the company info
-            AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompnayLogoUrl());
+            AppCompanyinfo companyinfo = new AppCompanyinfo(currentcard.getCompanyname(), currentcard.getCompanyDescription(),currentcard.getCompanyUrl(),currentcard.getOwner(),currentcard.getCompanylogo());
 
             AppLocation location       = new AppLocation(currentcard.getLocation().getCity(),currentcard.getLocation().getStreetname(),currentcard.getLocation().getHousenumber(),currentcard.getLocation().getZipcode(),currentcard.getLocation().getJoblongtitude(),currentcard.getLocation().getJoblatitude());
             if(!lon.isEmpty() && !lat.isEmpty()){
@@ -116,7 +114,7 @@ public class JobService {
                Joblist joblist = (Joblist) result.getResult();
                WebJobList webjoblist = new WebJobList();
                for (Job job: joblist.getCardList()){
-                   WebJob newWebjob = new WebJob(job.getJobid(),job.getJobtitle(),job.getPeriod().getValiddays(),job.getStringimageList());
+                   WebJob newWebjob = new WebJob(job.getJobid(),job.getJobtitle(),job.getPeriod().getValiddays(),job.getStringimageList(),job.getPeriod().getStatus(),job.getAmountlikes());
                    webjoblist.addJob(newWebjob);
                }
               result =  new ResultClass(webjoblist,200,"ok");
@@ -127,25 +125,65 @@ public class JobService {
            return result;
        }
     }
-    public ResultClass getLikedJobs(int webuserid, String status){
+    public ResultClass getLikedJobs(int webuserid, String status,int id){
         ResultClass RESULT = null;
         try{
-            ResultClass likes = JobImpl.getLikedJobs(webuserid,status);
+            ResultClass likes = JobImpl.getLikedJobs(webuserid,status,id);
             if(likes.isOk()){
                 LikedJobsList likedList = (LikedJobsList) likes.getResult();
                 List<WebLikedJob> joblist = new ArrayList<WebLikedJob>();
                 for(LikedJob likejob : likedList.getLikedJobList()){
                     DocumentSnapshot userdata =  ServiceProvider.getFirebaseService().getUid(likejob.getUserid());
-                    String firstname    = userdata.getString("firstName");
-                    String lastName     = userdata.getString("lastName");
-                    String email        = userdata.getString("emailAddress");
-                    String phone        = userdata.getString("phoneNumber");
-                    Date bday           = userdata.getDate("birthDate");
-                    likejob.setBirthday(bday);
+                    if(userdata != null){
+                        String firstname    = userdata.getString("firstName");
+                        String lastName     = userdata.getString("lastName");
+                        String email        = userdata.getString("emailAddress");
+                        String phone        = userdata.getString("phoneNumber");
+                        Date bday           = userdata.getDate("birthDate");
+                        likejob.setBirthday(bday);
 
-                    int age             = likejob.getage();
-                    WebLikedJob job = new WebLikedJob(likejob.getUserid(),firstname,lastName,age,null, likejob.getStatus(),"",likejob.getJobid(),likejob.getJobName());
-                    joblist.add(job);
+                        int age             = likejob.getage();
+                        WebLikedJob job = new WebLikedJob(likejob.getUserid(),firstname,lastName,age,null, likejob.getStatus(),"",likejob.getJobid(),likejob.getJobName());
+                        joblist.add(job);
+
+                    }
+                }
+
+                RESULT = new ResultClass(joblist,200,"OK");
+                System.out.println(RESULT.getResult());
+                return RESULT;
+            }else{
+                return likes;
+            }
+        }catch (Exception e){
+            RESULT = new ResultClass(null,500,"databasae error");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            return RESULT;
+        }
+    }
+    public ResultClass getLikedJobs(int webuserid, String status){
+        ResultClass RESULT = null;
+        try{
+            ResultClass likes = JobImpl.getLikedJobs(webuserid,status);
+
+            if(likes.isOk()){
+                LikedJobsList likedList = (LikedJobsList) likes.getResult();
+                List<WebLikedJob> joblist = new ArrayList<WebLikedJob>();
+                for(LikedJob likejob : likedList.getLikedJobList()){
+                    DocumentSnapshot userdata =  ServiceProvider.getFirebaseService().getUid(likejob.getUserid());
+                    if(userdata != null){
+                        String firstname    = userdata.getString("firstName");
+                        String lastName     = userdata.getString("lastName");
+                        String email        = userdata.getString("emailAddress");
+                        String phone        = userdata.getString("phoneNumber");
+                        Date bday           = userdata.getDate("birthDate");
+                        likejob.setBirthday(bday);
+
+                        int age             = likejob.getage();
+                        WebLikedJob job = new WebLikedJob(likejob.getUserid(),firstname,lastName,age,null, likejob.getStatus(),"",likejob.getJobid(),likejob.getJobName());
+                        joblist.add(job);
+                    }
                 }
 
                 RESULT = new ResultClass(joblist,200,"OK");

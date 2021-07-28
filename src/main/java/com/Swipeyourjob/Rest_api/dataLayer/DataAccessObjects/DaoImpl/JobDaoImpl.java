@@ -242,6 +242,9 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     "on jobs.establishment_companies_company_id = companies.company_id " +
                     "join webusers  " +
                     "on estam.establishmentowner = webusers.idwebusers " +
+                    "join jobperiod period " +
+                    "on period.jobs_jobid = jobs.jobid " +
+                    "and (period.enddate is null or period.enddate > now()) " +
                     "where jobs.jobid NOT IN (SELECT jobstatus_users.jobid from jobstatus_users where jobstatus_users.userid = ?) " +
                     "and jobs.jobid > ? " +
                     "order by jobs.jobid " +
@@ -433,6 +436,43 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
     }
 
     @Override
+    public ResultClass getLikedJobs(int webuserid, String filter,int jobid){
+        ResultClass RESULT = null;
+        try{
+            Connection connection = super.getConnection();
+            String sql = "select * FROM jobstatus_users stat " +
+                    "join jobs job " +
+                    "on job.jobid = stat.jobid " +
+                    "join Webusers_establishment webuser " +
+                    "on webuser.establishment_idestablishment = job.establishment_idestablishment " +
+                    "and webusers_idwebusers = ? " +
+                    "join jobstatuses jostat " +
+                    "on stat.statusid =  jostat.idjobstatuses " +
+                    "where jostat.statusname in ("+filter+") " +
+                    "and job.jobid = ?";
+
+            PreparedStatement preparedstatement = connection.prepareStatement(sql);
+            preparedstatement.setInt(1,webuserid);
+            preparedstatement.setInt(2,jobid);
+
+            ResultSet result = super.executeQuery(preparedstatement,connection);
+
+            LikedJobsList likedjobslist = new LikedJobsList();
+            while(result.next()){
+                String userid   = result.getString("userid");
+                String status   = result.getString("statusname");
+                jobid       = result.getInt("jobid");
+                String jobname  = result.getString("jobtitle");
+                LikedJob likedjob = new LikedJob(userid,status,jobname,jobid);
+                likedjobslist.addLikedJob(likedjob);
+            }
+            RESULT = new ResultClass(likedjobslist,200,"OK");
+            return RESULT;
+        }catch (Exception e){
+            return RESULT;
+        }
+    }
+    @Override
     public ResultClass getLikedJobs(int webuserid, String filter){
         ResultClass RESULT = null;
         try{
@@ -450,7 +490,6 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             PreparedStatement preparedstatement = connection.prepareStatement(sql);
             preparedstatement.setInt(1,webuserid);
 
-            System.out.println(preparedstatement);
             ResultSet result = super.executeQuery(preparedstatement,connection);
 
             LikedJobsList likedjobslist = new LikedJobsList();
@@ -474,15 +513,18 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         ResultClass RESULT = null;
         try{
             Connection connection = super.getConnection();
-            String imagesql = "select * FROM jobs  " +
+            String imagesql = "select *, (select count(*) from jobstatus_users jobuser where jobuser.jobid = jobs.jobid and jobuser.statusid = 1 ) as amountlikes  FROM jobs  " +
                     "join Webusers_establishment conne " +
                     "on conne.establishment_idestablishment = jobs.establishment_idestablishment " +
                     "and conne.webusers_idwebusers = ? " +
                     "join jobperiod " +
                     "on jobperiod.jobs_jobid = jobs.jobid " +
-                    "where enddate > now() or enddate is null ";
+                    "where enddate > now() or enddate is null " +
+                    "order by amountlikes";
+
             PreparedStatement imageStatement = connection.prepareStatement(imagesql);
             imageStatement.setInt(1, userid);
+            System.out.println(imageStatement);
             ResultSet result = super.executeQuery(imageStatement,connection);
 
             Joblist jobs = new Joblist();
@@ -492,9 +534,11 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 String jobname = result.getString("jobtitle");
                 Date startdate = result.getDate("startdate");
                 Date enddate = result.getDate("enddate");
+                int amountoflikes = result.getInt("amountlikes");
                 JobPeriod period = new JobPeriod(startdate,enddate);
                 Job newcard = new Job(jobid,jobname,null,null,imagelist,null,null,null,null,-1,-1,-1,null,null);
                 newcard.setPeriod(period);
+                newcard.setAmountlikes(amountoflikes);
                 jobs.addCard(newcard);
             }
             RESULT = new ResultClass(jobs,200,"OK");
