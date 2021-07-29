@@ -581,7 +581,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 insertjob = super.executeQueryReturningId(preparedStatement,connection);
                 RESULT = new ResultClass(insertjob,200,"Job and salary are uploaded.");
             }else{
-                String sql = "INSERT INTO JOBS (jobtitle,jobdescription,establishment_idestablishment,establishment_companies_company_id) VALUES (?,?,?,?)";
+                String sql = "INSERT INTO jobs (jobtitle,jobdescription,establishment_idestablishment,establishment_companies_company_id) VALUES (?,?,?,?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1,req.getJobName());
                 preparedStatement.setString(2,req.getJobDescription());
