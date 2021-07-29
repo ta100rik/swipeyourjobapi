@@ -650,7 +650,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                         String remLetStr = tag.substring(1).toLowerCase();
                         tag = firstLetStr + remLetStr;
                         String searchSQL = "SELECT tagid FROM tagbox where tagname = ? limit 1";
-                        PreparedStatement SearchStatement = connection.prepareStatement(searchSQL);
+                        PreparedStatement SearchStatement = connection.prepareStatement(searchSQL,ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                ResultSet.CONCUR_UPDATABLE);
                         SearchStatement.setString(1,tag);
                         ResultSet resultSet = super.executeQuery(SearchStatement,connection);
                         int rowcount = super.getRowCount(resultSet);
