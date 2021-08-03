@@ -1,6 +1,7 @@
 package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebCompanyProfile;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebImageUrl;
 import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
 import com.Swipeyourjob.Rest_api.ResultClass;
@@ -26,7 +27,9 @@ public class WebController {
     @PostMapping("/uploadimage")
     public ResponseEntity<?>  uploadImage(@RequestParam("imageFile") MultipartFile file) {
          try{
-            return ResponseEntity.ok(ServiceProvider.getHostingService().UploadImage(file));
+             String url = ServiceProvider.getHostingService().UploadImage(file);
+             WebImageUrl RESULT = new WebImageUrl(url);
+             return ResponseEntity.ok(RESULT);
         }catch (Exception e){
             return ResponseEntity.status(500).body("Something went wrong");
         }
@@ -241,11 +244,13 @@ public class WebController {
     public ResponseEntity<?> updateUserJobStatus(@RequestBody AppJobStatusUpdateRequest jobrequest){
         String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
         int userid = Integer.parseInt(userinfo[1]);
+
         ResultClass RESULT = new ResultClass(null,500,"Api error");
         try{
             String jobstatus = jobrequest.getStatus().toLowerCase();
             if(jobstatus.equals("rejected") || jobstatus.equals("accepted")){
                 RESULT = ServiceProvider.getJobService().updateJobStatus(jobrequest.getStatus(),jobrequest.getUserid(),jobrequest.getJobid(),userid);
+
             }else{
                 RESULT = new ResultClass(null,400,"You not allowed to set this status");
             }

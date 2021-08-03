@@ -179,7 +179,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
             String sql = "SELECT * FROM jobstatus_users " +
                     "where jobid = ? " +
                     "and userid = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setInt(1,jobid);
             preparedStatement.setString(2,appuser);
             ResultSet QueryResult = super.executeQuery(preparedStatement,connection);
