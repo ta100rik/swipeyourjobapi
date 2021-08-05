@@ -114,9 +114,11 @@ public class WebController {
     public ResponseEntity<?> updateProfile(@RequestBody WebCompanyProfile profile){
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-            int userid = Integer.parseInt(userinfo[1]);
+
+            int userid = Integer.parseInt(userinfo[2]);
             return ResponseEntity.ok(ServiceProvider.getCompanyService().updateEstablishmentProfile(profile,userid));
         }catch (Exception e){
+            System.out.println(e.getMessage());
             return ResponseEntity.noContent().build();
         }
 
