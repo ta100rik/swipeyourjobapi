@@ -29,7 +29,8 @@ public class CompanyDaoImpl extends BaseDaoMySQL implements companyDao {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM companies com " +
                     "join establishment est " +
                     "on est.companies_company_id = com.company_id " +
-                    "and est.idestablishment = ? limit 1");
+                    "and est.idestablishment = ? limit 1",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setInt(1,establishmentid);
             ResultSet result = super.executeQuery(preparedStatement,connection);
             int rowcount = super.getRowCount(result);

@@ -93,6 +93,7 @@ public class WebController {
                 boolean hasaccess = ServiceProvider.getCompanyService().hasEstablishmentAccess(userid,estamblishmentidconv);
                 if(hasaccess){
                     WebCompanyProfile profile = ServiceProvider.getCompanyService().getCompanyProfile(estamblishmentidconv);
+
                     return ResponseEntity.ok(profile);
                 }else{
                     return ResponseEntity.ok(hasaccess);

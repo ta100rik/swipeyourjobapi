@@ -67,7 +67,9 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
                     "where webuser.email = ? " +
                     "and vcd.code = ? " +
                     "and webuser.password is not null " +
-                    "and vcd.requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)");
+                    "and vcd.requesttime >= DATE_SUB(NOW(),INTERVAL 1 HOUR)"
+                    ,ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1,email);
             preparedStatement.setInt(2,verificationcode);
             System.out.println(preparedStatement);

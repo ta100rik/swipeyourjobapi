@@ -35,6 +35,7 @@ public class CompanyService {
      public WebCompanyProfile getCompanyProfile(int estamblishmentid){
          try{
              EstablishmentProfile profile = establishmentservice.getEstablishmentProfile(estamblishmentid);
+
              WebCompanyProfile webprofile = new WebCompanyProfile(
                      profile.getIntroduction(),
                      profile.getLogo(),
@@ -52,6 +53,7 @@ public class CompanyService {
                      estamblishmentid);
              return webprofile;
          }catch (Exception e){
+             System.out.println(e.getMessage());
             return  null;
          }
      }

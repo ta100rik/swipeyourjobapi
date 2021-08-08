@@ -1,5 +1,6 @@
 package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
+import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.EstamblishmentDao;
 import com.Swipeyourjob.Rest_api.dataLayer.ResponseClasses.Locationiq;
@@ -154,7 +155,9 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
                     "join establishment_adress adres " +
                     "on es.idestablishment = adres.establishment_idestablishment " +
                     "and adres.enddate is null " +
-                    "where es.idestablishment = ?");
+                    "where es.idestablishment = ?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
             Query.setInt(1,estamblishmentid);
             ResultSet result = super.executeQuery(Query,connection);
             while (result.next()){
@@ -198,7 +201,8 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
         try{
 
             Connection connection  = super.getConnection();
-            PreparedStatement establishmentaccess = connection.prepareStatement("SELECT * FROM swipeyourjob2.Webusers_establishment where webusers_idwebusers = ? and establishment_idestablishment = ?");
+            PreparedStatement establishmentaccess = connection.prepareStatement("SELECT * FROM swipeyourjob2.Webusers_establishment where webusers_idwebusers = ? and establishment_idestablishment = ?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             establishmentaccess.setInt(1,userid);
             establishmentaccess.setInt(2,establishmentid);
             ResultSet result = super.executeQuery(establishmentaccess,connection);
@@ -219,7 +223,8 @@ public class EstamblishmentDaoImpl extends BaseDaoMySQL implements Estamblishmen
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT est.* FROM swipeyourjob2.Webusers_establishment  con  " +
                     "join establishment est " +
                     "on con.establishment_idestablishment = est.idestablishment " +
-                    "where webusers_idwebusers =?");
+                    "where webusers_idwebusers =?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setInt(1,userid);
             ResultSet result = super.executeQuery(preparedStatement,connection);
             EstablishmentList list = new EstablishmentList();

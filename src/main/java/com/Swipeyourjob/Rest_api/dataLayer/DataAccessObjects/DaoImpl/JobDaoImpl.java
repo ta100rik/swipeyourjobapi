@@ -249,7 +249,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     "where jobs.jobid NOT IN (SELECT jobstatus_users.jobid from jobstatus_users where jobstatus_users.userid = ?) " +
                     "and jobs.jobid > ? " +
                     "order by jobs.jobid " +
-                    "limit ?");
+                    "limit ?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
 
             preparedStatement.setString(1,userid);
             preparedStatement.setInt(2,ConvertedStart);
@@ -336,7 +337,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     "and jobstatus_users.jobid = jobs.jobid " +
                     "join jobstatuses " +
                     "on jobstatuses.idjobstatuses = jobstatus_users.statusid " +
-                    "and jobstatuses.statusname = 'bookmarked' ");
+                    "and jobstatuses.statusname = 'bookmarked' ,ResultSet.TYPE_SCROLL_INSENSITIVE,\n" +
+                    "                    ResultSet.CONCUR_UPDATABLE");
 
             preparedStatement.setString(1,userid);
 
@@ -396,7 +398,8 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                     "on  " +
                     "jobstatuses.idjobstatuses = jobstatus_users.statusid " +
                     "and jobstatuses.statusname = 'bookmarked' " +
-                    "where jobstatus_users.userid = ?");
+                    "where jobstatus_users.userid = ?",ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1,userid);
             ResultSet result = super.executeQuery(preparedStatement,connection);
             while(result.next()){
