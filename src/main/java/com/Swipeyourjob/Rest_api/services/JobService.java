@@ -129,6 +129,7 @@ public class JobService {
         ResultClass RESULT = null;
         try{
             ResultClass likes = JobImpl.getLikedJobs(webuserid,status,id);
+
             if(likes.isOk()){
                 LikedJobsList likedList = (LikedJobsList) likes.getResult();
                 List<WebLikedJob> joblist = new ArrayList<WebLikedJob>();

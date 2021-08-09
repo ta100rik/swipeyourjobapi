@@ -76,6 +76,7 @@ public class CompanyService {
                    profile.getOwnerFirstName(),
                    profile.getOwnerLastname(),
                    profile.getOwnerPicture());
+           System.out.println(updateWebUser);
            boolean updateCompanylogo = companyservice.updateLogoByEstablishmentid(profile.getEstablishmentid(), profile.getLogo());
            return true;
        }catch (Exception e){

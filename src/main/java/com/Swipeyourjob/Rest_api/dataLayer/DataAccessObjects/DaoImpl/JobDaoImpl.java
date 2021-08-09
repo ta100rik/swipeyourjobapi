@@ -133,11 +133,11 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
         ResultClass RESULT = null;
         int statusid = StatusToStatusid(newStatus);
         try{
-            String sql = "UDPATE jobstatus_users set statusid = ? , webuser = ? where idjobstatus_users = ?";
+            String sql = "UPDATE jobstatus_users set statusid = ? , webuser = ? where idjobstatus_users = ?";
             PreparedStatement updatequery = connection.prepareStatement(sql);
             updatequery.setInt(1,statusid);
-            updatequery.setInt(2,rowid);
-            updatequery.setInt(3,webuser);
+            updatequery.setInt(2,webuser);
+            updatequery.setInt(3,rowid);
             if(super.updateQuery(updatequery,connection)){
                 RESULT = new ResultClass(true,200,"OK");
             }else{
@@ -191,6 +191,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
                 if(webuser == 0){
                     RESULT = updateJobstatus(status,connection,rowid);
                 }else{
+
                     RESULT = updateJobstatus(status,connection,rowid,webuser);
                 }
             }else{
@@ -441,6 +442,7 @@ public class JobDaoImpl extends BaseDaoMySQL implements jobDao {
 
     @Override
     public ResultClass getLikedJobs(int webuserid, String filter,int jobid){
+        System.out.println(filter);
         ResultClass RESULT = null;
         try{
             Connection connection = super.getConnection();

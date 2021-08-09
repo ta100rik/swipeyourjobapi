@@ -246,7 +246,7 @@ public class WebController {
     @PostMapping("/updateJobStatus")
     public ResponseEntity<?> updateUserJobStatus(@RequestBody AppJobStatusUpdateRequest jobrequest){
         String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-        int userid = Integer.parseInt(userinfo[1]);
+        int userid = Integer.parseInt(userinfo[2]);
 
         ResultClass RESULT = new ResultClass(null,500,"Api error");
         try{
@@ -258,8 +258,10 @@ public class WebController {
                 RESULT = new ResultClass(null,400,"You not allowed to set this status");
             }
         }catch (Exception e){
+
             RESULT = new ResultClass(null,500,"Api error");
         }
+        System.out.println(RESULT.getReason());
         return ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
 
     }
@@ -300,16 +302,19 @@ public class WebController {
         }
 
         ResultClass RESULT = null;
+
         try{
             if(!status.equals("")){
                 String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
                 int userid = Integer.parseInt(userinfo[2]);
+
                 RESULT = ServiceProvider.getJobService().getLikedJobs(userid,status);
             }else{
                 RESULT = new ResultClass(null,402,"That filter doesn't seams correct");
             }
             return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
         }catch(Exception e){
+            System.out.println(e.getMessage());
             RESULT = new ResultClass(null,500,"api error");
             return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
         }
@@ -343,6 +348,7 @@ public class WebController {
             if(!status.equals("")){
                 String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
                 int userid = Integer.parseInt(userinfo[2]);
+                System.out.println(status);
                 RESULT = ServiceProvider.getJobService().getLikedJobs(userid,status,id);
             }else{
                 RESULT = new ResultClass(null,402,"That filter doesn't seams correct");
