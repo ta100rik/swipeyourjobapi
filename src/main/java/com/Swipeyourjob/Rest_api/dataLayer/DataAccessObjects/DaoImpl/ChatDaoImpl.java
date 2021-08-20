@@ -105,24 +105,22 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("" +
                     "SELECT *, " +
-                    "(SELECT timestampmessage FROM chatmessages where roomid = room_users.room_id order by timestampmessage desc limit 1)  as 'TimestampLastMessage',  " +
-                    "(SELECT chatmessage FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1)  as 'lastmessage',  " +
-                    "IF((SELECT chatid FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1) <= (SELECT messageid FROM showedmessages where roomid = room_users.room_id and userid =  room_users.userid  order by moment desc limit 1) ,true, false) as 'readbolean' " +
+                    "(SELECT timestampmessage FROM chatmessages where roomid = room_users.room_id order by timestampmessage desc limit 1)  as 'TimestampLastMessage', " +
+                    "(SELECT chatmessage FROM chatmessages where roomid = room_users.room_id order by chatid desc limit 1)  as 'lastmessage' " +
                     "FROM room_users  " +
                     "join chat_rooms " +
                     "on chat_rooms.idchat_rooms = room_users.room_id " +
                     "join jobs " +
                     "on jobs.jobid = chat_rooms.chatjobid " +
                     "join companies " +
-                    "on companies.company_id = jobs.companyid " +
+                    "on companies.company_id = jobs.establishment_companies_company_id " +
                     "where room_users.userid = ? " +
-                    "and room_id > ?  " +
-                    "order by TimestampLastMessage desc " +
-                    "limit ? ");
+                    "and room_id > ? " +
+                    "limit ?");
             int ConvertedStart = Integer.parseInt(start);
             int ConvertedAmount = Integer.parseInt(amount);
-           preparedStatement.setString(1,useridentifier);
 
+           preparedStatement.setString(1,useridentifier);
            preparedStatement.setInt(2,ConvertedStart);
            preparedStatement.setInt(3,ConvertedAmount);
            ResultSet result = super.executeQuery(preparedStatement,connection);
@@ -140,7 +138,7 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                 String companylogo = result.getString("companylogo");
                 String companyName = result.getString("name");
                 String lastmessage = result.getString("lastmessage");
-                boolean lastmessagebool = result.getBoolean("readbolean");
+                boolean lastmessagebool = true;
                 chatRoom new_room = new chatRoom(guest_id,userid,room_id,idchat_rooms,chatname,chatjobid,roomAdmin,jobTitle,companylogo,lastmessage,lastmessagebool,companyName);
                 roomlist.addChatRoom(new_room);
             }

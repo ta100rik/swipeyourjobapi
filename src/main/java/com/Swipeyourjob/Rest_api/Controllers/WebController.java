@@ -8,6 +8,8 @@ import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.domain.Company.Company;
 import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
+import com.google.gson.Gson;
+import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -358,5 +360,40 @@ public class WebController {
             RESULT = new ResultClass(null,500,"api error");
             return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
         }
+    }
+    @GetMapping("/rooms")
+    public ResponseEntity<?> getRooms(
+            @RequestParam(required = true) String start,
+            @RequestParam(required = true) String amount
+    ){
+        ResultClass RESULT = null;
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            String userid = userinfo[2];
+            return ResponseEntity.ok(new Gson().toJson(ServiceProvider.getChatService().getPersonalRooms(userid,start,amount)));
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
+    }
+    @PostMapping("/createRoom")
+    public ResponseEntity<?> AddRoom(@RequestBody RoomRequest roomrequest) throws JSONException {
+        ResultClass RESULT = null;
+        try{
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            String userid = userinfo[2];
+
+            int roomid = ServiceProvider.getChatService().CreateRoom(roomrequest.getChatjobid(), roomrequest.getChatname(),userid,roomrequest.getRoomGuest());
+            if(roomid != 0){
+                RESULT = new ResultClass(roomid,200,"Ok");
+            }else{
+                RESULT = new ResultClass(roomid,402,"not ok room not created");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            RESULT = new ResultClass(null,500,"api error");
+        }
+        return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
+
     }
 }

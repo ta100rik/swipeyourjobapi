@@ -39,8 +39,6 @@ public class Passwordservice {
         Date validity = new Date();
 
         validity.setTime(validity.getTime() + days * 1000 * 60 * 60 * 24);
-        System.out.println(user.getFirstname());
-        System.out.println(user.getLastname());
         String jwttoken = Jwts.builder()
                 .setIssuer("Swipeyourjob")
                 .setSubject("UserInfo")
