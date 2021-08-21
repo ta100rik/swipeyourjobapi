@@ -157,14 +157,14 @@ public class WebController {
     }
     @PostMapping("/forgotpassword")
     public ResponseEntity<?> forgotpassword(@RequestBody ForgetpaswordRequest forgot){
+        ResultClass result = null;
         try{
             String email = forgot.getEmail();
-            return ResponseEntity.ok(ServiceProvider.getAuthenticationService().forgetmail(email));
-
+            result =  ServiceProvider.getAuthenticationService().forgetmail(email);
         }catch (Exception e){
-            return ResponseEntity.status(500).body("Server error");
+            result = new ResultClass(null,500,"NOK");
         }
-
+        return ResponseEntity.status(result.getStatuscode()).body(result);
     }
     @PostMapping("/resetPassword")
     public ResponseEntity<?> ResetPassword(@RequestBody ChangeForgotPasswordRequest passwordrequest){
@@ -350,7 +350,6 @@ public class WebController {
             if(!status.equals("")){
                 String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
                 int userid = Integer.parseInt(userinfo[2]);
-                System.out.println(status);
                 RESULT = ServiceProvider.getJobService().getLikedJobs(userid,status,id);
             }else{
                 RESULT = new ResultClass(null,402,"That filter doesn't seams correct");

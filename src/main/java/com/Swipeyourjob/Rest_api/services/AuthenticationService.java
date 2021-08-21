@@ -1,5 +1,6 @@
 package com.Swipeyourjob.Rest_api.services;
 
+import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.IdenticationDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.MailDaoImpl;
 import com.Swipeyourjob.Rest_api.domain.Authentication.Passwordservice;
@@ -71,17 +72,19 @@ public class AuthenticationService {
 
     }
 
-    public String forgetmail(String email){
+    public ResultClass forgetmail(String email){
 
         WebUser user = identicationService.getWebuserByEmail(email);
-
+        ResultClass RESULT = null;
         if(user != null){
             int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
             identicationService.saveForgetPasswordCode(random_int,email);
             mailService.sendForgotPasswordMail(mailService.getsession(),random_int,email,user.getFirstname());
-            return "Mail is send";
+            RESULT = new ResultClass("mail send",200,"ok");
+            return RESULT;
         }else{
-            return "Sorry user does not exist";
+            RESULT = new ResultClass("User is not found",402,"NOK");
+            return RESULT;
         }
     }
     public String ChangePassword(int code,String email, String password){
