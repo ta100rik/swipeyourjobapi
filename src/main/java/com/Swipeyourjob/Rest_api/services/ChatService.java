@@ -64,7 +64,8 @@ public class ChatService {
              int lastchatid = 0;
              boolean firstmessageboolean = true;
              for (ChatMessage chatmessageobject : chatroom.getChatmessages()){
-                 AppChatMessage message = new AppChatMessage(chatmessageobject.getChatmessage(),chatmessageobject.getUserid());
+                 AppChatMessage message = new AppChatMessage(chatmessageobject.getChatmessage(),chatmessageobject.getUserid(),chatmessageobject.getSender());
+                 message.setMeBoolean(userid);
                  if(firstmessageboolean){
                      lastchatid = chatmessageobject.getChatid();
                      firstmessageboolean = false;

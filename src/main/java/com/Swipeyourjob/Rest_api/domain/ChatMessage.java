@@ -4,10 +4,20 @@ public class ChatMessage {
     private String chatmessage;
     private String userid;
     private int chatid;
-    public ChatMessage(String chatmessage, String userid,int chatid) {
+    private String sender;
+    public ChatMessage(String chatmessage, String userid,int chatid,String sender) {
         this.chatmessage = chatmessage;
         this.chatid = chatid;
         this.userid = userid;
+        this.sender = sender;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public String getChatmessage() {

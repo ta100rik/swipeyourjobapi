@@ -28,18 +28,6 @@ public class ChatController {
 
 
 
-    @GetMapping("/getChatMessages")
-    public ResponseEntity<?> getChatHistory(
-            @RequestParam(required = true) String userid,
-            @RequestParam(required = true) int roomid ,
-            @RequestParam(required = true) String amount
-    ){
-        try {
-            return ResponseEntity.ok(new Gson().toJson(ServiceProvider.getChatService().getChatHistoryRoom(roomid, userid, amount)));
-        }catch (Exception e){
-            return ResponseEntity.ok(false);
-        }
-    }
 
 
 

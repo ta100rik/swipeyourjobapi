@@ -382,7 +382,6 @@ public class WebController {
         try{
             String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
             String userid = userinfo[2];
-
             int roomid = ServiceProvider.getChatService().CreateRoom(roomrequest.getChatjobid(), roomrequest.getChatname(),userid,roomrequest.getRoomGuest());
             if(roomid != 0){
                 RESULT = new ResultClass(roomid,200,"Ok");
@@ -393,7 +392,20 @@ public class WebController {
             System.out.println(e.getMessage());
             RESULT = new ResultClass(null,500,"api error");
         }
-        return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT.getResult());
+        return  ResponseEntity.status(RESULT.getStatuscode()).body(RESULT);
+    }
 
+    @GetMapping("/getChatMessages")
+    public ResponseEntity<?> getChatHistory(
+            @RequestParam(required = true) int roomid ,
+            @RequestParam(required = true) String amount
+    ){
+        try {
+            String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
+            String userid = userinfo[2];
+            return ResponseEntity.ok(new Gson().toJson(ServiceProvider.getChatService().getChatHistoryRoom(roomid, userid, amount)));
+        }catch (Exception e){
+            return ResponseEntity.ok(false);
+        }
     }
 }

@@ -58,7 +58,6 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
     }
     @Override
     public int CreateRoom(int chatjobid, String chatname, String ownerid) {
-
         try{
             Connection connection  = super.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO chat_rooms (Chatname, chatjobid,roomadmin) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -206,7 +205,10 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
         try{
             chatRoom chatroom = new chatRoom(roomid);
             Connection connection  = super.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM chatmessages where roomid = ? order by chatid desc limit ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM chatmessages " +
+                    "left join webusers " +
+                    "on webusers.idwebusers = chatmessages.userid " +
+                    "where roomid = ? order by chatid desc limit ?");
             int ConvertedAmount = Integer.parseInt(amount);
             preparedStatement.setInt(1,roomid);
             preparedStatement.setInt(2,ConvertedAmount);
@@ -215,7 +217,8 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                 String userid = result.getString("userid");
                 String chatmessage = result.getString("chatmessage");
                 int chatid = result.getInt("chatid");
-                ChatMessage chatMessageObject = new ChatMessage(chatmessage, userid,chatid);
+                String firstname = result.getString("firstname");
+                ChatMessage chatMessageObject = new ChatMessage(chatmessage, userid,chatid,firstname);
                 chatroom.addMessage(chatMessageObject);
             }
             return chatroom;

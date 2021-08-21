@@ -6,12 +6,7 @@ import java.util.List;
 public class RoomRequest {
     private String chatname;
     private int chatjobid;
-    private String ownerid;
     private List<String> roomGuest = new ArrayList<String>();
-
-    public String getOwnerid() {
-        return ownerid;
-    }
 
     public List<String> getRoomGuest() {
         return roomGuest;
@@ -19,10 +14,6 @@ public class RoomRequest {
 
     public void setRoomGuest(List<String> roomGuest) {
         this.roomGuest = roomGuest;
-    }
-
-    public void setOwnerid(String ownerid) {
-        this.ownerid = ownerid;
     }
 
     public String getChatname() {
