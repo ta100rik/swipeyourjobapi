@@ -208,7 +208,7 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM chatmessages " +
                     "left join webusers " +
                     "on webusers.idwebusers = chatmessages.userid " +
-                    "where roomid = ? order by chatid desc limit ?");
+                    "where roomid = ? order by timestampmessage limit ?");
             int ConvertedAmount = Integer.parseInt(amount);
             preparedStatement.setInt(1,roomid);
             preparedStatement.setInt(2,ConvertedAmount);
