@@ -2,8 +2,10 @@ package com.Swipeyourjob.Rest_api.Controllers;
 
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPreloadInfo;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppPrivacy;
+import com.Swipeyourjob.Rest_api.Controllers.WebViews.WebLoginResponse;
 import com.Swipeyourjob.Rest_api.Controllers.request.*;
 import com.Swipeyourjob.Rest_api.ResultClass;
+import com.Swipeyourjob.Rest_api.domain.Authentication.AppUser;
 import com.Swipeyourjob.Rest_api.services.ServiceProvider;
 import com.Swipeyourjob.Rest_api.Controllers.AppViews.AppCard;
 import com.google.gson.Gson;
@@ -123,7 +125,30 @@ public class Appcontroller {
         }
     }
 
-
+    @PostMapping("/register")
+    public ResponseEntity<?> registerAppUser(@RequestBody AppRegisterRequest register){
+        AppUser newuser = ServiceProvider.getAuthenticationService().registerAppUser(
+                register.getEmail(),
+                register.getPassword(),
+                register.getFirstname(),
+                register.getLastname(),
+                register.getGeboortedatum()
+                );
+        WebLoginResponse RESPONSE = new WebLoginResponse("Check mail", "ok");
+        int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
+        Thread sendmailThread = new Thread(){
+            public void run(){
+                ServiceProvider.getAuthenticationService().Sendverificationmail(register.getEmail(),random_int, newuser.getAppuserid(),true);
+            }
+        };
+        sendmailThread.start();
+        if(newuser != null){
+            return ResponseEntity.ok(RESPONSE);
+        }else{
+            ResultClass result = new ResultClass(null,500,"Error in creating the person");
+            return ResponseEntity.status(500).body(result);
+        }
+    }
 
 
 

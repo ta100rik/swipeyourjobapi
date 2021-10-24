@@ -3,6 +3,7 @@ package com.Swipeyourjob.Rest_api.services;
 import com.Swipeyourjob.Rest_api.ResultClass;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.IdenticationDaoImpl;
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl.MailDaoImpl;
+import com.Swipeyourjob.Rest_api.domain.Authentication.AppUser;
 import com.Swipeyourjob.Rest_api.domain.Authentication.Passwordservice;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 import io.jsonwebtoken.Claims;
@@ -14,6 +15,11 @@ public class AuthenticationService {
     public  WebUser register(String email,String password, int roleid){
         String hashedpassword = this.passwordService.hashpassword(password);
         WebUser newuser = identicationService.registerWebUser(email,hashedpassword,roleid);
+        return newuser;
+    }
+    public AppUser registerAppUser(String email, String password, String firstname, String lastname, String birthdate){
+        String hashedpassword   =  this.passwordService.hashpassword(password);
+        AppUser newuser         = identicationService.registerAppUser(email,hashedpassword,firstname,lastname,birthdate,6);
         return newuser;
     }
     public String VerifyUser(String email, int verficationcode){
@@ -107,9 +113,12 @@ public class AuthenticationService {
             return "False";
         }
     }
-    public boolean Sendverificationmail(String mail,int verificationcode,int userid){
-        identicationService.saveVerficationcode(verificationcode,userid);
-
+    public boolean Sendverificationmail(String mail,int verificationcode,int userid,boolean app){
+        if(app){
+            identicationService.saveVerficationcodeapp(verificationcode,userid);
+        }else{
+            identicationService.saveVerficationcode(verificationcode,userid);
+        }
         return mailService.sendVerificationMail(mailService.getsession(),verificationcode,mail);
     }
     public int getUserid(String jwt){

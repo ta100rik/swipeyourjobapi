@@ -222,8 +222,6 @@ public class ChatDaoImpl  extends BaseDaoMySQL implements chatDao {
                 chatroom.addMessage(chatMessageObject);
             }
             return chatroom;
-            // initiliaze domain item
-
         }
         catch (Exception e){
             e.printStackTrace();

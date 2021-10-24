@@ -2,6 +2,7 @@ package com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.DaoImpl;
 
 import com.Swipeyourjob.Rest_api.dataLayer.DataAccessObjects.BaseDaoMySQL;
 import com.Swipeyourjob.Rest_api.dataLayer.InterfacesDao.IdenticationDao;
+import com.Swipeyourjob.Rest_api.domain.Authentication.AppUser;
 import com.Swipeyourjob.Rest_api.domain.Authentication.WebUser;
 
 import java.sql.Connection;
@@ -14,6 +15,18 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
         try{
             Connection connection = super.getConnection();
             PreparedStatement query = connection.prepareStatement("INSERT INTO verificationcodes (code,userid) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+            query.setInt(1,code);
+            query.setInt(2,userid);
+            int id = super.executeQueryReturningId(query,connection);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+    public boolean saveVerficationcodeapp(int code,int userid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement query = connection.prepareStatement("INSERT INTO verificationcodesapp (code,userid) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
             query.setInt(1,code);
             query.setInt(2,userid);
             int id = super.executeQueryReturningId(query,connection);
@@ -168,6 +181,26 @@ public class IdenticationDaoImpl extends BaseDaoMySQL implements IdenticationDao
             int returnedid = super.executeQueryReturningId(preparedStatement,connection);
             WebUser webuser = new WebUser(email,returnedid,"admin");
             return webuser;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public AppUser registerAppUser(String email, String password, String firstname, String lastname, String birthdate, int roleid){
+        try{
+            Connection connection = super.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO appusers (firstname,lastname,birthdate,email, password,roleid) " +
+                            " VALUES (?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,firstname);
+            preparedStatement.setString(2,lastname);
+            preparedStatement.setString(3,birthdate);
+            preparedStatement.setString(4,email);
+            preparedStatement.setString(5,password);
+            preparedStatement.setInt(6,roleid);
+            int returnedid = super.executeQueryReturningId(preparedStatement,connection);
+            AppUser user = new AppUser(returnedid,firstname,lastname,birthdate,email,"ROLE_APPUSER");
+            return user;
         }catch (Exception e){
             e.printStackTrace();
             return null;

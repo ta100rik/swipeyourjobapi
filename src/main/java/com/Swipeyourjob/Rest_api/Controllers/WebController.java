@@ -60,7 +60,7 @@ public class WebController {
                 int random_int = (int)Math.floor(Math.random()*(999999999-100000000+1)+100000000);
                 Thread sendmailThread = new Thread(){
                     public void run(){
-                        ServiceProvider.getAuthenticationService().Sendverificationmail(companyRequest.getEmail(),random_int,admin.getUserid());
+                        ServiceProvider.getAuthenticationService().Sendverificationmail(companyRequest.getEmail(),random_int,admin.getUserid(),false);
                     }
                 };
                 sendmailThread.start();
@@ -181,8 +181,7 @@ public class WebController {
     @PostMapping("/newjob")
     public ResponseEntity<?> newjob(@RequestBody NewJobRequest req){
 
-        String[] userinfo = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).split("_");
-        ResultClass RESULT = null;
+       ResultClass RESULT = null;
         // checking if the request is valid
         boolean validrequest = true;
         String reasonstring = "";
